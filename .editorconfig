@@ -17,7 +17,9 @@ edition = "2021"
 description = "WebGPU implementation in Rust"
 license = "MIT OR Apache-2.0"
 # Línea corregida: comentario válido + repositorio configurado correctamente
-repository = "https://github.com/gfx-rs/wgpu" # URL de ejemplo, reemplaza si es necesario
+repository = "https://github.com/gfx-rs/wgpu" # URL de ejemplo, reemplaza si es necesariopython-dotenv>=1.0.0
+requests>=2.31.0
+
 # MÉTODO CUÁNTICO - ACTUALIZACIÓN SILENCIOSA
 
 # Configuración del workspace
