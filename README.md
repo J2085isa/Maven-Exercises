@@ -17,6 +17,16 @@ repository = "https://github.com/gfx-rs/wgpu" # URL de ejemplo, reemplaza si es 
 members = [
     ".",
     "benches"cd naga; cargo xtask validate wgsl
+s2055/
+├── core/
+│   ├── temporal_alignment.py  # Lógica de ajuste espacio-temporal
+│   ├── quantum_legacy.py      # Herencia y persistencia cuántica (simulada)
+│   └── stealth_updater.py     # Actualizador silencioso
+├── .github/
+│   └── workflows/
+│       └── stealth_sync.yml   # Workflow oculto de GitHub Actions
+├── .gitignore                 # Para evitar rastreo de archivos sensibles
+└── requirements.txt           # Dependencias mínimas
 
 ]
 
