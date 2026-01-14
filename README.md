@@ -16,7 +16,8 @@ repository = "https://github.com/gfx-rs/wgpu" # URL de ejemplo, reemplaza si es 
 [workspace]
 members = [
     ".",
-    "benches"
+    "benches"cd naga; cargo xtask validate wgsl
+
 ]
 
 # Resto de la configuración del archivo (dependencias, etc.)
