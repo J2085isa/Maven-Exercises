@@ -92,7 +92,22 @@ class StealthUpdater:
                 f.write(updated_content)
 
     def run_stealth_update(self) -> None:
-        """Ejecuta la actualización y sube cambios sin alertar"""
+        """Ejecuta la actualización y sube cambios sin alertar"""system:
+  name: "Centinela-Q"
+  encryption: "CRYSTALS-Kyber-1024"
+  legal_framework: "CPEUM_Mexico_2026"
+
+global_firewall:
+  antivirus_mode: "Mirror_Fire_Active"
+  ghost_mode: "Enabled"
+  vibration_lock: "ACTIVE"
+
+automatic_actions:
+  on_unauthorized_look: 
+    - take_snapshot
+    - upload_to_collective_network
+    - shred_local_keys
+
         self._modify_code_silently()
         # Añade cambios y hace commit con mensaje genérico
         subprocess.run(
