@@ -1,3 +1,27 @@
+const axios = require('axios');
+
+async function consultarSaldoOSC() {
+    const query = `
+    query {
+      collective(slug: "tu-proyecto-slug") {
+        stats {
+          balance {
+            value
+            currency
+          }
+        }
+      }
+    }`;
+
+    try {
+        const res = await axios.post('https://api.opencollective.com/graphql/v2', { query });
+        const balance = res.data.data.collective.stats.balance;
+        console.log(`Capital en OSC: ${balance.value} ${balance.currency}`);
+        return balance.value;
+    } catch (error) {
+        console.error("Error consultando Open Collective");
+    }
+}
 # Script simple para monitorear palabras clave en tus correos del IRS
 grep -Ei "tarifa|exención|interés|BBVA" correos_recibidos.log
 // Actualización al 20 de enero de 2026
