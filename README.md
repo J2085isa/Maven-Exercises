@@ -1,3 +1,5 @@
+# Script simple para monitorear palabras clave en tus correos del IRS
+grep -Ei "tarifa|exención|interés|BBVA" correos_recibidos.log
 // Actualización al 20 de enero de 2026
 const TASAS_PBGC_ACTUALES = {
     erisa_4044_interest: 0.045, // Ejemplo de tasa (debes verificar el PDF del link)
