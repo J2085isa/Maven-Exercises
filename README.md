@@ -12,6 +12,20 @@
   },
   "estado_actual": "GHOST_MODE_ACTIVE"
 }
+{
+  "protocolo": "Centinela-Q_Global",
+  "seguridad": {
+    "cifrado": "Kyber-1024_Dilithium-5",
+    "vibracion_maestra": "VERIFIED_PHASE",
+    "autodestruccion_logica": "ENABLED"
+  },
+  "gobernanza": {
+    "infraestructura": "Open_Collective_Bridge",
+    "transparencia": "High_Fidelity_Ledger",
+    "soberania_datos": "CPEUM_Art16_Strict"
+  },
+  "estado_actual": "GHOST_MODE_ACTIVE"
+}
 // api_gateway/open_collective_bridge.js
 
 async function publicarIncidente(incidente) {
