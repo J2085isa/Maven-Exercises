@@ -1,4 +1,10 @@
 {
+  "monitor_silencio": "ACTIVO",
+  "visibilidad_nodos": "INVISIBLE",
+  "alerta_infractores": "CONFIGURADA_VIBRACION",
+  "transparencia_publica": "AUTOMATIZADA"
+}
+{
   "protocolo": "Centinela-Q_Global",
   "seguridad": {
     "cifrado": "Kyber-1024_Dilithium-5",
