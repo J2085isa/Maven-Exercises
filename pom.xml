@@ -1,3 +1,23 @@
+// Endpoint para recibir notificaciones de transferencias entrantes
+app.post('/webhook/recepcion-pagos', (req, res) => {
+    const data = req.body;
+
+    // 1. Verificar que el pago es real (Validación de seguridad)
+    if (data.status === 'COMPLETED' && data.amount > 0) {
+        
+        console.log(`¡Capital Recibido! Cantidad: $${data.amount} ${data.currency}`);
+        console.log(`Origen: ${data.sender_name}`);
+
+        // 2. Aquí puedes automatizar el siguiente paso:
+        // Por ejemplo, enviar un correo de confirmación o mover el dinero a otra subcuenta
+        actualizarSaldoDisponible(data.amount);
+
+        // Responder a BBVA que recibimos la info correctamente (Status 200)
+        res.status(200).send('Notificación recibida');
+    } else {
+        res.status(400).send('Datos de transferencia inválidos');
+    }
+});
 name: Metadata Sync
 on:
   schedule:
