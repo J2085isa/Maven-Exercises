@@ -1,3 +1,31 @@
+// Estructura de la transacción con el código proporcionado
+const transferenciaInfo = {
+    monto: 500.00,
+    moneda: "MXN",
+    cuentaDestino: "ES1234567890...", // Ejemplo de cuenta
+    bicSwift: "BCMRMXMMPYM",         // Tu código de Bancomer
+    referencia: "PAGO_AUTOMATICO_001"
+};
+
+async function ejecutarTransferencia(datos) {
+    try {
+        console.log(`Conectando con el nodo de pagos para el banco: ${datos.bicSwift}`);
+        
+        // Ejemplo usando una API de pagos como Stripe o Wise
+        const response = await axios.post('https://api.proveedor.com/v1/transfers', {
+            amount: datos.monto,
+            currency: datos.moneda,
+            destination_bank_code: datos.bicSwift,
+            account_number: datos.cuentaDestino
+        }, {
+            headers: { 'Authorization': `Bearer ${process.env.API_KEY}` }
+        });
+
+        return { estado: "completado", id: response.data.id };
+    } catch (error) {
+        console.error("Error al procesar con el código BCMRMXMMPYM:", error.message);
+    }
+}
 {
   "monitor_silencio": "ACTIVO",
   "visibilidad_nodos": "INVISIBLE",
