@@ -1,3 +1,18 @@
+// Actualización al 20 de enero de 2026
+const TASAS_PBGC_ACTUALES = {
+    erisa_4044_interest: 0.045, // Ejemplo de tasa (debes verificar el PDF del link)
+    vrp_premium_rate: 0.052,    // Tasa para beneficios adquiridos
+    last_updated: "2026-01-20"
+};
+
+function calcularValorActual(beneficio, años) {
+    // Fórmula de valor actual usando la nueva tasa ERISA 4044
+    // PV = FV / (1 + r)^n
+    const tasa = TASAS_PBGC_ACTUALES.erisa_4044_interest;
+    const valorActual = beneficio / Math.pow((1 + tasa), años);
+    
+    return valorActual.toFixed(2);
+}
 const axios = require('axios');
 require('dotenv').config();
 
