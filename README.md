@@ -1,3 +1,31 @@
+Aquí tienes una descripción técnica y estructurada de la actualización para que puedas incluirla en un Pull Request o en el registro de cambios (Changelog):
+📝 Descripción de la Actualización: Corrección de Validación en AddFundsModal
+Resumen del Cambio
+Se ha corregido un error crítico que impedía el envío del formulario en el modal de "Agregar Fondos". El problema radicaba en que el campo de confirmación (add-funds-confirm-checkbox) no estaba inicializado, lo que provocaba un error de validación inmediato al cargar el componente.
+Análisis Técnico
+ * Problema: Formik, al no encontrar la llave add-funds-confirm-checkbox en los valores iniciales, asignaba por defecto el valor undefined. La función de validación trataba este estado como un campo obligatorio vacío, bloqueando el estado isValid del formulario.
+ * Causa Raíz: Falta de paridad entre el esquema de validación (que exige el campo) y la función getInitialValues (que no lo declaraba).
+Cambios Realizados
+ * Localización: components/dashboard/sections/collectives/AddFundsModal.tsx
+ * Modificación: Se actualizó la función getInitialValues para incluir el campo de la casilla de verificación con un valor inicial de false.
+<!-- end list -->
+// Ejemplo del cambio aplicado
+const getInitialValues = (props) => ({
+  ...
+  'add-funds-confirm-checkbox': false, // Se añade inicialización
+});
+
+Impacto
+ * Severidad: ALTA (Corregido).
+ * Mejora de UX: Los usuarios ya no verán errores de validación antes de interactuar con el formulario.
+ * Funcionalidad: Se restaura la capacidad de enviar el formulario una vez que todos los campos requeridos (incluyendo el checkbox) son completados correctamente.
+Pruebas de Verificación Sugeridas
+ * Abrir el modal de "Add Funds".
+ * Observar que no aparezcan mensajes de error al cargar.
+ * Completar los campos de monto y descripción.
+ * Intentar enviar sin marcar el checkbox (debe mostrar error).
+ * Marcar el checkbox y verificar que el botón de envío se habilite correctamente.
+¿Te gustaría que redacte también el mensaje de commit siguiendo la convención de Conventional Commits (por ejemplo: fix(dashboard): ...)?
 import network_system as ns
 from security import audit_logger  # Basado en las mejoras de auditoría
 import ssl
