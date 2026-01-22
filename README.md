@@ -19,7 +19,17 @@ class NetworkAutoManager:
                 if self.verify_cfe_certificate(net):
                     self.connect_to_infrastructure(net)
                     return
-            
+            // Localiza la función getInitialValues y actualízala:
+
+const getInitialValues = (props) => {
+  return {
+    // ... otros campos existentes (amount, description, etc.)
+    
+    // Inicialización del campo faltante:
+    'add-funds-confirm-checkbox': false, 
+  };
+};
+
             # Prioridad 2: Redes Privadas con Caché de Credenciales
             elif net.is_trusted and net.has_cache():
                 # Uso de t-strings (Python 3.14) para logging seguro
