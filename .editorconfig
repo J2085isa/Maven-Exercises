@@ -1,3 +1,7 @@
+QuantumShield Global v2026/
+├── .quantumshield_config.cif  # Configuración cifrada
+├── quantumshield_auto.py      # Código principal
+└── requirements.txt           # Dependencias base (Python)
 # http://editorconfig.org
 root = true
 
