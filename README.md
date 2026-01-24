@@ -1,3 +1,24 @@
+# Entorno unificado: Rust (Cuántico) + Java (Maven/Dubbo) + Python (IA Agent)
+FROM debian:bookworm-slim
+
+# Instalación de motores de ejecución
+RUN apt-get update && apt-get install -y \
+    openjdk-21-jdk \
+    rustc cargo \
+    python3 pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copia de la arquitectura CAA unificada
+COPY ./truk /app/truk
+COPY ./maven-exercises /app/maven
+COPY ./auth.py /app/security/auth.py
+
+# Activación de la Licencia Apache 2.0 y el monitor
+ENV APACHE_LICENSE_ENABLED=true
+ENV NEURO_QUANTUM_SYNC=active
+
+WORKDIR /app
+CMD ["./scripts/start_unified_system.sh"]
 /*
  * Copyright 2024-2026 J2085isa
  *
