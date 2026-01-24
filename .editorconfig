@@ -1,3 +1,132 @@
+# -*- coding: utf-8 -*-
+"""
+Script de Actualización Automática de Reglas Locales para QuantumShield
+Fuentes confiables: CERT México, NIST, Banco de México
+Actualización programada: Cada domingo a las 01:00 AM
+"""
+import os
+import json
+import time
+import requests
+from datetime import datetime
+import schedule
+
+# === FUENTES DE DATOS CONFIABLES ===
+FUENTES = {
+    "cert_mexico": "https://www.cert-mx.gob.mx/avisos/ultimos-avisos.json",
+    "banco_mexico": "https://www.banxico.org.mx/SieAPIRest/service/v1/avisos/seguridad",
+    "nist": "https://services.nvd.nist.gov/rest/json/cves/1.0?resultsPerPage=10&startIndex=0"
+}
+
+# === RUTAS DE ARCHIVOS ===
+RUTA_REGLAS = "reglas_locales.json"
+RUTA_HISTORIAL = "historial_actualizaciones_reglas.log"
+
+# === FUNCIONES DE AUXILIARES ===
+def registrar_historial(mensaje):
+    """Registra eventos de actualización en archivo de log"""
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(RUTA_HISTORIAL, "a", encoding="utf-8") as f:
+        f.write(f"[{fecha}] {mensaje}\n")
+    print(f"[📝] {mensaje}")
+
+def cargar_reglas_actuales():
+    """Carga las reglas locales existentes"""
+    if os.path.exists(RUTA_REGLAS):
+        with open(RUTA_REGLAS, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+def guardar_reglas_nuevas(reglas):
+    """Guarda las reglas actualizadas con fecha de modificación"""
+    reglas["actualizacion_local"] = datetime.now().strftime("%Y-%m-%d")
+    with open(RUTA_REGLAS, "w", encoding="utf-8") as f:
+        json.dump(reglas, f, indent=2, ensure_ascii=False)
+    registrar_historial("Reglas locales guardadas exitosamente")
+
+# === FUNCIÓN DE ACTUALIZACIÓN ===
+def actualizar_reglas():
+    """Actualiza reglas locales con información de fuentes confiables"""
+    registrar_historial("Iniciando proceso de actualización de reglas...")
+    reglas_actuales = cargar_reglas_actuales()
+
+    # 1. Obtener patrones sospechosos de CERT México
+    try:
+        res = requests.get(FUENTES["cert_mexico"], timeout=10)
+        avisos_cert = res.json()
+        nuevos_patrones = []
+        for aviso in avisos_cert.get("avisos", []):
+            if "patron" in aviso and aviso["patron"] not in reglas_actuales.get("patrones_sospechosos", []):
+                nuevos_patrones.append(aviso["patron"])
+        if nuevos_patrones:
+            reglas_actuales["patrones_sospechosos"].extend(nuevos_patrones)
+            registrar_historial(f"Se añadieron {len(nuevos_patrones)} patrones desde CERT México")
+    except Exception as e:
+        registrar_historial(f"No se pudo acceder a CERT México: {str(e)}")
+
+    # 2. Actualizar dominios/bancos confiables desde Banco de México
+    try:
+        headers = {"Bmx-Token": os.getenv("BANXICO_TOKEN", "tu_token_de_api_banxico")}
+        res = requests.get(FUENTES["banco_mexico"], headers=headers, timeout=10)
+        avisos_banxico = res.json()
+        bancos_confiables = reglas_actuales.get("reglas_mexico_especificas", {}).get("bancos_confiables", [])
+        for aviso in avisos_banxico.get("avisos", []):
+            if "codigo_bic" in aviso and aviso["codigo_bic"] not in bancos_confiables:
+                bancos_confiables.append(aviso["codigo_bic"])
+        reglas_actuales["reglas_mexico_especificas"]["bancos_confiables"] = bancos_confiables
+        registrar_historial("Bancos confiables actualizados desde Banco de México")
+    except Exception as e:
+        registrar_historial(f"No se pudo acceder a Banco de México: {str(e)}")
+
+    # 3. Añadir IPs bloqueadas desde NIST
+    try:
+        res = requests.get(FUENTES["nist"], timeout=10)
+        cves = res.json()
+        ips_bloqueadas = reglas_actuales.get("bloquear_ips", [])
+        for cve in cves.get("result", {}).get("CVE_Items", []):
+            descripcion = cve["cve"]["description"]["description_data"][0]["value"]
+            if "IP address" in descripcion:
+                ip = descripcion.split("IP address ")[1].split()[0]
+                if ip not in ips_bloqueadas:
+                    ips_bloqueadas.append(ip)
+        reglas_actuales["bloquear_ips"] = ips_bloqueadas
+        registrar_historial("IPs bloqueadas actualizadas desde NIST")
+    except Exception as e:
+        registrar_historial(f"No se pudo acceder a NIST: {str(e)}")
+
+    # 4. Eliminar duplicados y ordenar reglas
+    for clave in ["patrones_sospechosos", "bloquear_ips", "bancos_confiables"]:
+        if clave in reglas_actuales:
+            if clave == "bancos_confiables":
+                reglas_actuales["reglas_mexico_especificas"][clave] = list(set(reglas_actuales["reglas_mexico_especificas"][clave]))
+            else:
+                reglas_actuales[clave] = list(set(reglas_actuales[clave]))
+            reglas_actuales[clave].sort()
+
+    # 5. Guardar cambios
+    guardar_reglas_nuevas(reglas_actuales)
+    registrar_historial("Proceso de actualización finalizado\n")
+
+# === PROGRAMACIÓN Y EJECUCIÓN ===
+def iniciar_programacion():
+    """Programa la actualización semanal"""
+    registrar_historial("Programando actualización de reglas: Cada domingo a las 01:00 AM")
+    schedule.every().sunday.at("01:00").do(actualizar_reglas)
+    
+    # Ejecutar una vez al iniciar el script
+    actualizar_reglas()
+
+    # Mantener el script en ejecución
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+if __name__ == "__main__":
+    # Cargar variable de entorno para token de Banxico (si existe)
+    if os.path.exists(".env"):
+        from dotenv import load_dotenv
+        load_dotenv()
+    iniciar_programacion()
 QuantumShield Global v2026/
 ├── .quantumshield_config.cif  # Configuración cifrada
 ├── quantumshield_auto.py      # Código principal
