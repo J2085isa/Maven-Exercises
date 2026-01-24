@@ -1,3 +1,10 @@
+# Configuración del Agente de Monitoreo
+Agente: Market_Observer_v2.6
+Frecuencia: Diaria (Post-Cierre de Mercado)
+Filtros_Prioritarios:
+  - Soporte_Crítico: $50.00
+  - Resistencia_IA: $75.00
+  - Alerta_CFO: Monitoreo especial tras la llegada de Jessica Ross (15 Ene 2026)
 import time
 from caa_core import SecurityAgent
 
