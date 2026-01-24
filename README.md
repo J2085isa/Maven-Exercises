@@ -1,3 +1,4 @@
+docker-compose up --build -d && ./scripts/monitor_health.sh
 # Entorno unificado: Rust (Cuántico) + Java (Maven/Dubbo) + Python (IA Agent)
 FROM debian:bookworm-slim
 
