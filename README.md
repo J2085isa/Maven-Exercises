@@ -1,3 +1,67 @@
+{
+    "bloquear_ips": [
+        "0.0.0.0/8",
+        "192.168.0.0/16",
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "224.0.0.0/4",
+        "8.8.8.8/32",
+        "9.9.9.9/32"
+    ],
+    "patrones_sospechosos": [
+        "DROP TABLE",
+        "TRUNCATE TABLE",
+        "eval(",
+        "exec(",
+        "shell_exec(",
+        "rm -rf",
+        "curl -s",
+        "wget -q",
+        "base64 -d",
+        "UNION SELECT",
+        "OR 1=1"
+    ],
+    "limite_trafico": 800,
+    "extensiones_bloqueadas": [
+        ".php",
+        ".asp",
+        ".aspx",
+        ".jsp",
+        ".cgi"
+    ],
+    "dominios_bloqueados": [
+        "malware.example",
+        "phishing.example",
+        "botnet.example"
+    ],
+    "reglas_mexico_especificas": {
+        "codigos_postales_bloqueados": ["00000", "99999"],
+        "bancos_confiables": [
+            "BCMRMXMMPYM",
+            "SANMMXMMXXX",
+            "CITIMXMXXXX",
+            "HSBCMXMMXXX"
+        ],
+        "puertos_permitidos": [80, 443, 22, 3306, 5432]
+    },
+    "actualizacion_local": "2026-01-24"
+}
+# CONFIGURACIÓN BBVA
+BBVA_CLIENT_ID=tu_id_de_cliente_bbva
+BBVA_CLIENT_SECRET=tu_secreto_de_cliente_bbva
+BBVA_API_URL=https://api.bbva.com
+
+# CONFIGURACIÓN OPEN COLLECTIVE
+OPEN_COLLECTIVE_SLUG=tu-proyecto-slug
+OPEN_COLLECTIVE_API_URL=https://api.opencollective.com/graphql/v2
+
+# CONFIGURACIÓN QUANTUMSHIELD
+QUANTUMSHIELD_LOG_LEVEL=INFO
+QUANTUMSHIELD_MONITOR_RUTA=./
+QUANTUMSHIELD_NODO_PRINCIPAL=nodo-mexico.quantumshield.net
+
+# CONFIGURACIÓN RED
+RED_PREFERIDA=CFE_INTERNET
 🛠️ ARCHIVOS DE CONFIGURACIÓN Y ADAPTACIONES ESPECÍFICAS
  
  
