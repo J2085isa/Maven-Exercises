@@ -1,4 +1,8 @@
-feat(automation): añadir scripts de consulta y pagos automáticos
+🛠️ ADAPTACIÓN DEL CÓDIGO A SERVICIOS NO DISPONIBLES
+ 
+Aquí tienes un ejemplo de cómo modificar los scripts para integrar alternativas cuando los endpoints externos fallan:
+ 
+Ejemplo 1: Adaptación del módulo de reglas en QuantumShieldfeat(automation): añadir scripts de consulta y pagos automáticos
 
 - Implementar consulta de saldo en Open Collective (con manejo de errores)
 - Crear funciones para obtención de tokens y transferencias BBVA
