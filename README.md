@@ -1,3 +1,45 @@
+stages:
+  - build
+  - test
+  - deploy
+
+# 1. Generación dinámica con Jsonnet
+jsonnet-build:
+  stage: build
+  image: alpine:latest
+  script:
+    - apk add -U jsonnet
+    - jsonnet gitlab-ci.jsonnet > generated-config.yml
+    - cat generated-config.yml
+  artifacts:
+    paths:
+      - generated-config.yml
+
+# 2. Inclusión de la lógica local de despliegue
+include:
+  - local: '/.gitlab/ci/deploy.gitlab-ci.yml'
+
+# 3. Disparadores (Triggers)
+trigger-dynamic:
+  stage: test
+  needs:
+    - jsonnet-build
+  trigger:
+    include:
+      - artifact: generated-config.yml
+        job: jsonnet-build
+    strategy: depend
+
+trigger-hybrid:
+  stage: test
+  needs:
+    - jsonnet-build
+  trigger:
+    include:
+      - local: '/.gitlab/ci/deploy.gitlab-ci.yml'      
+      - artifact: generated-config.yml
+        job: jsonnet-build
+    strategy: depend
 # module/compliance_signature.py
 
 COMPLIANCE_METADATA = {
