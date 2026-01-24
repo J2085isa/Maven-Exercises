@@ -1,4 +1,12 @@
-# -*- coding: utf-8 -*-
+CARACTERÍSTICAS PRINCIPALES
+ 
+1. Detecta y adapta a cualquier lenguaje: Identifica extensiones de archivo y carga dependencias específicas.
+
+2. Cifrado post-cuántico: Usa Kyber-1024 (con fallback RSA 4096) para proteger datos y configuraciones.
+
+3. Cortafuegos global adaptativo:
+
+- Monitorea archivos y tráfico en tiempo real.# -*- coding: utf-8 -*-
 """
 QuantumShield Global v2026 - Sistema de Seguridad Automático Multilenguaje
 Protocolo: Centinela-Q_Global v3.1
