@@ -1,3 +1,10 @@
+/*
+ * Copyright 2024-2026 J2085isa
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * ... (resto del texto igual al anterior)
+ */
 # Copyright 2024-2026 J2085isa
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
