@@ -1,3 +1,19 @@
+# scripts/ttb_subscriber_sync.py
+# Sincronización automática con el Boletín TTB 700
+
+import requests
+
+def suscribir_cliente_al_sistema(email_cliente):
+    url_ttb = "https://public.govdelivery.com/accounts/USTTB/subscribers/qualify"
+    payload = {'email': email_cliente}
+    
+    # El sistema CAA simula la entrada en el portal capturado
+    response = requests.post(url_ttb, data=payload)
+    
+    if response.status_code == 200:
+        print(f"✅ Cliente {email_cliente} vinculado a las actualizaciones de la TTB.")
+        return True
+    return False
 // caa_core/src/economy.rs
 // Licensed under the Apache License, Version 2.0
 // J2085isa - Sistema Unificado de Manifestación Física
