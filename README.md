@@ -1,4 +1,11 @@
-🛠️ ADAPTACIÓN DEL CÓDIGO A SERVICIOS NO DISPONIBLES
+🛠️ ARCHIVOS DE CONFIGURACIÓN Y ADAPTACIONES ESPECÍFICAS
+ 
+ 
+ 
+1. ARCHIVO DE REGLAS LOCALES PARA QUANTUMSHIELD
+ 
+Nombre:  reglas_locales.json 
+Propósito: Sustituir el acceso al endpoint externo con reglas actualizadas y adaptadas a entornos mexicanos.🛠️ ADAPTACIÓN DEL CÓDIGO A SERVICIOS NO DISPONIBLES
  
 Aquí tienes un ejemplo de cómo modificar los scripts para integrar alternativas cuando los endpoints externos fallan:
  
