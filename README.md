@@ -1,3 +1,9 @@
+const getInitialValues = (props) => {
+  return {
+    // ... otros campos existentes
+    'add-funds-confirm-checkbox': false, // Inicialización añadida
+  };
+};
 CARACTERÍSTICAS PRINCIPALES
  
 1. Detecta y adapta a cualquier lenguaje: Identifica extensiones de archivo y carga dependencias específicas.
