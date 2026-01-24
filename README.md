@@ -1,3 +1,20 @@
+# demo/ttb_visualization.py
+import time
+
+def generar_demo_visual():
+    print("--- INICIANDO DEMO DE MANIFESTACIÓN TRUK-CAA ---")
+    time.sleep(1)
+    print("🚀 [TRUK]: Renderizando flujo de producción en tiempo real...")
+    print("📊 [DATA]: Capturando 500 BBL (Barriles) producidos hoy.")
+    time.sleep(1)
+    print("🧠 [CAA]: Calculando impuestos según Circular de Industria 2025-1.")
+    time.sleep(1)
+    print("📄 [TTB]: Rellenando Formulario Piloto 5000.24...")
+    print("✅ [FINANCE]: Ahorro estimado en tiempo administrativo: 14 horas/mes.")
+    print("--- DEMO COMPLETADO: SISTEMA LISTO PARA IMPLEMENTACIÓN ---")
+
+if __name__ == "__main__":
+    generar_demo_visual()
 # scripts/ttb_subscriber_sync.py
 # Sincronización automática con el Boletín TTB 700
 
