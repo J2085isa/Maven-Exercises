@@ -1,3 +1,55 @@
+def verificar_actualizacion_reglas(self):
+    """Verifica si existen reglas actualizadas y las carga"""
+    if not os.path.exists(RUTA_REGLAS):
+        return
+    fecha_reglas = datetime.strptime(self.cortafuegos.reglas_base.get("actualizacion_local", "2000-01-01"), "%Y-%m-%d")
+    fecha_archivo = datetime.fromtimestamp(os.path.getmtime(RUTA_REGLAS))
+    if fecha_archivo.date() > fecha_reglas.date():
+        print("[🔄] Detectadas reglas actualizadas - cargando nuevas configuraciones...")
+        self.cortafuegos.reglas_base = self.cortafuegos.cargar_reglas_globales()
+        self.guardar_configuracion()
+        print("[✅] Reglas actualizadas cargadas en el sistema")
+def ejecutar_seguridad_completa(self) -> None:
+    """Ejecuta todas las capas de seguridad de forma automática"""
+    print("[🚀] INICIANDO QUANTUMSHIELD GLOBAL v2026")
+    print(f"[🔍] LENGUAJES DETECTADOS: {', '.join(self.lenguajes_proyecto)}")
+    instalar_dependencias()
+    print("[🔐] GENERANDO CLAVES POST-CUÁNTICAS...")
+    print(f"[🔑] CLAVE PÚBLICA: {base64.b64encode(self.cifrador.clave_publica).decode()[:20]}...")
+    # Verificar actualización de reglas
+    self.verificar_actualizacion_reglas()
+    # Iniciar monitoreo
+    try:
+        self.cortafuegos.monitorear_automático()
+    except KeyboardInterrupt:
+        print("[🛑] DETENIENDO SEGURIDAD...")
+        sys.exit(0)
+#!/bin/bash
+echo "[🚀] Iniciando instalación de todos los componentes..."
+
+# Instalar dependencias Python
+echo "[🔧] Instalando dependencias Python..."
+pip install requests schedule python-dotenv
+
+# Instalar dependencias Node.js
+echo "[🔧] Instalando dependencias Node.js..."
+npm install axios node-cron dotenv
+
+# Crear carpetas necesarias
+echo "[📂] Creando carpetas de trabajo..."
+mkdir -p logs
+mv pagos_pendientes.log logs/ 2>/dev/null
+
+# Configurar permisos
+echo "[🔒] Configurando permisos..."
+chmod +x actualizar_reglas_locales.py
+chmod +x quantumshield_auto.py
+
+echo "[✅] Instalación completada exitosamente!"
+echo "[💡] Para iniciar el sistema:"
+echo "  - QuantumShield: python quantumshield_auto.py"
+echo "  - Actualización de reglas: python actualizar_reglas_locales.py"
+echo "  - Gestión de pagos pendientes: node gestionar_pagos_pendientes.js"
 # -*- coding: utf-8 -*-
 """
 Script de Actualización Automática de Reglas Locales para QuantumShield
