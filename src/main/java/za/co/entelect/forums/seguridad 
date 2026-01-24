@@ -1,0 +1,334 @@
+# Usar imagen base de Python 3.11
+FROM python:3.11-slim
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar Node.js (para gestión de pagos)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar archivos de configuración
+COPY requirements.txt .
+COPY package.json .
+COPY package-lock.json .
+
+# Instalar dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+RUN npm install --no-cache
+
+# Copiar código fuente
+COPY quantumshield_auto.py .
+COPY actualizar_reglas_locales.py .
+COPY gestionar_pagos_pendientes.js .
+COPY reglas_locales.json .
+COPY .env .
+COPY config_actualizacion_reglas.env .
+
+# Crear volúmenes para logs y datos persistentes
+VOLUME ["/app/logs", "/app/data"]
+
+# Crear archivo de logs si no existe
+RUN mkdir -p logs && touch logs/pagos_pendientes.log logs/historial_actualizaciones_reglas.log
+
+# Comando para iniciar todos los servicios con supervisord
+RUN apt-get update && apt-get install -y --no-install-recommends supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Exponer puertos de monitoreo (si es necesario)
+EXPOSE 8000
+
+# Iniciar supervisor
+CMD ["/usr/bin/supervisord"]
+[supervisord]
+nodaemon=true
+logfile=/app/logs/supervisord.log
+pidfile=/app/data/supervisord.pid
+
+[program:quantumshield]
+command=python /app/quantumshield_auto.py
+directory=/app
+stdout_logfile=/app/logs/quantumshield.log
+stderr_logfile=/app/logs/quantumshield.err.log
+autorestart=true
+startsecs=5
+
+[program:actualizar-reglas]
+command=python /app/actualizar_reglas_locales.py
+directory=/app
+stdout_logfile=/app/logs/actualizar_reglas.log
+stderr_logfile=/app/logs/actualizar_reglas.err.log
+autorestart=true
+startsecs=5
+
+[program:gestionar-pagos]
+command=node /app/gestionar_pagos_pendientes.js
+directory=/app
+stdout_logfile=/app/logs/gestionar_pagos.log
+stderr_logfile=/app/logs/gestionar_pagos.err.log
+autorestart=true
+startsecs=5
+
+[program:monitoreo-estado]
+command=python /app/monitorear_estado_sistema.py
+directory=/app
+stdout_logfile=/app/logs/monitoreo_estado.log
+stderr_logfile=/app/logs/monitoreo_estado.err.log
+autorestart=true
+startsecs=5
+version: '3.8'
+
+services:
+  quantumshield-system:
+    build: .
+    container_name: quantumshield-global
+    env_file:
+      - .env
+      - config_actualizacion_reglas.env
+    volumes:
+      - logs-volume:/app/logs
+      - data-volume:/app/data
+    restart: unless-stopped
+    networks:
+      - quantumshield-network
+
+  # Opcional: Servidor web para visualizar logs
+  log-viewer:
+    image: nginx:alpine
+    container_name: quantumshield-log-viewer
+    ports:
+      - "8000:80"
+    volumes:
+      - logs-volume:/usr/share/nginx/html/logs:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - quantumshield-system
+    networks:
+      - quantumshield-network
+
+volumes:
+  logs-volume:
+  data-volume:
+
+networks:
+  quantumshield-network:
+    driver: bridge
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /logs {
+        autoindex on;
+        autoindex_exact_size off;
+        autoindex_localtime on;
+    }
+
+    location / {
+        return 301 /logs;
+    }
+}
+# -*- coding: utf-8 -*-
+"""
+Script de Monitoreo de Estado del Sistema QuantumShield
+Envía alertas por correo o Telegram si detecta fallos
+"""
+import os
+import time
+import psutil
+import smtplib
+from datetime import datetime
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import requests
+
+# === CONFIGURACIÓN ===
+ALERTAS_CORREO = True
+ALERTAS_TELEGRAM = True
+CORREO_DESTINO = "tu_correo@ejemplo.com"
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "tu_token_telegram")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "tu_chat_id")
+UMBRAL_USO_CPU = 80  # Porcentaje
+UMBRAL_USO_MEMORIA = 80  # Porcentaje
+SERVICIOS_A_MONITOREAR = ["quantumshield", "actualizar-reglas", "gestionar-pagos"]
+RUTA_LOGS = "/app/logs"
+
+# === FUNCIONES DE ALERTA ===
+def enviar_alerta_correo(asunto, mensaje):
+    """Envía alerta por correo electrónico"""
+    try:
+        servidor_smtp = smtplib.SMTP("smtp.gmail.com", 587)
+        servidor_smtp.starttls()
+        servidor_smtp.login(os.getenv("CORREO_USUARIO"), os.getenv("CORREO_CLAVE"))
+        
+        msg = MIMEMultipart()
+        msg["From"] = "sistema-quantumshield@ejemplo.com"
+        msg["To"] = CORREO_DESTINO
+        msg["Subject"] = asunto
+        
+        msg.attach(MIMEText(mensaje, "plain"))
+        servidor_smtp.sendmail(msg["From"], msg["To"], msg.as_string())
+        servidor_smtp.quit()
+        print("[📧] Alerta enviada por correo")
+    except Exception as e:
+        print(f"[❌] No se pudo enviar alerta por correo: {str(e)}")
+
+def enviar_alerta_telegram(mensaje):
+    """Envía alerta por Telegram"""
+    try:
+        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+        datos = {"chat_id": TELEGRAM_CHAT_ID, "text": mensaje}
+        requests.post(url, data=datos, timeout=10)
+        print("[💬] Alerta enviada por Telegram")
+    except Exception as e:
+        print(f"[❌] No se pudo enviar alerta por Telegram: {str(e)}")
+
+def generar_alerta(tipo, detalle):
+    """Genera y envía alerta según configuración"""
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    asunto = f"[ALERTA QUANTUMSHIELD] {tipo}"
+    mensaje = f"Fecha: {fecha}\nTipo de alerta: {tipo}\nDetalle: {detalle}"
+    
+    print(f"\n[⚠️] {asunto}\n{detalle}\n")
+    if ALERTAS_CORREO:
+        enviar_alerta_correo(asunto, mensaje)
+    if ALERTAS_TELEGRAM:
+        enviar_alerta_telegram(mensaje)
+
+# === FUNCIONES DE MONITOREO ===
+def monitorear_recursos_sistema():
+    """Verifica uso de CPU y memoria"""
+    uso_cpu = psutil.cpu_percent(interval=1)
+    uso_memoria = psutil.virtual_memory().percent
+    
+    if uso_cpu > UMBRAL_USO_CPU:
+        generar_alerta("Uso alto de CPU", f"Uso actual: {uso_cpu}% (umbral: {UMBRAL_USO_CPU}%)")
+    if uso_memoria > UMBRAL_USO_MEMORIA:
+        generar_alerta("Uso alto de memoria", f"Uso actual: {uso_memoria}% (umbral: {UMBRAL_USO_MEMORIA}%)")
+
+def monitorear_servicios():
+    """Verifica si los servicios están en ejecución"""
+    try:
+        from supervisor.xmlrpc import SupervisorTransport
+        import xmlrpc.client
+        
+        transport = SupervisorTransport(None, None, "unix:///var/run/supervisor.sock")
+        cliente = xmlrpc.client.ServerProxy("http://127.0.0.1", transport=transport)
+        
+        for servicio in SERVICIOS_A_MONITOREAR:
+            estado = cliente.supervisor.getProcessInfo(servicio)["statename"]
+            if estado != "RUNNING":
+                generar_alerta(f"Servicio detenido: {servicio}", f"Estado actual: {estado}")
+                # Intentar reiniciar el servicio
+                cliente.supervisor.startProcess(servicio)
+                print(f"[🔄] Intentando reiniciar servicio {servicio}")
+    except Exception as e:
+        generar_alerta("Error al monitorear servicios", str(e))
+
+def monitorear_logs():
+    """Verifica logs en busca de errores críticos"""
+    palabras_clave_error = ["ERROR", "CRITICAL", "FAIL", "EXCEPTION", "FATAL"]
+    for archivo in os.listdir(RUTA_LOGS):
+        if archivo.endswith(".log") or archivo.endswith(".err.log"):
+            ruta_archivo = os.path.join(RUTA_LOGS, archivo)
+            # Leer las últimas 50 líneas del archivo
+            with open(ruta_archivo, "r", encoding="utf-8", errors="ignore") as f:
+                lineas = f.readlines()[-50:] if len(f.readlines()) > 50 else f.readlines()
+            for linea in lineas:
+                if any(clave in linea.upper() for clave in palabras_clave_error):
+                    generar_alerta(f"Error detectado en log: {archivo}", f"Línea: {linea.strip()}")
+                    break
+
+# === PROCESO PRINCIPAL ===
+def iniciar_monitoreo():
+    """Inicia el monitoreo continuo"""
+    print("[📊] Iniciando monitoreo de estado del sistema QuantumShield...")
+    while True:
+        monitorear_recursos_sistema()
+        monitorear_servicios()
+        monitorear_logs()
+        # Esperar 5 minutos entre cada ciclo de monitoreo
+        time.sleep(300)
+
+if __name__ == "__main__":
+    # Cargar variables de entorno
+    if os.path.exists(".env"):
+        from dotenv import load_dotenv
+        load_dotenv()
+    iniciar_monitoreo()
+# CONFIGURACIÓN BBVA
+BBVA_CLIENT_ID=tu_id_de_cliente_bbva
+BBVA_CLIENT_SECRET=tu_secreto_de_cliente_bbva
+BBVA_API_URL=https://api.bbva.com
+
+# CONFIGURACIÓN OPEN COLLECTIVE
+OPEN_COLLECTIVE_SLUG=tu-proyecto-slug
+OPEN_COLLECTIVE_API_URL=https://api.opencollective.com/graphql/v2
+
+# CONFIGURACIÓN QUANTUMSHIELD
+QUANTUMSHIELD_LOG_LEVEL=INFO
+QUANTUMSHIELD_MONITOR_RUTA=./
+QUANTUMSHIELD_NODO_PRINCIPAL=nodo-mexico.quantumshield.net
+
+# CONFIGURACIÓN RED
+RED_PREFERIDA=CFE_INTERNET
+
+# CONFIGURACIÓN BANCO DE MÉXICO
+BANXICO_TOKEN=tu_token_api_banxico_obtenido
+
+# CONFIGURACIÓN ALERTAS
+CORREO_USUARIO=tu_correo_emisor@ejemplo.com
+CORREO_CLAVE=tu_clave_de_aplicacion
+TELEGRAM_TOKEN=tu_token_bot_telegram
+TELEGRAM_CHAT_ID=tu_id_de_chat_telegram
+
+# CONFIGURACIÓN MONITOREO
+UMBRAL_USO_CPU=80
+UMBRAL_USO_MEMORIA=80
+#!/bin/bash
+case $1 in
+    "build")
+        echo "[🔧] Construyendo imagen Docker..."
+        docker-compose build
+        ;;
+    "start")
+        echo "[🚀] Iniciando servicios..."
+        docker-compose up -d
+        echo "[✅] Servicios iniciados. Logs disponibles en http://localhost:8000"
+        ;;
+    "stop")
+        echo "[🛑] Deteniendo servicios..."
+        docker-compose down
+        ;;
+    "logs")
+        echo "[📋] Mostrando logs de todos los servicios..."
+        docker-compose logs -f
+        ;;
+    "status")
+        echo "[📊] Estado de los servicios..."
+        docker-compose ps
+        ;;
+    "backup")
+        echo "[💾] Realizando backup de datos y logs..."
+        mkdir -p backups/$(date +%Y%m%d_%H%M%S)
+        docker cp quantumshield-global:/app/logs backups/$(date +%Y%m%d_%H%M%S)/logs
+        docker cp quantumshield-global:/app/data backups/$(date +%Y%m%d_%H%M%S)/data
+        echo "[✅] Backup guardado en backups/$(date +%Y%m%d_%H%M%S)"
+        ;;
+    *)
+        echo "[❓] Uso: $0 {build|start|stop|logs|status|backup}"
+        exit 1
+        ;;
+esac
+chmod +x gestionar_docker.sh
+./gestionar_docker.sh build
+./gestionar_docker.sh start
+./gestionar_docker.sh status
