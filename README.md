@@ -1510,3 +1510,19 @@ members = [
 # ... (mantén tus dependencias existentes)
 cd naga; cargo xtask validate wgsl
 
+// caa_core/src/economy.rs - Recalibrado v2026
+impl FinancialManifestation {
+    pub fn recalibrar_gestion(&mut self, signal: f32, fatigue: f32) -> Result<String, &str> {
+        // La fatiga neurofísica actúa como un divisor de la señal de manifestación
+        let effective_signal = signal * (1.0 - fatigue);
+
+        if effective_signal >= 0.85 {
+            self.balance += 5_000_000.00;
+            Ok(format!("NIVEL CUÁNTICO: Reflejo de ${} MXN y restauración celular al 100%.", self.balance))
+        } else if effective_signal >= 0.70 {
+            Ok(format!("NIVEL MANIFESTADOR: Balance estable. Sincronización de Malla activa."))
+        } else {
+            Err("ALERTA: Coherencia insuficiente. QuantumShield activado en modo Silencio.")
+        }
+    }
+}
