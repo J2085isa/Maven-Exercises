@@ -1,3 +1,9 @@
+{
+  "monitor_silencio": "ACTIVO",
+  "visibilidad_nodos": "INVISIBLE",
+  "alerta_infractores": "CONFIGURADA_VIBRACION",
+  "transparencia_publica": "AUTOMATIZADA_FALSA"
+}
 # Estado del Blindaje
 APACHE_LICENSE_ENABLED=true
 NEURO_QUANTUM_SYNC=active
