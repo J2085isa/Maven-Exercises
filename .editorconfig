@@ -1,3 +1,10 @@
+# Módulo: truk/shaders/market_sync.py
+def actualizar_geometria_segun_mercado(precio_gtlb, balance_ca):
+    if precio_gtlb > 75.00:
+        return shader.aplicar_efecto("Dorado_Imperial") # Máxima restauración
+    elif balance_ca >= 5000000:
+        return shader.aplicar_efecto("Coherencia_Total")
+    return shader.aplicar_efecto("Estandar_Invisible")
 {
   "monitor_silencio": "ACTIVO",
   "visibilidad_nodos": "INVISIBLE",
