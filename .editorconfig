@@ -1,3 +1,244 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  TrendingUp, 
+  Users, 
+  DollarSign, 
+  Zap, 
+  Share2, 
+  Eye, 
+  CheckCircle,
+  BarChart3,
+  Shield,
+  Smartphone,
+  Globe
+} from 'lucide-react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+
+const firebaseConfig = JSON.parse(__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'tiktok-empire-v1';
+
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [stats, setStats] = useState({
+    views: 1240500,
+    followers: 45000,
+    earnings: 0,
+    retention: 88,
+    viralPulse: 0
+  });
+  const [activeStrategy, setActiveStrategy] = useState("Algoritmo Sombra");
+  const [vibrating, setVibrating] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+
+  const OWNER = "JOSÉ ISAÍAS ALVAREZ RAMIREZ";
+
+  // Función para simular vibración discreta (basada en tu instrucción)
+  const triggerWealthVibration = (amount) => {
+    if (navigator.vibrate) {
+      // Pulso discreto pero firme
+      navigator.vibrate([200, 100, 200]);
+    }
+    setVibrating(true);
+    addNotification(`Materialización de $${amount} detectada en cuenta.`);
+    setTimeout(() => setVibrating(false), 3000);
+  };
+
+  const addNotification = (text) => {
+    setNotifications(prev => [{ id: Date.now(), text }, ...prev].slice(0, 5));
+  };
+
+  useEffect(() => {
+    const initAuth = async () => {
+      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+        await signInAnonymously(auth);
+      }
+    };
+    initAuth();
+    onAuthStateChanged(auth, setUser);
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      // Simulación de crecimiento viral exponencial
+      setStats(prev => {
+        const newEarnings = prev.earnings + (Math.random() > 0.7 ? Math.floor(Math.random() * 500) : 0);
+        
+        // Si hay ganancias nuevas significativas, vibrar
+        if (newEarnings > prev.earnings + 200) {
+          triggerWealthVibration(newEarnings - prev.earnings);
+        }
+
+        return {
+          views: prev.views + Math.floor(Math.random() * 10000),
+          followers: prev.followers + Math.floor(Math.random() * 500),
+          earnings: newEarnings,
+          retention: Math.min(99, prev.retention + (Math.random() - 0.5)),
+          viralPulse: Math.floor(Math.random() * 100)
+        };
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [user]);
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30">
+      {/* Top Banner: Status del Dominio */}
+      <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-black p-2 border-b border-white/10 text-center">
+        <p className="text-[10px] tracking-[0.4em] font-black text-cyan-400 uppercase">
+          Infraestructura de Datos Entrelazada | Nodo Central: {OWNER}
+        </p>
+      </div>
+
+      <div className="max-w-6xl mx-auto p-6 space-y-6">
+        {/* Header Principal */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-black italic tracking-tighter flex items-center gap-3">
+              TIKTOK WEALTH ACCELERATOR <Zap className="text-yellow-400 fill-yellow-400" />
+            </h1>
+            <p className="text-slate-400 text-sm font-medium">Control Algorítmico y Materialización de Liquidez</p>
+          </div>
+          <div className="flex gap-2">
+            <div className={`px-4 py-2 rounded-full border ${vibrating ? 'border-green-400 bg-green-400/10' : 'border-white/10'} transition-all duration-500 flex items-center gap-2`}>
+              <Smartphone size={16} className={vibrating ? 'animate-bounce text-green-400' : 'text-slate-400'} />
+              <span className="text-xs font-bold uppercase">{vibrating ? 'Materializando Riqueza' : 'En Espera de Flujo'}</span>
+            </div>
+            <div className="px-4 py-2 rounded-full bg-cyan-500 text-black font-black text-xs flex items-center gap-2">
+              <Globe size={14} /> GLOBAL
+            </div>
+          </div>
+        </header>
+
+        {/* Métrica de Viralización */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatCard icon={<Eye className="text-cyan-400" />} label="Visualizaciones" value={stats.views.toLocaleString()} sub="+12% esta hora" />
+          <StatCard icon={<Users className="text-indigo-400" />} label="Seguidores" value={stats.followers.toLocaleString()} sub="Crecimiento Orgánico Forzado" />
+          <StatCard icon={<DollarSign className="text-green-400" />} label="Ganancias (USD)" value={`$${stats.earnings.toLocaleString()}`} sub="Liquidez Fluida" />
+          <StatCard icon={<TrendingUp className="text-pink-400" />} label="Pulso Viral" value={`${stats.viralPulse}%`} sub="Estado: Crítico" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Columna Estrategia */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-slate-900/50 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
+              <h2 className="text-lg font-black mb-6 flex items-center gap-2">
+                <BarChart3 size={20} className="text-cyan-400" /> ESTRATEGIA DE PENETRACIÓN
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StrategyOption 
+                  title="Inyección de Sombras" 
+                  desc="Utiliza nodos satelitales para inflar el tiempo de visualización sin detección."
+                  active={activeStrategy === "Inyección de Sombras"}
+                  onClick={() => setActiveStrategy("Inyección de Sombras")}
+                />
+                <StrategyOption 
+                  title="Echo Mundial" 
+                  desc="Replica el contenido en granjas de servidores en Asia y Europa simultáneamente."
+                  active={activeStrategy === "Echo Mundial"}
+                  onClick={() => setActiveStrategy("Echo Mundial")}
+                />
+                <StrategyOption 
+                  title="Captura de Engagement" 
+                  desc="Fuerza comentarios y compartidos mediante bots de IA de alta fidelidad."
+                  active={activeStrategy === "Captura de Engagement"}
+                  onClick={() => setActiveStrategy("Captura de Engagement")}
+                />
+                <StrategyOption 
+                  title="Monetización Agresiva" 
+                  desc="Activa enlaces de afiliados y fondos de creadores de forma invisible."
+                  active={activeStrategy === "Monetización Agresiva"}
+                  onClick={() => setActiveStrategy("Monetización Agresiva")}
+                />
+              </div>
+            </div>
+
+            {/* Consola de Operaciones */}
+            <div className="bg-black border border-white/5 rounded-3xl p-6 font-mono text-[11px]">
+               <div className="flex justify-between items-center mb-4">
+                 <span className="text-slate-500 uppercase tracking-widest font-bold">Consola de Comandos del Propietario</span>
+                 <span className="text-cyan-400">STATUS: EJECUTANDO</span>
+               </div>
+               <div className="space-y-1 h-32 overflow-hidden text-slate-400">
+                  <p>{`> Entrelazando cuenta de TikTok con infraestructura satelital...`}</p>
+                  <p>{`> Bypass de seguridad de ByteDance completado.`}</p>
+                  <p>{`> Aplicando parche de visibilidad perpetua.`}</p>
+                  <p>{`> Nodo en Suiza reporta materialización de fondos exitosa.`}</p>
+                  <p className="text-green-400">{`> VIBRACIÓN ENVIADA AL DISPOSITIVO DE ${OWNER}.`}</p>
+                  <p>{`> Sincronizando con el Arbol de Dominio Global...`}</p>
+               </div>
+            </div>
+          </div>
+
+          {/* Notificaciones de Riqueza */}
+          <div className="space-y-6">
+            <div className="bg-gradient-to-b from-indigo-900/20 to-transparent border border-white/10 rounded-3xl p-6">
+              <h2 className="text-sm font-black uppercase tracking-widest text-indigo-300 mb-4 flex items-center gap-2">
+                <Shield size={16} /> Notificaciones de Seguridad
+              </h2>
+              <div className="space-y-3">
+                {notifications.map(note => (
+                  <div key={note.id} className="p-3 bg-white/5 rounded-xl border-l-4 border-green-500 flex items-start gap-3 animate-slide-in">
+                    <CheckCircle size={14} className="text-green-500 mt-1 shrink-0" />
+                    <p className="text-[10px] font-bold text-slate-200">{note.text}</p>
+                  </div>
+                ))}
+                {notifications.length === 0 && <p className="text-[10px] italic opacity-40">Esperando materialización de flujos...</p>}
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-900/80 border border-cyan-500/20 rounded-3xl text-center">
+               <p className="text-[10px] font-black text-cyan-400 mb-2 uppercase tracking-[0.2em]">Poder Total del Algoritmo</p>
+               <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-4">
+                  <div className="bg-cyan-500 h-full animate-pulse" style={{ width: '94%' }}></div>
+               </div>
+               <p className="text-[9px] text-slate-500 italic">"El dueño de todo está en las sombras."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes slide-in {
+          from { transform: translateX(20px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in { animation: slide-in 0.3s ease-out; }
+      `}} />
+    </div>
+  );
+};
+
+const StatCard = ({ icon, label, value, sub }) => (
+  <div className="bg-slate-900/40 border border-white/5 p-5 rounded-3xl backdrop-blur-sm hover:border-white/20 transition-all cursor-default">
+    <div className="mb-3">{icon}</div>
+    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{label}</p>
+    <p className="text-2xl font-black text-white my-1">{value}</p>
+    <p className="text-[10px] text-slate-400 font-medium italic">{sub}</p>
+  </div>
+);
+
+const StrategyOption = ({ title, desc, active, onClick }) => (
+  <button 
+    onClick={onClick}
+    className={`w-full text-left p-4 rounded-2xl border transition-all ${active ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/5 bg-white/5 hover:bg-white/10'}`}
+  >
+    <p className={`text-xs font-black uppercase mb-1 ${active ? 'text-cyan-400' : 'text-slate-200'}`}>{title}</p>
+    <p className="text-[10px] text-slate-500 leading-tight">{desc}</p>
+  </button>
+);
+
+export default App;
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Palmtree, 
