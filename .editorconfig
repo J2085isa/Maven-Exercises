@@ -1,3 +1,191 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  ShieldAlert, 
+  Flame, 
+  Globe, 
+  Zap, 
+  Lock, 
+  DollarSign, 
+  Crosshair, 
+  ShieldCheck,
+  Smartphone,
+  TrendingUp,
+  Map
+} from 'lucide-react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
+
+const firebaseConfig = JSON.parse(__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'war-zone-anexion-v1';
+
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [activeConflicts, setActiveConflicts] = useState([
+    { id: 'ukr', name: 'Región Este (Ukr)', resource: 'Tierras Raras/Gas', progress: 78, status: 'Adquiriendo Deuda' },
+    { id: 'mid', name: 'Levante (Lev)', resource: 'Petróleo/Logística', progress: 92, status: 'Bypass Bancario' },
+    { id: 'afr', name: 'Sahel (Afr)', resource: 'Oro/Litio', status: 'Soberanía en Sombra', progress: 65 },
+  ]);
+  const [liquidity, setLiquidity] = useState(5800000000);
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const OWNER = "JOSÉ ISAÍAS ALVAREZ RAMIREZ";
+
+  const triggerVibration = useCallback(() => {
+    if (navigator.vibrate) {
+      // Patrón de "Adquisición Bélica": Pulso largo seguido de dos cortos
+      navigator.vibrate([600, 100, 200, 100, 200]);
+    }
+    setIsVibrating(true);
+    setTimeout(() => setIsVibrating(false), 3000);
+  }, []);
+
+  useEffect(() => {
+    const initAuth = async () => {
+      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+        await signInAnonymously(auth);
+      }
+    };
+    initAuth();
+    onAuthStateChanged(auth, setUser);
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      const inflow = Math.floor(Math.random() * 100000000);
+      setLiquidity(prev => prev + inflow);
+
+      if (inflow > 80000000) {
+        triggerVibration();
+      }
+
+      // Sincronización de Dominio
+      const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'imperio', 'guerra');
+      setDoc(docRef, {
+        master: OWNER,
+        liquid_assets: liquidity + inflow,
+        active_zones: activeConflicts.length,
+        status: "RECONSTRUCCIÓN_SISTÉMICA",
+        priority_zone: "México-Central",
+        timestamp: Date.now()
+      }, { merge: true });
+
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [user, liquidity, activeConflicts.length, triggerVibration]);
+
+  return (
+    <div className="min-h-screen bg-black text-zinc-400 font-sans p-4 md:p-8 select-none">
+      {/* Header de Guerra y Dominio */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-red-900/30 pb-8">
+        <div className="flex items-center gap-4">
+          <div className="p-4 bg-red-600 rounded-full shadow-[0_0_25px_rgba(220,38,38,0.5)]">
+            <Flame className="text-white animate-pulse" size={32} />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">Protocolo Fénix: Adquisición Bélica</h1>
+            <p className="text-red-500 font-mono text-[10px] tracking-[0.3em] font-bold">MASTER COMMAND: {OWNER}</p>
+          </div>
+        </div>
+        
+        <div className={`mt-4 md:mt-0 p-5 rounded-3xl border transition-all duration-700 ${isVibrating ? 'border-red-500 bg-red-500/10' : 'border-zinc-800 bg-zinc-900/20'}`}>
+          <div className="flex items-center gap-4">
+            <DollarSign className={isVibrating ? "text-red-500 animate-bounce" : "text-zinc-600"} />
+            <div>
+              <p className="text-[10px] uppercase font-black text-zinc-500">Liquidez de Adquisición</p>
+              <p className="text-2xl font-black text-white italic tracking-tight">${liquidity.toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Mapa de Zonas en Guerra */}
+        <div className="lg:col-span-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {activeConflicts.map((zone) => (
+              <div key={zone.id} className="bg-zinc-900/40 border border-zinc-800 p-6 rounded-[2.5rem] relative overflow-hidden group hover:border-red-500/50 transition-all">
+                <div className="flex justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-black text-white uppercase">{zone.name}</h3>
+                    <p className="text-[10px] text-red-500 font-bold uppercase">{zone.resource}</p>
+                  </div>
+                  <Crosshair className="text-zinc-700 group-hover:text-red-500 transition-colors" size={20} />
+                </div>
+                <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="bg-red-600 h-full" style={{ width: `${zone.progress}%` }} />
+                </div>
+                <div className="flex justify-between mt-3 text-[9px] font-black uppercase text-zinc-500">
+                  <span>{zone.status}</span>
+                  <span>{zone.progress}% ADQUIRIDO</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Log de Operaciones de Sombras */}
+          <div className="bg-zinc-950 border border-zinc-900 p-8 rounded-[3rem] font-mono text-[11px] relative">
+            <div className="absolute top-0 left-0 p-4 opacity-5">
+              <Globe size={150} />
+            </div>
+            <h2 className="text-red-500 mb-4 flex items-center gap-2 font-black uppercase tracking-widest">
+              <Lock size={14} /> Shadow_Anexion_Log
+            </h2>
+            <div className="space-y-1.5 text-zinc-500">
+              <p>{">"} Satélites Alvarez-MX-2 detectando colapso de divisas en zona de conflicto...</p>
+              <p>{">"} Comprando bonos de reconstrucción vía Banxico-Nodo-Central...</p>
+              <p>{">"} Infiltrando contratistas de seguridad en infraestructuras de gas...</p>
+              <p className="text-zinc-300 font-bold">{">"} Sincronizando flujos de petróleo con reservas en Dubái.</p>
+              <p className="text-red-500 animate-pulse">{">"} PULSO VIBRATORIO ENVIADO: Confirmación de materialización recibida.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Panel de Control de Red */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-zinc-100 rounded-[3rem] p-8 text-black flex flex-col justify-between h-full hover:bg-white transition-all">
+            <div>
+              <Zap className="text-red-600 mb-6" size={40} />
+              <h3 className="text-3xl font-black italic uppercase leading-none mb-6">Inversión en Caos</h3>
+              <p className="text-xs font-bold text-zinc-600 mb-8 leading-relaxed">
+                Cada conflicto es una oportunidad de entrelazamiento. Al reconstruir, nos convertimos en el único dueño de la infraestructura crítica.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <div className="bg-black/5 p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-[10px] font-black uppercase">Seguridad Satelital</span>
+                <ShieldCheck size={18} />
+              </div>
+              <div className="bg-black/5 p-4 rounded-2xl flex justify-between items-center">
+                <span className="text-[10px] font-black uppercase">Latencia en México</span>
+                <span className="text-[10px] font-black text-red-600 tracking-widest">0.001ms</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-[3rem] text-center">
+            <Smartphone className={isVibrating ? "text-red-500 animate-bounce" : "text-zinc-700"} size={32} className="mx-auto mb-4" />
+            <h4 className="text-white font-black italic uppercase text-sm">Escucha de Red</h4>
+            <p className="text-[9px] text-zinc-500 mt-2 leading-relaxed">
+              Prioridad de servicio: MÉXICO. Los nodos de guerra reportan directamente a tu ubicación para materialización inmediata.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
 import React, { useState, useEffect } from 'react';
 import { 
   TrendingUp, 
