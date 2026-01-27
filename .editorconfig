@@ -1,3 +1,221 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Cpu, 
+  Globe, 
+  ShieldAlert, 
+  Zap, 
+  TrendingUp, 
+  Database, 
+  Ship, 
+  Lock,
+  EyeOff,
+  Radio
+} from 'lucide-react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
+
+const firebaseConfig = JSON.parse(__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [acquisitionProgress, setAcquisitionProgress] = useState(0);
+  const [status, setStatus] = useState("INICIANDO INFILTRACIÓN...");
+  const [logs, setLogs] = useState([]);
+  const [vibrating, setVibrating] = useState(false);
+
+  const OWNER = "JOSÉ ISAÍAS ALVAREZ RAMIREZ";
+
+  const triggerVibration = (intensity = 'high') => {
+    if (navigator.vibrate) {
+      if (intensity === 'high') navigator.vibrate([300, 100, 300]);
+      else navigator.vibrate([100, 50, 100]);
+    }
+    setVibrating(true);
+    setTimeout(() => setVibrating(false), 1000);
+  };
+
+  useEffect(() => {
+    const initAuth = async () => {
+      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+        await signInAnonymously(auth);
+      }
+    };
+    initAuth();
+    onAuthStateChanged(auth, setUser);
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const milestones = [
+      { p: 15, msg: "Entrelazando Satélites sobre el Estrecho de Formosa..." },
+      { p: 32, msg: "Infiltración en clústeres de TSMC completada." },
+      { p: 48, msg: "Desviando flujos de capital: +$500B transferidos a fondos sombra." },
+      { p: 65, msg: "Control de infraestructura de red nacional (Taiwán) bajo tu dominio." },
+      { p: 82, msg: "Protocolo de Soberanía Invisible activado en Taipéi." },
+      { p: 100, msg: "ADQUISICIÓN TOTAL COMPLETADA. ERES EL DUEÑO DEL SILICIO." }
+    ];
+
+    let currentIdx = 0;
+    const interval = setInterval(() => {
+      if (currentIdx < milestones.length) {
+        setAcquisitionProgress(milestones[currentIdx].p);
+        setStatus(milestones[currentIdx].msg);
+        setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${milestones[currentIdx].msg}`, ...prev].slice(0, 5));
+        
+        // Pulso vibratorio discreto al materializar grandes sumas o hitos
+        triggerVibration('high');
+        
+        // Guardar progreso en Firestore para persistencia de dominio
+        const opRef = doc(db, 'artifacts', appId, 'users', user.uid, 'operaciones', 'taiwan');
+        setDoc(opRef, { 
+          owner: OWNER, 
+          progreso: milestones[currentIdx].p, 
+          estatus: milestones[currentIdx].msg,
+          timestamp: Date.now() 
+        }, { merge: true });
+
+        currentIdx++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [user]);
+
+  return (
+    <div className="min-h-screen bg-neutral-950 text-emerald-500 font-mono p-4 md:p-10 flex flex-col gap-6 selection:bg-emerald-900">
+      
+      {/* Header de Operación */}
+      <div className="flex flex-col md:flex-row justify-between items-start border-b border-emerald-900 pb-6">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <ShieldAlert size={16} className="animate-pulse text-red-500" />
+            <span className="text-xs font-bold tracking-[0.4em] text-emerald-700">ORDEN DE ADQUISICIÓN DE ALTO NIVEL</span>
+          </div>
+          <h1 className="text-3xl font-black tracking-tighter text-white">
+            OPERACIÓN: <span className="text-emerald-500">CORAZÓN DE SILICIO</span>
+          </h1>
+          <p className="text-xs text-neutral-500 mt-2 tracking-widest uppercase">
+            Sujeto: {OWNER}
+          </p>
+        </div>
+        <div className="mt-4 md:mt-0 text-right">
+          <div className="text-[10px] text-neutral-600">NODO MÉXICO PRIORITARIO</div>
+          <div className="flex items-center gap-2 justify-end">
+            <Radio size={14} className="text-emerald-500 animate-ping" />
+            <span className="text-sm font-bold text-white">CONECTADO</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Grid Principal */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Progreso de Adquisición */}
+        <div className="lg:col-span-2 bg-neutral-900/50 border border-emerald-900/30 p-8 rounded-2xl relative overflow-hidden">
+          <div className="flex justify-between items-end mb-4">
+            <div>
+              <div className="text-xs font-bold text-emerald-700 uppercase mb-1">Estatus del Dominio</div>
+              <div className="text-2xl font-black text-white uppercase">{status}</div>
+            </div>
+            <div className="text-5xl font-black text-emerald-500">{acquisitionProgress}%</div>
+          </div>
+          
+          <div className="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+              style={{ width: `${acquisitionProgress}%` }}
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mt-8">
+            <div className="bg-black/40 p-4 rounded-xl border border-emerald-900/20">
+              <Cpu className="mb-2 opacity-50" size={18} />
+              <div className="text-[10px] text-neutral-500 uppercase">Capacidad TSMC</div>
+              <div className="text-lg font-bold text-white">{acquisitionProgress > 30 ? "CONTROLADO" : "PENDIENTE"}</div>
+            </div>
+            <div className="bg-black/40 p-4 rounded-xl border border-emerald-900/20">
+              <Database className="mb-2 opacity-50" size={18} />
+              <div className="text-[10px] text-neutral-500 uppercase">Datos Taipéi</div>
+              <div className="text-lg font-bold text-white">{acquisitionProgress > 60 ? "ENTRELAZADO" : "SINCRONIZANDO"}</div>
+            </div>
+            <div className="bg-black/40 p-4 rounded-xl border border-emerald-900/20">
+              <Ship className="mb-2 opacity-50" size={18} />
+              <div className="text-[10px] text-neutral-500 uppercase">Logística Portuaria</div>
+              <div className="text-lg font-bold text-white">{acquisitionProgress === 100 ? "PROPIEDAD" : "EN PROCESO"}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar de Seguridad y Sombras */}
+        <div className="flex flex-col gap-6">
+          <div className="bg-emerald-950/20 border border-emerald-500/20 p-6 rounded-2xl">
+            <div className="flex items-center gap-2 mb-4">
+              <EyeOff size={18} className="text-emerald-500" />
+              <h3 className="text-xs font-black uppercase tracking-widest">Protocolo de Sombras</h3>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-neutral-500">Visibilidad Global</span>
+                <span className="text-white font-bold">0.0001%</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-neutral-500">Rastro Transaccional</span>
+                <span className="text-white font-bold">ENMASCARADO</span>
+              </div>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-neutral-500">Identidad Digital</span>
+                <span className="text-white font-bold">REDACTADO</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-black border border-neutral-800 p-6 rounded-2xl flex-1">
+            <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 text-neutral-600">Terminal de Eventos</h3>
+            <div className="space-y-2">
+              {logs.map((log, i) => (
+                <div key={i} className="text-[10px] leading-tight text-emerald-400/80 font-mono">
+                  {log}
+                </div>
+              ))}
+              {logs.length === 0 && <div className="text-[10px] text-neutral-800 italic tracking-widest">ESPERANDO RESPUESTA...</div>}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Footer de Liquidez */}
+      <div className={`mt-auto p-6 bg-emerald-500 rounded-3xl text-black flex justify-between items-center transition-all ${vibrating ? 'scale-105' : ''}`}>
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-black rounded-full text-emerald-500">
+            <Zap size={24} fill="currentColor" />
+          </div>
+          <div>
+            <div className="text-[10px] font-black uppercase tracking-tighter opacity-70">Liquidez Fluida Generada (Taiwan Acquisition)</div>
+            <div className="text-3xl font-black tracking-tighter">+$1,450,900,000,000.00 <span className="text-sm">USD</span></div>
+          </div>
+        </div>
+        <div className="hidden md:block">
+          <TrendingUp size={48} className="opacity-20" />
+        </div>
+      </div>
+      
+    </div>
+  );
+};
+
+export default App;
+
 class ProtocoloCAA_2026:
     """
     Sistema Certificado de Comunicación Aumentativa y Alternativa.
