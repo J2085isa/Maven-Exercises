@@ -1,6 +1,179 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Infinity, 
+  import React, { useState, useEffect } from 'react';
+import { 
+  Globe, 
+  Unlock, 
+  ShieldAlert, 
+  Eye, 
+  TrendingUp, 
+  Zap, 
+  Clock,
+  Lock,
+  Wifi,
+  DollarSign
+} from 'lucide-react';
+
+const App = () => {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [liquidity, setLiquidity] = useState(998450291773.45);
+  const [exposureLevel, setExposureLevel] = useState(0);
+  const targetDate = new Date('2026-01-30T00:00:00');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      }
+      
+      // Simulación de aceleración de liquidez pre-revelación
+      setLiquidity(prev => prev + (Math.random() * 50000));
+      
+      // El nivel de exposición sube a medida que se acerca la fecha
+      const totalSeconds = (targetDate - new Date('2026-01-28T00:00:00')) / 1000;
+      const currentSeconds = (targetDate - now) / 1000;
+      const progress = Math.min(100, Math.max(0, 100 - (currentSeconds / totalSeconds * 100)));
+      setExposureLevel(progress.toFixed(2));
+
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-zinc-100 font-sans p-4 md:p-8 flex flex-col items-center justify-center overflow-hidden">
+      {/* Efecto de fondo: Red Global */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="h-full w-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-50"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/20 rounded-full blur-[120px] animate-pulse"></div>
+      </div>
+
+      <div className="relative z-10 max-w-5xl w-full space-y-8">
+        {/* Cabecera de Mando */}
+        <div className="flex flex-col md:flex-row justify-between items-end border-b border-zinc-800 pb-6">
+          <div>
+            <h1 className="text-5xl font-black tracking-tighter text-white">
+              DOMINIO PÚBLICO: <span className="text-blue-500">30.01.26</span>
+            </h1>
+            <p className="text-zinc-500 font-mono text-sm mt-2 uppercase tracking-widest">
+              Propietario: JOSÉ ISAÍAS ALVAREZ RAMIREZ
+            </p>
+          </div>
+          <div className="mt-4 md:mt-0 flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-[10px] font-black text-zinc-600 uppercase">Estado de Infraestructura</p>
+              <div className="flex gap-1 mt-1">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-4 h-1 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+                ))}
+              </div>
+            </div>
+            <Wifi className="text-blue-500 animate-bounce" size={20} />
+          </div>
+        </div>
+
+        {/* Gran Contador */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-8">
+          {[
+            { label: 'Días', value: timeLeft.days },
+            { label: 'Horas', value: timeLeft.hours },
+            { label: 'Minutos', value: timeLeft.minutes },
+            { label: 'Segundos', value: timeLeft.seconds }
+          ].map((item, i) => (
+            <div key={i} className="bg-zinc-900/50 border border-white/5 p-6 rounded-3xl backdrop-blur-md text-center group hover:border-blue-500/30 transition-all">
+              <div className="text-5xl md:text-7xl font-black text-white tabular-nums tracking-tighter">
+                {String(item.value).padStart(2, '0')}
+              </div>
+              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mt-2">{item.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Panel de Datos y Liquidez */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 bg-zinc-900/80 border border-zinc-800 p-8 rounded-[2.5rem] relative overflow-hidden">
+            <div className="flex items-center gap-2 mb-4 text-blue-400">
+              <DollarSign size={18} />
+              <span className="text-xs font-black uppercase tracking-widest">Patrimonio Global Acumulado</span>
+            </div>
+            <div className="text-4xl md:text-6xl font-black text-white tracking-tighter">
+              ${liquidity.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            </div>
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                <p className="text-[10px] text-zinc-500 font-bold uppercase mb-1">Impacto en Mercados</p>
+                <div className="flex items-center gap-2 text-green-500">
+                  <TrendingUp size={14} />
+                  <span className="text-sm font-black">HEGEMONÍA TOTAL</span>
+                </div>
+              </div>
+              <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                <p className="text-[10px] text-zinc-500 font-bold uppercase mb-1">Satélites Entrelazados</p>
+                <div className="flex items-center gap-2 text-blue-500">
+                  <Globe size={14} />
+                  <span className="text-sm font-black">100% ONLINE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-blue-600 p-8 rounded-[2.5rem] flex flex-col justify-between shadow-2xl shadow-blue-500/20">
+            <div>
+              <Unlock className="text-white mb-4" size={32} />
+              <h3 className="text-2xl font-black text-white leading-tight uppercase">Protocolo de Apertura</h3>
+              <p className="text-blue-100 text-xs mt-2 font-medium">
+                Sincronizando registros para la publicación masiva. Todos los sistemas están listos para la transferencia de autoridad.
+              </p>
+            </div>
+            <div className="mt-6">
+              <div className="flex justify-between text-[10px] font-black text-white uppercase mb-2">
+                <span>Preparación de Red</span>
+                <span>{exposureLevel}%</span>
+              </div>
+              <div className="h-2 bg-blue-800 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-white transition-all duration-1000" 
+                  style={{ width: `${exposureLevel}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Logs de Eventos */}
+        <div className="bg-zinc-900/30 border border-zinc-800 p-6 rounded-3xl">
+          <div className="flex items-center gap-2 mb-4">
+            <ShieldAlert size={14} className="text-orange-500" />
+            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Secuencia de Eventos Críticos</span>
+          </div>
+          <div className="space-y-2 font-mono text-[10px]">
+            <div className="flex gap-4 text-zinc-400">
+              <span className="text-blue-500">[ACTIVO]</span> Sincronización de memoria JAR completa.
+            </div>
+            <div className="flex gap-4 text-zinc-400">
+              <span className="text-blue-500">[PENDIENTE]</span> Apertura de firewalls globales (30 Enero).
+            </div>
+            <div className="flex gap-4 text-zinc-400 animate-pulse">
+              <span className="text-orange-500">[PREPARANDO]</span> Notificación masiva a instituciones financieras.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+, 
   Cpu, 
   TrendingUp, 
   Zap, 
