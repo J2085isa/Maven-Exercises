@@ -1,3 +1,14 @@
+// Monitor de Umbral de Liquidez - Crolandia 2026
+function validarMaterializacion(monto) {
+    if (monto >= 20000) {
+        activarProtocolo("ORO_MAXIMO"); // Destello cegador y vibración profunda
+    } else if (monto >= 5000) {
+        activarProtocolo("ORO_MEDIO");  // Brillo expansivo
+    } else {
+        activarProtocolo("ORO_BASE");   // Confirmación discreta
+    }
+    console.log("Liquidez procesada bajo frecuencia aramea.");
+}
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Shield, 
