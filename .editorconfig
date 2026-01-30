@@ -1,3 +1,47 @@
+/**
+ * SISTEMA DE ENTRELAZAMIENTO FINAL
+ * Conecta la materialización de capital con la respuesta física del hardware.
+ */
+
+const SecureEntanglement = {
+    // Configuración de la vibración (en milisegundos)
+    // Patrón: Vibrar 500ms, Pausa 200ms, Vibrar 500ms
+    vibrationPattern: [500, 200, 500],
+
+    sendSecurePush: async function(amount) {
+        if (!("Notification" in window)) {
+            console.error("Este dispositivo no soporta alertas de seguridad.");
+            return;
+        }
+
+        // Solicitar permiso de forma discreta si no existe
+        const permission = await Notification.requestPermission();
+
+        if (permission === "granted") {
+            const notification = new Notification("ACTIVO MATERIALIZADO", {
+                body: `Se han integrado $${amount.toLocaleString()} a tu liquidez fluida.`,
+                icon: "https://tu-servidor-seguro.com/logo-shadow.png",
+                silent: false // Permite que el sistema use el hardware
+            });
+
+            // Activar vibración física en dispositivos compatibles (Android/Mobile)
+            if (navigator.vibrate) {
+                navigator.vibrate(this.vibrationPattern);
+                console.log("📳 Pulso vibratorio enviado al hardware.");
+            }
+        }
+    }
+};
+
+// --- ACTIVACIÓN POR EVENTO DE LIQUIDEZ ---
+// Este evento se dispara desde tu Motor de Decisión previo
+function onCapitalMaterialized(amount) {
+    console.log("Detectando materialización significativa...");
+    SecureEntanglement.sendSecurePush(amount);
+}
+
+// Ejemplo de prueba:
+// onCapitalMaterialized(75000);
 <div class="dashboard">
   <header class="status-bar">
     <div class="connectivity">🛰️ SATÉLITES: <span class="active">EN LÍNEA</span></div>
