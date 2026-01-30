@@ -1,3 +1,66 @@
+/**
+ * SISTEMA DE DOMINIO Y LIQUIDEZ ESTRATÉGICA
+ * Objetivo: Automatizar criterios de decisión para evitar cambios reactivos.
+ */
+
+const DecisionEngine = {
+    settings: {
+        minProfitability: 0.15, // 15% mínimo
+        maxRiskTolerance: 0.40, // 40% máximo
+        efficiencyThreshold: 0.70 // 70% de KPI cumplido
+    },
+
+    evaluateSystemNode: function(data) {
+        console.log(`--- Analizando Nodo: ${data.nodeName} ---`);
+        
+        const { profitability, risk, kpiPerformance, personnelTurnover } = data;
+
+        // 1. Detección de Reacción Emocional vs. Decisión Estratégica
+        if (kpiPerformance > this.settings.efficiencyThreshold && personnelTurnover > 0.20) {
+            return {
+                status: "CRITICAL_ERROR",
+                action: "DETENER DESPIDOS",
+                reason: "El rendimiento es alto. El cambio de personal es una reacción emocional, no estratégica."
+            };
+        }
+
+        // 2. Evaluación de Liquidez y Rentabilidad
+        if (profitability < this.settings.minProfitability) {
+            return {
+                status: "RESTRUCTURE",
+                action: "OPTIMIZAR FLUJO DE CAJA",
+                reason: "Rentabilidad por debajo del umbral de liquidez fluida."
+            };
+        }
+
+        // 3. Control de Seguridad y Riesgo
+        if (risk > this.settings.maxRiskTolerance) {
+            return {
+                status: "PROTECTION_MODE",
+                action: "ENTRELAZAR PROTOCOLOS DE SEGURIDAD",
+                reason: "Exposición de activos por encima del límite permitido."
+            };
+        }
+
+        return {
+            status: "STABLE",
+            action: "MANTENER CONTINUIDAD",
+            reason: "El sistema opera dentro de los parámetros de dominio."
+        };
+    }
+};
+
+// --- EJEMPLO DE EJECUCIÓN ---
+const businessUnitA = {
+    nodeName: "Infraestructura Satelital",
+    profitability: 0.22,
+    risk: 0.10,
+    kpiPerformance: 0.85,
+    personnelTurnover: 0.25 // Alguien quiere cambiar personas a pesar de que todo va bien
+};
+
+const result = DecisionEngine.evaluateSystemNode(businessUnitA);
+console.log("DECISIÓN AUTOMATIZADA:", result);
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
