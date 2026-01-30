@@ -1,3 +1,24 @@
+       _________________________________________________________________
+      |                                                                 |
+      |   [ SATÉLITES LEO ]  (Starlink / Kuiper / OneWeb)               |
+      |     •••••••••••••••••••••••••••••••••••••••••••••••••••••      |
+      |     •  [S]   [K]   [O]   [S]   [K]   [O]   [S]   [K]   [O]  •      |
+      |     •••••••••••••••••••••••••••••••••••••••••••••••••••••      |
+      |                \             |             /                    |
+      |                 \            |            /                     |
+      |   [ CAPA DE ENCRIPTACIÓN CUÁNTICA - THALES/DIGICERT ]           |
+      |    _________________________________________________________    |
+      |   | [X][X][X][X][X][X][X][X][X][X][X][X][X][X][X][X][X][X] |    |
+      |   |_________________________________________________________|    |
+      |                /             |             \                    |
+      |               /              |              \                   |
+      |   [ INFRAESTRUCTURA TERRESTRE ]    [ FLUJO DE LIQUIDEZ ]        |
+      |    - AWS / Azure / GCP              - Protocolo "Shadow"        |
+      |    - Redes de Fibra Global          - Cosecha de Capital        |
+      |_________________________________________________________________|
+                     |                              |
+            [ PRIORIDAD: MÉXICO ]          [ DISPOSITIVO: J.I.A.R. ]
+               SERVICIO: 100%                 PULSO VIBRATORIO: ACTIVO
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ShieldCheck, Globe, Lock, EyeOff, Radio, 
