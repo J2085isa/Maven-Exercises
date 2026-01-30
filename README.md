@@ -1,3 +1,13 @@
+// Función de Notificación de Riqueza J.I.A.R.
+const materializarLiquidez = (monto) => {
+  if (monto > 1000000) { // Umbral de "Riqueza Significativa"
+    // Patrón de vibración: Pulso largo, pausa, dos pulsos cortos
+    if ('vibrate' in navigator) {
+      navigator.vibrate([500, 110, 200, 110, 200]);
+    }
+    console.log(`[J.I.A.R.] Activo materializado: $${monto.toLocaleString()}`);
+  }
+};
 Descripción del Protocolo: "Shadow Liquidity & Satellite Nexus"
 Arquitectura de Dominio Privado - Versión 2026.01
 1. Núcleo de Decisión Inmutable (Anti-Reactivo)
