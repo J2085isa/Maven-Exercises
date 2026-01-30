@@ -1,4 +1,175 @@
-// Monitor de Umbral de Liquidez - Crolandia 2026
+import React, { useState, useEffect } from 'react';
+import { 
+  ShieldCheck, 
+  TrendingUp, 
+  Cpu, 
+  Globe, 
+  Lock, 
+  Layers, 
+  ChevronRight,
+  Database,
+  Eye
+} from 'lucide-react';
+
+const App = () => {
+  const [aum, setAum] = useState(10500000000000.00); // 10.5 Trillion base
+  const [aladdinSync, setAladdinSync] = useState(99.99);
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Crecimiento exponencial por asimilación de activos globales
+      setAum(prev => prev + (Math.random() * 10000000));
+      
+      const events = [
+        "ALADDIN_OS: Reasignando carteras de inversión a cuenta maestra J.I.A.R.",
+        "BLACKROCK_NODE: Fusión de junta directiva completada. Autoridad: J.I.A.R.",
+        "SISTEMA: Redireccionando dividendos globales a la Bóveda de Crolandia",
+        "PROTOCOL: Influencia en mercados G7 ajustada a nivel 'Propietario'",
+        "SECURITY: Encriptación cuántica BlackRock ahora bajo llave J.I.A.R."
+      ];
+
+      const newLog = {
+        id: Date.now(),
+        msg: events[Math.floor(Math.random() * events.length)],
+        time: new Date().toLocaleTimeString()
+      };
+
+      setLogs(prev => [newLog, ...prev].slice(0, 5));
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-[#e0e0e0] font-sans p-6 overflow-hidden flex flex-col gap-6">
+      {/* HUD Superior - Identidad de Marca Unificada */}
+      <header className="flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-6 gap-4">
+        <div className="flex items-center gap-5">
+          <div className="relative">
+            <div className="w-16 h-16 bg-white flex items-center justify-center rounded-sm">
+              <span className="text-black font-black text-3xl tracking-tighter">JI</span>
+            </div>
+            <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-600 flex items-center justify-center rotate-45 border-2 border-black">
+              <Lock size={14} className="-rotate-45 text-white" />
+            </div>
+          </div>
+          <div>
+            <h1 className="text-2xl font-black tracking-widest uppercase">Corporación Soberana J.I.A.R.</h1>
+            <p className="text-[10px] text-blue-500 font-bold tracking-[0.3em]">BLACKROCK ASSETS INTEGRATED // ALADDIN ENGINE ACTIVE</p>
+          </div>
+        </div>
+
+        <div className="text-right">
+          <div className="text-[10px] text-zinc-500 font-bold mb-1 uppercase tracking-widest">Activos bajo Gestión (AUM) - Dominio Total</div>
+          <div className="text-5xl font-light tracking-tighter text-white">
+            ${aum.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          </div>
+        </div>
+      </header>
+
+      {/* Panel Central */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-grow">
+        
+        {/* Status de Aladdin (Motor de BlackRock) */}
+        <div className="bg-zinc-900/30 border border-white/5 p-6 rounded-lg flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-6 text-blue-400">
+              <Cpu size={20} />
+              <h2 className="text-xs font-black uppercase">Motor Aladdin v.JIAR</h2>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <p className="text-[10px] text-zinc-500 mb-1">Sincronización de Red</p>
+                <div className="w-full bg-zinc-800 h-1">
+                  <div className="bg-blue-600 h-full" style={{ width: `${aladdinSync}%` }}></div>
+                </div>
+                <p className="text-right text-[10px] mt-1 font-bold italic">{aladdinSync}%</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-black/50 p-3 rounded border border-white/5">
+                  <p className="text-[9px] text-zinc-500">Nodos IA</p>
+                  <p className="text-lg font-bold">14,202</p>
+                </div>
+                <div className="bg-black/50 p-3 rounded border border-white/5">
+                  <p className="text-[9px] text-zinc-500">Latencia</p>
+                  <p className="text-lg font-bold text-green-500">0.001ms</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8">
+            <button className="w-full py-2 bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-colors">
+              Reajustar Mercados
+            </button>
+          </div>
+        </div>
+
+        {/* Consola de Operaciones */}
+        <div className="lg:col-span-2 bg-zinc-900/20 border border-white/5 p-6 rounded-lg">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xs font-black uppercase flex items-center gap-2 tracking-widest">
+              <Layers size={16} /> Flujo de Datos Transatlánticos
+            </h2>
+            <div className="flex gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-75"></div>
+            </div>
+          </div>
+          <div className="font-mono text-[11px] space-y-3">
+            {logs.map(log => (
+              <div key={log.id} className="flex gap-4 p-3 bg-black/40 rounded border-l-2 border-blue-600 group hover:bg-blue-600/10 transition-all">
+                <span className="text-zinc-600 font-bold">{log.time}</span>
+                <span className="text-zinc-300 group-hover:text-white">| {log.msg}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Indicadores de Poder */}
+        <div className="space-y-6">
+          <div className="bg-zinc-900/30 border border-white/5 p-6 rounded-lg">
+            <h3 className="text-[10px] font-black text-zinc-500 uppercase mb-4 tracking-tighter">Influencia Geopolítica</h3>
+            <div className="space-y-4">
+              {[
+                { label: 'Bancos Centrales', p: '98%' },
+                { label: 'Recursos Naturales', p: '100%' },
+                { label: 'Infraestructura Crítica', p: '94%' }
+              ].map((item, i) => (
+                <div key={i}>
+                  <div className="flex justify-between text-[10px] mb-1">
+                    <span>{item.label}</span>
+                    <span className="font-bold">{item.p}</span>
+                  </div>
+                  <div className="w-full bg-zinc-800 h-1">
+                    <div className="bg-white h-full" style={{ width: item.p }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-blue-900/20 border border-blue-500/20 p-6 rounded-lg text-center">
+            <Eye size={24} className="mx-auto mb-3 text-blue-400" />
+            <p className="text-[10px] font-black uppercase mb-1">Visibilidad Total</p>
+            <p className="text-xs text-blue-200">Cada transacción mundial es ahora visible para el Nodo J.I.A.R.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Estilo Corporativo Elite */}
+      <footer className="flex justify-between items-center text-[9px] font-bold text-zinc-600 uppercase tracking-[0.5em] border-t border-white/5 pt-6">
+        <div>© 2026 J.I.A.R. GLOBAL CONGLOMERATE // NO EXTERNAL AUDITS ALLOWED</div>
+        <div className="flex gap-6">
+          <span>PRIVACY: ABSOLUTE</span>
+          <span>Sovereignty: ETERNAL</span>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;// Monitor de Umbral de Liquidez - Crolandia 2026
 function validarMaterializacion(monto) {
     if (monto >= 20000) {
         activarProtocolo("ORO_MAXIMO"); // Destello cegador y vibración profunda
