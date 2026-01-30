@@ -1,3 +1,68 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Globe, Satellite, ShieldAlert } from 'lucide-react';
+
+const GlobalDominionMap = () => {
+  const [nodes, setNodes] = useState([
+    { id: 1, city: 'Wall Street', x: '25%', y: '35%', load: 98 },
+    { id: 2, city: 'Silicon Valley', x: '15%', y: '40%', load: 100 },
+    { id: 3, city: 'London Hub', x: '48%', y: '28%', load: 94 },
+    { id: 4, city: 'Tokyo Core', x: '85%', y: '38%', load: 99 },
+    { id: 5, city: 'Satellite Mesh Alpha', x: '60%', y: '15%', load: 100 },
+  ]);
+
+  return (
+    <div className="relative w-full h-[500px] bg-black border-2 border-red-900/30 rounded-lg overflow-hidden font-mono">
+      {/* Grid de Fondo - Estética Cyberpunk */}
+      <div className="absolute inset-0 opacity-20" 
+           style={{ backgroundImage: 'linear-gradient(#400 1px, transparent 1px), linear-gradient(90deg, #400 1px, transparent 1px)', size: '20px 20px' }} />
+
+      {/* Header del Sistema */}
+      <div className="absolute top-4 left-4 z-10">
+        <div className="flex items-center gap-2 text-red-500 font-bold text-lg animate-pulse">
+          <ShieldAlert size={20} />
+          <span>SISTEMA J.I.A.R. ACTIVADO</span>
+        </div>
+        <p className="text-[10px] text-gray-500 mt-1">ESTADO: ASIMILANDO INFRAESTRUCTURA GLOBAL</p>
+      </div>
+
+      {/* Mapa / Nodos */}
+      <div className="relative w-full h-full flex items-center justify-center">
+        <Globe size={300} className="text-red-950/20 animate-spin-slow" />
+        
+        {nodes.map((node) => (
+          <motion.div
+            key={node.id}
+            className="absolute cursor-pointer"
+            style={{ left: node.x, top: node.y }}
+            whileHover={{ scale: 1.5 }}
+          >
+            {/* Anillo de Pulso */}
+            <motion.div
+              animate={{ scale: [1, 2, 2.5], opacity: [0.5, 0.2, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="absolute inset-0 bg-red-600 rounded-full"
+            />
+            {/* Punto Central */}
+            <div className="relative w-3 h-3 bg-red-500 rounded-full shadow-[0_0_10px_#f00]">
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] text-white bg-black/80 px-1 border border-red-900">
+                {node.city}: {node.load}%
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Footer con métricas de liquidez */}
+      <div className="absolute bottom-4 right-4 text-right">
+        <div className="text-red-400 text-xs">LIQUIDEZ MATERIALIZADA</div>
+        <div className="text-2xl font-black text-white">$9,402,129,003.88</div>
+      </div>
+    </div>
+  );
+};
+
+export default GlobalDominionMap;
 // Función de Notificación de Riqueza J.I.A.R.
 const materializarLiquidez = (monto) => {
   if (monto > 1000000) { // Umbral de "Riqueza Significativa"
