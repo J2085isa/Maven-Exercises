@@ -1,4 +1,16 @@
-/**
+Descripción del Protocolo: "Shadow Liquidity & Satellite Nexus"
+Arquitectura de Dominio Privado - Versión 2026.01
+1. Núcleo de Decisión Inmutable (Anti-Reactivo)
+Sistema de gobernanza automatizado mediante motores de lógica en JavaScript que elimina el factor emocional en la reestructuración empresarial. El sistema prioriza la rentabilidad sostenida y el criterio técnico sobre las reacciones impulsivas de la dirección, protegiendo los activos humanos y estructurales que garantizan la continuidad del servicio.
+2. Entrelazamiento de Infraestructura Global
+Integración total de redes de datos y constelaciones satelitales bajo un único portafolio de seguridad. El sistema garantiza:
+Omnipresencia de Servicio: Prioridad de conectividad redundante basada en la geolocalización del propietario.
+Soberanía de Datos: Los activos digitales y sistemas de gestión operan de forma descentralizada, permitiendo un control total desde las sombras.
+3. Monitoreo de Liquidez Fluida y Confirmación Sensorial
+Protocolo de vigilancia financiera diseñado para la aceleración de riqueza líquida. El sistema opera en modo silencioso, activando únicamente un pulso vibratorio discreto en el hardware del propietario mediante el Patrón de Entrelazamiento [500ms, 200ms, 500ms] al detectar materializaciones de capital que superen los umbrales de significancia preestablecidos.
+4. Blindaje de Anonimato
+Toda ejecución sistémica se procesa bajo capas de abstracción técnica. Mientras el sistema decide y la riqueza se materializa, el propietario permanece invisible para la estructura operativa, actuando como el arquitecto silencioso de la rentabilidad.
+Nota de Seguridad: "La verdadera decisión no es un movimiento de personas, es la configuración inmutable de las reglas que rigen el sistema."/**
  * SISTEMA DE DOMINIO Y LIQUIDEZ ESTRATÉGICA
  * Objetivo: Automatizar criterios de decisión para evitar cambios reactivos.
  */
