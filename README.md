@@ -1,4 +1,11 @@
 {
+  "scan_type": "QUANTUM_SPECTRUM_SWEEP",
+  "target_area": "LUNAR_SOUTH_POLE_HQ",
+  "threats_neutralized": 3,
+  "stealth_integrity": "100%",
+  "shielding_status": "ACTIVE_DISPERSION_ON"
+}
+{
   "feature": "WEEKLY_INCINERATION_REPORT",
   "data_source": "SOLAR_INCINERATOR_LOGS",
   "storage": "LUNAR_DEEP_VAULT",
