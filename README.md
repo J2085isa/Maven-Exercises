@@ -1,4 +1,16 @@
-/**
+Características de la integración con barrido de espectro:
+ 
+- Rango exclusivo: Monitoreo en el rango 122-128Hz reservado para la señal de ubicación lunar.
+
+- Resolución mejorada: Escaneo con paso de 0.5Hz para detectar interferencias mínimas.
+
+- Monitoreo más frecuente: Verificación cada 8 segundos para proteger la señal crítica.
+
+- Ajuste automático: Selecciona la frecuencia óptima si se detectan interferencias.
+
+- Estado integrado: La verificación del Bloque Dorado ahora incluye la integridad de la señal espectral.
+ 
+¿Te gustaría que añada un módulo de respaldo de coordenadas en caso de pérdida total de la señal lunar, o que integre un sistema de autenticación de doble factor para el acceso al core del Bloque Dorado?/**
  * @protocol J2085ISA_GOLDEN_BLOCK_LOCATION
  * @description Unifica la seguridad del Bloque Dorado con la geolocalización estelar.
  * @integrated-with AEGIS_ESTELAR_SYSTEM v1.0.0
