@@ -1,4 +1,17 @@
-document.addEventListener("DOMContentLoaded", function() {
+Descripción: Módulo de Validación Frontend (Hugo)
+Archivo: assets/js/contact-validation.js
+Propósito: Garantizar la integridad de los datos capturados a través del formulario de contacto antes de su procesamiento por el motor de despliegue (Netlify/GitHub Pages).
+🛠️ Especificaciones Técnicas
+Mecanismo: Event Listener vinculado al evento submit del DOM.
+Validaciones Incluidas:
+Sintaxis de Email: Implementación de expresión regular (Regex) para verificar el formato @ y dominio.
+Sanitización de Mensaje: Uso de .trim() para evitar envíos compuestos únicamente por espacios en blanco.
+Longitud Mínima: Restricción de seguridad para evitar spam de mensajes vacíos (mínimo 10 caracteres).
+Control de Flujo: Uso de event.preventDefault() para interceptar envíos fallidos sin recargar la página.
+📊 Integración en el Flujo de Hugo
+El script se integra mediante el Asset Pipeline de Hugo para asegurar que se minifique y procese como un recurso estático optimizado.
+📝 Actualización para el Informe (INFORME-SITIO-ACADEMICO.md)
+Puedes copiar y pegar esta entrada en tu tabla de progreso:document.addEventListener("DOMContentLoaded", function() {
     const contactForm = document.querySelector('#contact-form');
     
     if (contactForm) {
