@@ -1,3 +1,36 @@
+git clone https://github.com/J2085isa/academic-kickstart.git
+cd academic-kickstart
+nvm use  # Asegúrate de tener la versión de Node indicada en el README
+npm ci  # Instala dependencias de JS (ej: para widgets o animaciones)
+hugo mod get -u  # Actualiza módulos de Hugo con componentes JS
+git clone https://github.com/J2085isa/Algoritmos-y-estructuras-de-datos.git
+cd Algoritmos-y-estructuras-de-datos/JavaScript
+nvm use
+npm install jest --save-dev  # Para ejecutar tests de los algoritmos
+hugo server --debug  # Muestra logs de carga de archivos JS
+npm run build  # Genera archivos empaquetados en la carpeta public
+# Verifica que los scripts estén incluidos en el archivo layouts/partials/head.html
+node <nombre-del-archivo>.js  # Ejecuta el script directamente para ver logs
+npx jest <archivo-de-test>.test.js --verbose  # Ejecuta tests con detalle
+# Compara tu código con los ejemplos en la carpeta "Soluciones" del repositorio
+// diagnostico-j2085isa.js
+const { execSync } = require('child_process');
+const fs = require('fs');
+
+try {
+  console.log('=== Diagnóstico Repositorio J2085isa ===');
+  console.log('Versión de Node:', process.version);
+  console.log('Archivos JS presentes:', fs.readdirSync('./').filter(f => f.endsWith('.js')).join(', '));
+  if (fs.existsSync('./package.json')) {
+    console.log('Scripts del proyecto:', Object.keys(require('./package.json').scripts || {}).join(', '));
+  }
+  if (fs.existsSync('../Python')) {
+    console.log('Carpeta Python detectada - Verifica compatibilidad de rutas');
+  }
+  console.log('=== Diagnóstico Exitoso ===');
+} catch (error) {
+  console.error('=== Error en Diagnóstico ===', error.message);
+}
 Estado y Estructura de Datos:
 - Utilizas `useState` para manejar los nodos, que representan diferentes ciudades con su respectiva carga (load). Esto te permite tener un control dinámico sobre las localidades representadas en el mapa.
 
