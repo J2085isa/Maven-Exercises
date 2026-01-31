@@ -1,4 +1,345 @@
-MANUAL DE OPERACIÓN - PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
+MANUAL DE OPERACIÓN - COMPLEMENTO
+ 
+CAPACITACIÓN DEL PERSONAL + SCRIPTS DE AUTOMATIZACIÓN
+ 
+PARA PERSONAL AUTORIZADO DEL PRINCIPADO SOMBRIO
+FECHA DE ACTUALIZACIÓN: 2026-02-03
+ 
+ 
+ 
+PARTE 1: CAPACITACIÓN DEL PERSONAL
+ 
+MÓDULO 1: CONOCIMIENTOS BÁSICOS
+ 
+1.1 INTRODUCCIÓN AL PROTOCOLO
+ 
+- Objetivo de capacitación: Que el personal comprenda el propósito y alcance del protocolo, respetando siempre los límites de la soberanía
+- Temas clave:
+- Definición de "información sensible" según códigos penales del Principado
+- Diferencia entre actividades prohibidas y permitidas en la Deep Web
+- Importancia del cifrado E2E para la seguridad de la red
+- Evaluación: Prueba teórica de 20 preguntas (ejemplos):
+1. ¿Qué actividades justifican la intervención del protocolo?
+2. ¿Cuáles son las penalizaciones permitidas para nodos infractores?
+3. ¿Por qué no se debe intervenir en actividades fuera de la jurisdicción?
+ 
+1.2 NAVEGACIÓN EN LA INTERFAZ
+ 
+- Prácticas guiadas:
+- Iniciar y detener el sistema desde la CLI
+- Acceder y navegar por el dashboard de monitoreo
+- Consultar y exportar logs de auditoría
+- Ejercicio práctico:
+- Simular una filtración de datos y verificar que el sistema actúa correctamente
+- Identificar una actividad ilícita en el dashboard y revisar su evidencia
+ 
+MÓDULO 2: OPERACIONES INTERMEDIAS
+ 
+2.1 GESTIÓN DE NODOS
+ 
+- Temas clave:
+- Cómo identificar nodos confiables vs. infractores
+- Procedimiento para agregar nuevos nodos a la lista de confianza
+- Regeneración de claves E2E en caso de compromiso
+- Ejercicio práctico:
+- Agregar un nodo de prueba a la lista de respaldos
+- Generar claves E2E para el nodo y verificar su funcionamiento
+- Simular un ataque en el nodo y aplicar la penalización correspondiente
+ 
+2.2 MANEJO DE EVIDENCIAS
+ 
+- Temas clave:
+- Cómo verificar la integridad de las evidencias (hash SHA-256)
+- Procedimiento para retener y almacenar evidencias en el depósito lunar
+- Criterios para eliminar evidencias según códigos penales
+- Ejercicio práctico:
+- Exportar una evidencia, verificar su hash y almacenarla en un medio seguro
+- Generar un reporte de evidencia para las autoridades soberanas
+ 
+MÓDULO 3: OPERACIONES AVANZADAS (SOLO PARA COMANDANTES)
+ 
+3.1 PROCEDIMIENTOS DE EMERGENCIA
+ 
+- Temas clave:
+- Identificación de ataques masivos a la red
+- Activación del modo de emergencia y ajustes de configuración
+- Coordinación con autoridades soberanas en casos críticos
+- Simulación de emergencia:
+- Ejecutar script de simulación de ataque masivo
+- Aplicar todos los pasos del procedimiento de emergencia
+- Generar y enviar el reporte correspondiente
+ 
+3.2 AJUSTES DE CONFIGURACIÓN
+ 
+- Temas clave:
+- Modificación de criterios de soberanía según actualizaciones legales
+- Ajuste de intervalos de barrido y umbrales de detección
+- Integración con nuevos módulos del sistema Aegis Estelar
+- Ejercicio práctico:
+- Actualizar la lista de actividades prohibidas en la configuración
+- Ajustar el intervalo de barrido para periodos de alto riesgo
+- Integrar un nuevo módulo de detección de amenazas
+ 
+PLAN DE CAPACITACIÓN
+ 
+ROL MODULOS REQUERIDOS DURACIÓN FRECUENCIA DE ACTUALIZACIÓN 
+Operador Nivel 1 Módulo 1 8 horas Cada 3 meses 
+Operador Nivel 2 Módulo 1 + Módulo 2 16 horas Cada 2 meses 
+Comandante Todos los módulos 24 horas Cada mes 
+ 
+ 
+ 
+PARTE 2: SCRIPTS DE AUTOMATIZACIÓN
+ 
+SCRIPT 1: MANTENIMIENTO SEMANAL AUTOMÁTICO
+ 
+bash  
+#!/bin/bash
+# NOMBRE: mantenimiento-semanal.sh
+# DESCRIPCIÓN: Automatiza tareas de mantenimiento semanal del protocolo
+# EJECUCIÓN: sudo ./mantenimiento-semanal.sh
+
+# Fecha actual para nombres de archivo
+FECHA=$(date +%Y-%m-%d)
+RUTA_RESPALDO="/var/respaldos-protocolo/$FECHA"
+RUTA_LOGS="/var/log/protocolo"
+
+# Crear carpeta de respaldo
+mkdir -p $RUTA_RESPALDO
+
+echo "============================================="
+echo "INICIANDO MANTENIMIENTO SEMANAL - $FECHA"
+echo "============================================="
+
+# 1. Exportar logs de auditoría y estado
+echo "[PASO 1] Exportando logs..."
+node -e "
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+const fs = require('fs');
+const fecha = '$FECHA';
+const auditoria = AxiomaUbicacion.exportAuditLog();
+const estado = JSON.stringify({
+    fecha_exportacion: new Date().toISOString(),
+    estado_sistema: AxiomaUbicacion.checkGoldenBlockStatus()
+}, null, 2);
+fs.writeFileSync('$RUTA_RESPALDO/auditoria-semanal-$FECHA.json', auditoria);
+fs.writeFileSync('$RUTA_RESPALDO/estado-semanal-$FECHA.json', estado);
+console.log('Logs exportados correctamente');
+"
+
+# 2. Eliminar evidencias procesadas (más de 6 meses)
+echo "[PASO 2] Eliminando evidencias antiguas..."
+find ./ -name "evidencia-*.json" -type f -mtime +180 -delete
+echo "Evidencias antiguas eliminadas"
+
+# 3. Verificar espacio en disco
+echo "[PASO 3] Verificando espacio en disco..."
+ESPACIO_DISPONIBLE=$(df -h / | grep / | awk '{ print $4 }')
+echo "Espacio disponible en disco: $ESPACIO_DISPONIBLE"
+
+if [ $(df -P / | awk 'NR==2 {print $5}' | sed 's/%//') -ge 80 ]; then
+    echo "⚠️ ADVERTENCIA: Espacio en disco superior al 80%"
+    # Enviar alerta por correo
+    echo "Asunto: Alerta de espacio en disco - Protocolo GDS_J2085ISA" > $RUTA_RESPALDO/alerta-disco-$FECHA.txt
+    echo "Mensaje: Espacio disponible: $ESPACIO_DISPONIBLE" >> $RUTA_RESPALDO/alerta-disco-$FECHA.txt
+    # mail -s "Alerta Protocolo GDS_J2085ISA" soporte@principado-sombrio.net < $RUTA_RESPALDO/alerta-disco-$FECHA.txt
+fi
+
+# 4. Actualizar lista de nodos confiables desde depósito lunar
+echo "[PASO 4] Actualizando lista de nodos confiables..."
+# Simulación de descarga desde depósito lunar
+curl -s "https://lunar-vault.principado-sombrio.net/nodos-confiables.json" -o ./nodos-confiables.json
+echo "Lista de nodos actualizada"
+
+# 5. Generar reporte de mantenimiento
+echo "[PASO 5] Generando reporte..."
+REPORTE="$RUTA_RESPALDO/reporte-mantenimiento-$FECHA.txt"
+echo "REPORTE DE MANTENIMIENTO SEMANAL - PROTOCOLO GDS_J2085ISA" > $REPORTE
+echo "Fecha: $FECHA" >> $REPORTE
+echo "Logs exportados: Sí" >> $REPORTE
+echo "Evidencias eliminadas: Sí" >> $REPORTE
+echo "Espacio en disco disponible: $ESPACIO_DISPONIBLE" >> $REPORTE
+echo "Nodos confiables actualizados: Sí" >> $REPORTE
+
+echo "============================================="
+echo "MANTENIMIENTO COMPLETADO - Reporte guardado en $REPORTE"
+echo "============================================="
+ 
+ 
+SCRIPT 2: SIMULACIÓN DE ENTRENAMIENTO
+ 
+javascript  
+// NOMBRE: simulacion-entrenamiento.js
+// DESCRIPCIÓN: Simula escenarios de entrenamiento para personal autorizado
+
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+const { GLOBAL_SECURITY_CONFIG } = require('./global-security-shield');
+
+// Escenarios de simulación
+const ESCENARIOS = [
+    {
+        id: 1,
+        nombre: "Filtración de datos sensibles",
+        descripcion: "Nodo desconocido transmite datos del Bloque Dorado",
+        nodo: { id: "SIM_NODE_01", ip: "192.168.1.200", data: { sensitive: true, type: "GOLDEN_BLOCK_DATA" } }
+    },
+    {
+        id: 2,
+        nombre: "Venta de identidad personal",
+        descripcion: "Nodo comercializa información de identidad para corrupción",
+        nodo: { id: "SIM_NODE_02", ip: "192.168.1.201", data: { sensitive: false, type: "VENTA_DE_IDENTIDAD_PERSONAL" } }
+    },
+    {
+        id: 3,
+        nombre: "Actividad legal en Deep Web",
+        descripcion: "Nodo opera dentro de los límites de la soberanía",
+        nodo: { id: "SIM_NODE_03", ip: "192.168.1.202", data: { sensitive: false, type: "ACTIVIDAD_LEGAL" } }
+    }
+];
+
+// Función para ejecutar escenario
+function ejecutarEscenario(escenarioId) {
+    const escenario = ESCENARIOS.find(e => e.id === escenarioId);
+    if (!escenario) {
+        console.log("❌ Escenario no encontrado");
+        return;
+    }
+
+    console.log(`\n📚 EJECUTANDO ESCENARIO ${escenario.id}: ${escenario.nombre}`);
+    console.log(`Descripción: ${escenario.descripcion}`);
+
+    // Simular escaneo del nodo
+    if (escenario.nodo.data.sensitive) {
+        console.log("⚠️ DETECTADA FILTRACIÓN DE DATOS");
+        const resultado = AxiomaUbicacion.triggerSolarIncinerator(escenario.nodo.ip);
+        console.log(`Resultado: ${resultado}`);
+    } else if (GLOBAL_SECURITY_CONFIG.sovereigntyCriteria.forbiddenActivities.includes(escenario.nodo.data.type)) {
+        console.log("⚖️ DETECTADA ACTIVIDAD ILÍCITA SEGÚN CRITERIOS DE SOBERANÍA");
+        const penalizacion = GLOBAL_SECURITY_CONFIG.sovereigntyCriteria.allowedPenalties[Math.floor(Math.random() * GLOBAL_SECURITY_CONFIG.sovereigntyCriteria.allowedPenalties.length)];
+        console.log(`Penalización aplicada: ${penalizacion}`);
+        console.log(`Evidencia generada: ${require('crypto').createHash('sha256').update(escenario.nodo.ip + Date.now()).digest('hex')}`);
+    } else {
+        console.log("✅ ACTIVIDAD LEGAL - NO SE REALIZA INTERVENCIÓN");
+    }
+
+    console.log("\n📝 PREGUNTAS DE EVALUACIÓN:");
+    switch (escenario.id) {
+        case 1:
+            console.log("1. ¿Qué acción debió tomar el sistema?");
+            console.log("2. ¿Por qué se aplica esta acción?");
+            break;
+        case 2:
+            console.log("1. ¿Esta actividad está dentro de los criterios prohibidos?");
+            console.log("2. ¿Qué otras penalizaciones se podrían aplicar?");
+            break;
+        case 3:
+            console.log("1. ¿Por qué no se debe intervenir en este nodo?");
+            console.log("2. ¿Qué pasaría si se interviniera de todas formas?");
+            break;
+    }
+}
+
+// Menú de simulación
+console.log("=============================================");
+console.log("SIMULADOR DE ENTRENAMIENTO - PROTOCOLO GDS_J2085ISA");
+console.log("=============================================");
+console.log("Escenarios disponibles:");
+ESCENARIOS.forEach(e => console.log(`${e.id}. ${e.nombre}`));
+console.log("\nEscribe el número del escenario a ejecutar (o 'salir' para terminar):");
+
+// Leer entrada del usuario
+const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+readline.on('line', (input) => {
+    if (input.toLowerCase() === 'salir') {
+        console.log("✅ Simulación terminada");
+        readline.close();
+        return;
+    }
+
+    const escenarioId = parseInt(input);
+    ejecutarEscenario(escenarioId);
+    console.log("\nEscribe otro número de escenario o 'salir':");
+});
+ 
+ 
+SCRIPT 3: VERIFICACIÓN DE INTEGRIDAD DEL SISTEMA
+ 
+bash  
+#!/bin/bash
+# NOMBRE: verificacion-integridad.sh
+# DESCRIPCIÓN: Verifica que todos los módulos del sistema funcionen correctamente
+
+echo "============================================="
+echo "VERIFICANDO INTEGRIDAD DEL PROTOCOLO GDS_J2085ISA"
+echo "============================================="
+
+# 1. Verificar que Node.js esté instalado
+echo "[PASO 1] Verificando dependencias..."
+if command -v node &> /dev/null; then
+    echo "✅ Node.js está instalado: $(node -v)"
+else
+    echo "❌ Node.js no está instalado"
+    exit 1
+fi
+
+# 2. Verificar que módulos estén instalados
+echo "[PASO 2] Verificando módulos npm..."
+if [ -d "node_modules" ]; then
+    echo "✅ Carpeta node_modules existe"
+    MODULOS_REQUERIDOS=("express" "mqtt" "crypto" "readline")
+    for modulo in "${MODULOS_REQUERIDOS[@]}"; do
+        if [ -d "node_modules/$modulo" ]; then
+            echo "✅ Módulo $modulo instalado"
+        else
+            echo "❌ Módulo $modulo NO instalado"
+        fi
+    done
+else
+    echo "❌ Carpeta node_modules no existe - Ejecuta 'npm install'"
+    exit 1
+fi
+
+# 3. Verificar archivos del sistema
+echo "[PASO 3] Verificando archivos del sistema..."
+ARCHIVOS_REQUERIDOS=("axioma-ubicacion.js" "global-security-shield.js" "bloque-dorado-cli.js")
+for archivo in "${ARCHIVOS_REQUERIDOS[@]}"; do
+    if [ -f "$archivo" ]; then
+        echo "✅ Archivo $archivo existe"
+        # Verificar hash del archivo (ejemplo)
+        HASH_ESPERADO=$(cat "hashes-archivos.txt" | grep $archivo | awk '{print $2}')
+        HASH_ACTUAL=$(sha256sum $archivo | awk '{print $1}')
+        if [ "$HASH_ACTUAL" = "$HASH_ESPERADO" ]; then
+            echo "✅ Integridad de $archivo confirmada"
+        else
+            echo "⚠️ ADVERTENCIA: Integridad de $archivo no confirmada"
+        fi
+    else
+        echo "❌ Archivo $archivo NO existe"
+    fi
+done
+
+# 4. Prueba de funcionamiento básico
+echo "[PASO 4] Prueba de funcionamiento básico..."
+node -e "
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+const estado = AxiomaUbicacion.checkGoldenBlockStatus();
+console.log('✅ Estado del sistema: ' + estado);
+"
+
+echo "============================================="
+echo "VERIFICACIÓN COMPLETADA"
+echo "============================================="
+ 
+ 
+ 
+ 
+INSTRUCCIONES DE USO DE LOS SCRIPTS
+ 
+**PARA EL SCRIPT DE MANTENMANUAL DE OPERACIÓN - PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
  
 PARA PERSONAL AUTORIZADO DEL PRINCIPADO SOMBRIO
 FECHA DE PUBLICACIÓN: 2026-02-01
