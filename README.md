@@ -1,4 +1,19 @@
 {
+  "lunar_assets": {
+    "hardware": "PROPIETARIO_COMPLETO",
+    "defense_system": {
+      "name": "AEGIS_LUNAR_AI",
+      "mode": "AUTONOMOUS_PROTECTION",
+      "decision_latency": "SUB_NANOSECOND",
+      "status": "GUARDING"
+    }
+  },
+  "global_liquidity": {
+    "monitoring": "REAL_TIME_VIA_AI",
+    "pulsatory_feedback": "EN_LINEA"
+  }
+}
+{
   "asset_id": "LUNAR-CORE-PROPRIETARY",
   "owner": "J2085isa",
   "location": "Mare Shackleton / Lunar South Pole",
