@@ -1,4 +1,35 @@
-package.jsonDescripción de los Informes de Ejercicios Resueltos en Repositorios de J2085isa
+document.addEventListener("DOMContentLoaded", function() {
+    const contactForm = document.querySelector('#contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(event) {
+            let isValid = true;
+            const email = document.querySelector('#email').value;
+            const message = document.querySelector('#message').value;
+
+            // Validación básica de Email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                console.error("Email inválido");
+                isValid = false;
+            }
+
+            // Validación de contenido
+            if (message.trim().length < 10) {
+                console.warn("El mensaje es demasiado corto");
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Detiene el envío si hay errores
+                alert("Por favor, verifica los campos antes de enviar.");
+            } else {
+                console.log("Validación exitosa. Enviando datos...");
+            }
+        });
+    }
+});
+ de los Informes de Ejercicios Resueltos en Repositorios de J2085isa
  
 Los informes de ejercicios resueltos son herramientas automatizadas generadas mediante scripts de JavaScript (Node.js), diseñadas para dar seguimiento claro y estructurado al avance en proyectos educativos del perfil J2085isa, como Maven-Exercises o Algoritmos-y-estructuras-de-datos.
  
