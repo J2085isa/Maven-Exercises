@@ -1,4 +1,19 @@
 {
+  "autonomous_axioms": {
+    "stress_management": {
+      "id": "AUTO_STRESS_V1",
+      "priority": "MAXIMA_CRITICA",
+      "execution_interval": "45m",
+      "auto_healing": true,
+      "failure_threshold": "5%_PERFORMANCE_DROP"
+    }
+  },
+  "network_integrity": {
+    "current_speed": "OPTIMA",
+    "last_auto_test": "31/01/2026 09:04:12"
+  }
+}
+{
   "operation": "TABULA_RASA",
   "status": "EN_CURSO_94%",
   "terrestrial_footprint": "DELETED",
