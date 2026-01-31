@@ -1,4 +1,38 @@
-// generar-informe-ejercicios.js
+Descripción de los Informes de Ejercicios Resueltos en Repositorios de J2085isa
+ 
+Los informes de ejercicios resueltos son herramientas automatizadas generadas mediante scripts de JavaScript (Node.js), diseñadas para dar seguimiento claro y estructurado al avance en proyectos educativos del perfil J2085isa, como Maven-Exercises o Algoritmos-y-estructuras-de-datos.
+ 
+Objetivo Central
+ 
+Su propósito es documentar de forma sistemática el estado de cada ejercicio, facilitando tanto el autoaprendizaje como la revisión externa. Se busca evitar la necesidad de rastrear manualmente qué actividades están completas, en proceso o pendientes, además de registrar detalles clave que respalden el entendimiento de los temas abordados.
+ 
+Características Distintivas
+ 
+- Adaptabilidad: Se ajustan a la estructura específica de cada repositorio. Por ejemplo, en Maven-Exercises evalúan la validez de archivos  pom.xml , mientras que en Algoritmos-y-estructuras-de-datos verifican el cumplimiento de requisitos de complejidad algorítmica.
+
+- Formatos de Salida: Predominantemente en Markdown (para integración directa en la documentación del repositorio) y JSON (para almacenamiento de datos o exportación a otras herramientas). Algunos casos incluyen versiones en texto plano para mayor accesibilidad.
+
+- Automatización Inteligente: Los scripts leen la organización de carpetas y archivos del proyecto para detectar:
+
+- Si existe una solución escrita (ej: archivo  .js ,  .java  o  pom.xml  configurado).
+
+- Si las pruebas asociadas han sido superadas (mediante archivos de confirmación o ejecución de tests básicos).
+
+- Fechas de creación y modificación de los archivos de solución.
+ 
+Estructura Típica
+ 
+- Encabezado: Incluye fecha y hora de generación, nombre del repositorio y tema de los ejercicios.
+
+- Tabla de Contenido: Sección principal con columnas estándar como Nombre del Ejercicio, Estado (Completado, En Progreso, Pendiente), Fecha de Finalización y Detalles (pruebas superadas, observaciones o errores pendientes).
+
+- Sección Adicional: En algunos casos, se incluye un resumen con estadísticas (ej: porcentaje de ejercicios completados) o notas sobre temas que requieren mayor profundización.
+ 
+Integración en el Flujo de Trabajo
+ 
+- El script generador se incluye en el repositorio con un comando definido en el  package.json  para su ejecución sencilla.
+
+- Los informes generados se actualizan periódicamente y se guardan en la raíz del proyecto o en una carpeta dedicada a documentación, permitiendo que otros colaboradores o estudiantes consulten el progreso y los ejemplos de soluciones.// generar-informe-ejercicios.js
 const fs = require('fs').promises;
 const path = require('path');
 
