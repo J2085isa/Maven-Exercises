@@ -1,3 +1,25 @@
+{
+  "project": "HELIOS_GLOBAL_CONTROL",
+  "status": "ENTRELAZADO_TOTAL",
+  "active_nodes": {
+    "LEO_Constellation": {
+      "satellite_id": "HEL-01-ALPHA",
+      "position": { "lat": "19.4326", "lon": "-99.1332" },
+      "signal_strength": "100%",
+      "uplink_status": "ENCRIPTADO_GPG"
+    },
+    "GEO_Backbone": {
+      "satellite_id": "HEL-SYNC-PRIME",
+      "redundancy": "ACTIVA",
+      "data_mirror": "${ENV.DIR_DOMINIO_PRINCIPAL}/vault/backup"
+    }
+  },
+  "liquidity_sync": {
+    "last_pulse": "30/01/2026 22:05:12",
+    "latency": "14ms",
+    "security_layer": "Protocolo_Cero_Rastros"
+  }
+}
 ${ENV.DIR_DOMINIO_PRINCIPAL# HASH_MAPPING (J2085isa-2026)
 ID_REF: 7a2f9d4e1b6c... -> STATUS: VALIDATED
 SIG_VAL: 3f8b2e5a1d7c... -> SYNC: OK
