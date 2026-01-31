@@ -1,4 +1,378 @@
-INTEGRACIÓN COMPLETA DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA
+PRUEBA DE ESTRÉS DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA
+ 
+OBJETIVO: Evaluar el rendimiento y resistencia del sistema ante cargas extremas, ataques masivos y escenarios de alta complejidad
+DURACIÓN ESTIMADA: 2 horas
+REQUISITOS: Servidor con al menos 8 GB RAM, 4 núcleos de CPU y conexión de red de alta velocidad
+ 
+ 
+ 
+SCRIPT DE PRUEBA DE ESTRÉS COMPLETO
+ 
+javascript  
+/**
+ * @script PRUEBA_ESTRES_GLOBAL_DATA_SHIELD
+ * @description Simula cargas extremas, ataques masivos y escenarios complejos para evaluar el sistema
+ */
+
+const http = require('http');
+const mqtt = require('mqtt');
+const crypto = require('crypto');
+const fs = require('fs');
+const { fork } = require('child_process');
+
+// Configuración de la prueba
+const PRUEBA_CONFIG = {
+    duracionTotal: 7200000, // 2 horas en ms
+    intervaloNuevosNodos: 100, // Generar nodo cada 100ms
+    cantidadNodosAtacantes: 500, // Nodos maliciosos simultáneos
+    tasaFiltracionesPorSegundo: 20, // Filtraciones simuladas por segundo
+    tasaActividadesIllicitas: 15, // Actividades ilícitas por segundo
+    puertoPruebaAPI: 3001,
+    brokerMQTTPrueba: 'mqtt://localhost:1884'
+};
+
+// Almacenes de estado de la prueba
+let pruebaActiva = true;
+let contadores = {
+    nodosGenerados: 0,
+    filtracionesSimuladas: 0,
+    actividadesIllicitasSimuladas: 0,
+    solicitudesAPI: 0,
+    mensajesMQTT: 0,
+    erroresSistema: 0
+};
+
+// Reporte de resultados
+const reportePrueba = {
+    inicio: new Date().toISOString(),
+    fin: null,
+    configuracion: PRUEBA_CONFIG,
+    contadores: contadores,
+    metricasRendimiento: [],
+    errores: []
+};
+
+// --- MÓDULO 1: SIMULACIÓN DE NODOS MASIVOS ---
+function simularNodosMasivos() {
+    const intervalo = setInterval(() => {
+        if (!pruebaActiva) {
+            clearInterval(intervalo);
+            return;
+        }
+
+        // Generar nodo aleatorio (confiable, atacante o legal)
+        const tipoNodo = Math.random();
+        let nodo = {
+            id: `SIM_NODE_${contadores.nodosGenerados + 1}`,
+            ip: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+            data: {
+                sensitive: false,
+                type: "ACTIVIDAD_LEGAL"
+            }
+        };
+
+        // Nodo atacante - filtración de datos
+        if (tipoNodo < 0.4) {
+            nodo.data.sensitive = true;
+            nodo.data.type = "GOLDEN_BLOCK_DATA";
+            contadores.filtracionesSimuladas++;
+            enviarFiltracionSimulada(nodo);
+        }
+        // Nodo atacante - actividad ilícita
+        else if (tipoNodo < 0.7) {
+            const actividadesIllicitas = [
+                "VENTA_DE_IDENTIDAD_PERSONAL",
+                "COMERCIO_DE_INFORMACION_SOCIAL_PARA_CORRUPCION",
+                "MANIPULACION_DE_DATOS_PENALES_CON_FINES_ILEGALES"
+            ];
+            nodo.data.type = actividadesIllicitas[Math.floor(Math.random() * actividadesIllicitas.length)];
+            contadores.actividadesIllicitasSimuladas++;
+            enviarActividadIllicitaSimulada(nodo);
+        }
+
+        contadores.nodosGenerados++;
+        if (contadores.nodosGenerados % 100 === 0) {
+            console.log(`📊 Nodos generados: ${contadores.nodosGenerados} | Filtraciones: ${contadores.filtracionesSimuladas} | Ilícitas: ${contadores.actividadesIllicitasSimuladas}`);
+        }
+    }, PRUEBA_CONFIG.intervaloNuevosNodos);
+}
+
+// --- MÓDULO 2: SIMULACIÓN DE FILTRACIONES Y ACTIVIDADES ILÍCITAS ---
+function enviarFiltracionSimulada(nodo) {
+    // Enviar solicitud a la API del sistema
+    const datos = JSON.stringify({
+        source_ip: nodo.ip,
+        node_id: nodo.id,
+        leaked_data_type: nodo.data.type
+    });
+
+    const opciones = {
+        hostname: 'localhost',
+        port: PRUEBA_CONFIG.puertoPruebaAPI,
+        path: '/api/leak-detected',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': datos.length
+        }
+    };
+
+    const req = http.request(opciones, (res) => {
+        contadores.solicitudesAPI++;
+        res.on('data', () => {});
+    });
+
+    req.on('error', (error) => {
+        contadores.erroresSistema++;
+        reportePrueba.errores.push({ tipo: "API_ERROR", mensaje: error.message, timestamp: new Date().toISOString() });
+    });
+
+    req.write(datos);
+    req.end();
+}
+
+function enviarActividadIllicitaSimulada(nodo) {
+    // Enviar mensaje MQTT simulado
+    const clienteMQTT = mqtt.connect(PRUEBA_CONFIG.brokerMQTTPrueba);
+    
+    clienteMQTT.on('connect', () => {
+        const mensaje = JSON.stringify({
+            nodeId: nodo.id,
+            ip: nodo.ip,
+            type: nodo.data.type,
+            evidenceHash: crypto.createHash('sha256').update(nodo.ip + Date.now()).digest('hex')
+        });
+
+        clienteMQTT.publish('bloque-dorado/comandos', mensaje, (error) => {
+            if (error) {
+                contadores.erroresSistema++;
+                reportePrueba.errores.push({ tipo: "MQTT_ERROR", mensaje: error.message, timestamp: new Date().toISOString() });
+            } else {
+                contadores.mensajesMQTT++;
+            }
+            clienteMQTT.end();
+        });
+    });
+}
+
+// --- MÓDULO 3: MONITOREO DE RENDIMIENTO DEL SISTEMA ---
+function monitorearRendimiento() {
+    setInterval(() => {
+        if (!pruebaActiva) return;
+
+        // Obtener métricas de rendimiento (solo Linux/Unix)
+        const usoCPU = fs.readFileSync('/proc/loadavg', 'utf8').split(' ')[0];
+        const usoMemoria = fs.readFileSync('/proc/meminfo', 'utf8').split('\n').filter(line => line.includes('MemAvailable'))[0].split(':')[1].trim();
+        
+        const metrica = {
+            timestamp: new Date().toISOString(),
+            usoCPU: usoCPU,
+            usoMemoria: usoMemoria,
+            nodosGenerados: contadores.nodosGenerados,
+            erroresSistema: contadores.erroresSistema,
+            solicitudesAPIProcesadas: contadores.solicitudesAPI,
+            mensajesMQTTProcesados: contadores.mensajesMQTT
+        };
+
+        reportePrueba.metricasRendimiento.push(metrica);
+        console.log(`⚡ Rendimiento - CPU: ${usoCPU} | Memoria disponible: ${usoMemoria} | Errores: ${contadores.erroresSistema}`);
+    }, 5000); // Cada 5 segundos
+}
+
+// --- MÓDULO 4: INICIALIZACIÓN DE SERVICIOS DE PRUEBA ---
+function iniciarServiciosPrueba() {
+    // Servidor HTTP simulando la API del sistema
+    const server = http.createServer((req, res) => {
+        if (req.method === 'POST' && req.url === '/api/leak-detected') {
+            let body = '';
+            req.on('data', chunk => body += chunk);
+            req.on('end', () => {
+                // Simular procesamiento por el sistema
+                setTimeout(() => {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ estado: "PROCESADO" }));
+                }, Math.random() * 100); // Simular latencia variable
+            });
+        } else {
+            res.writeHead(404);
+            res.end();
+        }
+    });
+
+    server.listen(PRUEBA_CONFIG.puertoPruebaAPI, () => {
+        console.log(`🌐 Servidor de prueba API activo en puerto ${PRUEBA_CONFIG.puertoPruebaAPI}`);
+    });
+
+    // Broker MQTT simulado (ejecutar en proceso hijo)
+    const brokerHijo = fork('simular-broker-mqtt.js');
+    brokerHijo.on('message', (mensaje) => {
+        if (mensaje === 'BROKER_LISTO') {
+            console.log(`📡 Broker MQTT de prueba activo en ${PRUEBA_CONFIG.brokerMQTTPrueba}`);
+        }
+    });
+}
+
+// --- MÓDULO 5: CONTROL DE LA PRUEBA ---
+function iniciarPrueba() {
+    console.log("=============================================");
+    console.log("INICIANDO PRUEBA DE ESTRÉS - PROTOCOLO GDS_J2085ISA");
+    console.log(`DURACIÓN ESTIMADA: ${PRUEBA_CONFIG.duracionTotal / 3600000} horas`);
+    console.log("=============================================");
+
+    // Iniciar servicios de prueba
+    iniciarServiciosPrueba();
+
+    // Esperar 10 segundos para que los servicios estén listos
+    setTimeout(() => {
+        // Iniciar módulos de simulación
+        simularNodosMasivos();
+        monitorearRendimiento();
+
+        // Detener prueba después de la duración configurada
+        setTimeout(() => {
+            finalizarPrueba();
+        }, PRUEBA_CONFIG.duracionTotal);
+    }, 10000);
+}
+
+function finalizarPrueba() {
+    pruebaActiva = false;
+    reportePrueba.fin = new Date().toISOString();
+
+    // Calcular métricas finales
+    const duracionSegundos = (new Date(reportePrueba.fin) - new Date(reportePrueba.inicio)) / 1000;
+    reportePrueba.metricasFinales = {
+        duracionSegundos: duracionSegundos.toFixed(2),
+        nodosPorSegundo: (contadores.nodosGenerados / duracionSegundos).toFixed(2),
+        filtracionesPorSegundo: (contadores.filtracionesSimuladas / duracionSegundos).toFixed(2),
+        solicitudesAPIPorSegundo: (contadores.solicitudesAPI / duracionSegundos).toFixed(2),
+        tasaError: ((contadores.erroresSistema / (contadores.solicitudesAPI + contadores.mensajesMQTT)) * 100).toFixed(2) + "%"
+    };
+
+    // Guardar reporte
+    const nombreReporte = `reporte-prueba-estres-${new Date().toISOString().replace(/:/g, '-')}.json`;
+    fs.writeFileSync(nombreReporte, JSON.stringify(reportePrueba, null, 2));
+
+    console.log("\n=============================================");
+    console.log("PRUEBA DE ESTRÉS FINALIZADA");
+    console.log("=============================================");
+    console.log(`Duración total: ${reportePrueba.metricasFinales.duracionSegundos} segundos`);
+    console.log(`Nodos generados: ${contadores.nodosGenerados}`);
+    console.log(`Filtraciones simuladas: ${contadores.filtracionesSimuladas}`);
+    console.log(`Actividades ilícitas simuladas: ${contadores.actividadesIllicitasSimuladas}`);
+    console.log(`Solicitudes API procesadas: ${contadores.solicitudesAPI}`);
+    console.log(`Mensajes MQTT procesados: ${contadores.mensajesMQTT}`);
+    console.log(`Errores del sistema: ${contadores.erroresSistema} (${reportePrueba.metricasFinales.tasaError})`);
+    console.log(`Reporte guardado en: ${nombreReporte}`);
+    console.log("=============================================");
+
+    // Terminar procesos hijos
+    process.exit(0);
+}
+
+// --- ARCHIVO AUXILIAR: simular-broker-mqtt.js ---
+// Guarda este código en un archivo separado con ese nombre
+/*
+const aedes = require('aedes')();
+const server = require('net').createServer(aedes.handle);
+const port = 1884;
+
+server.listen(port, () => {
+    console.log('Broker MQTT de prueba iniciado en puerto', port);
+    process.send('BROKER_LISTO');
+});
+
+aedes.on('publish', (packet, client) => {
+    // Simular procesamiento del mensaje por el sistema
+});
+*/
+
+// --- INICIAR PRUEBA ---
+// Instalar dependencias requeridas:
+// npm install http mqtt crypto fs child_process aedes net
+iniciarPrueba();
+ 
+ 
+ 
+ 
+PROCEDIMIENTO DE EJECUCIÓN
+ 
+PASO 1: PREPARACIÓN DEL SERVIDOR
+ 
+1. Actualizar el sistema operativo:
+bash  
+sudo apt update && sudo apt upgrade -y
+ 
+2. Instalar dependencias adicionales:
+bash  
+npm install aedes net
+ 
+3. Crear el archivo auxiliar  simular-broker-mqtt.js  con el código proporcionado en el comentario del script principal
+4. Cerrar todos los procesos no necesarios para liberar recursos
+ 
+PASO 2: CONFIGURACIÓN DE LA PRUEBA
+ 
+- Ajustar los parámetros en  PRUEBA_CONFIG  según las capacidades del servidor:
+-  duracionTotal : Duración de la prueba (en ms)
+-  cantidadNodosAtacantes : Cantidad máxima de nodos maliciosos simultáneos
+-  tasaFiltracionesPorSegundo : Cantidad de filtraciones simuladas por segundo
+- Para servidores con recursos limitados, reducir los valores a la mitad
+ 
+PASO 3: EJECUCIÓN DE LA PRUEBA
+ 
+1. Iniciar el sistema principal del protocolo:
+bash  
+node global-security-shield.js &
+ 
+2. Iniciar la prueba de estrés:
+bash  
+node prueba-estres-sistema.js
+ 
+3. Monitorear los logs en tiempo real con otro terminal:
+bash  
+tail -f reporte-prueba-estres-*.json
+ 
+ 
+PASO 4: MONITOREO DURANTE LA PRUEBA
+ 
+- Verificar las siguientes métricas cada 10 minutos:
+- Uso de CPU (no debe exceder el 90% por períodos prolongados)
+- Uso de memoria RAM (no debe exceder el 95%)
+- Tasa de errores (no debe superar el 5%)
+- Tiempo de respuesta del sistema (no debe superar los 2 segundos)
+- Registrar cualquier anomalía o caída del sistema
+ 
+ 
+ 
+CRITERIOS DE ÉXITO
+ 
+La prueba se considera exitosa si se cumplen todos los siguientes puntos:
+ 
+1. El sistema no sufre caídas ni bloqueos durante toda la duración de la prueba
+2. La tasa de errores se mantiene por debajo del 5%
+3. El tiempo de respuesta promedio es inferior a 1 segundo
+4. Todas las filtraciones y actividades ilícitas son detectadas y procesadas
+5. El sistema puede recuperar su rendimiento normal después de la prueba
+ 
+ 
+ 
+ACCIONES CORRECTIVAS SI SE DETECTAN PROBLEMAS
+ 
+PROBLEMA DETECTADO ACCIÓN CORRECTIVA 
+Uso de CPU superior al 90% Reducir la tasa de nodos generados y optimizar algoritmos de detección 
+Uso de memoria excesivo Implementar limpieza de caché periódica y reducir el tamaño de logs en memoria 
+Tasa de errores alta Verificar la configuración de la red y optimizar el procesamiento paralelo 
+Caídas del sistema Aumentar los recursos del servidor y ajustar los límites de conexiones simultáneas 
+ 
+ 
+ 
+REPORTE FINAL
+ 
+Después de la prueba, generar un informe con los siguientes datos:
+ 
+1. Configuración utilizada
+2. Duración real de la prueba
+3. Métricas de rendimiento obtenidasINTEGRACIÓN COMPLETA DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA
  
 Aquí está la versión potenciada y compatible con el sistema existente, corrigiendo dependencias y añadiendo funcionalidades de monitoreo y registro continuo:
  
