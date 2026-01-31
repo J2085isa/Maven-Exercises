@@ -11,6 +11,19 @@ public class MyCustomMojo extends AbstractMojo {
         getLog().info("Ejecutando Plugin Personalizado de J2085isa...");
     }
 }
+package com.j2085isa.plugins;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+
+@Mojo(name = "say-hello", defaultPhase = LifecyclePhase.COMPILE)
+public class MyCustomMojo extends AbstractMojo {
+    public void execute() throws MojoExecutionException {
+        getLog().info("Ejecutando Plugin Personalizado de J2085isa...");
+    }
+}
 <dependency>
     <groupId>org.apache.maven.plugin-tools</groupId>
     <artifactId>maven-plugin-annotations</artifactId>
