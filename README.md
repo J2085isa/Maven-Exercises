@@ -1,3 +1,67 @@
+// generar-informe-ejercicios.js
+const fs = require('fs').promises;
+const path = require('path');
+
+// Ruta a la carpeta de ejercicios
+const CARPETA_EJERCICIOS = './ejercicios';
+// Ruta de salida del informe
+const RUTA_INFORME = './INFORME-EJERCICIOS.md';
+
+async function generarInforme() {
+  try {
+    const ejercicios = await fs.readdir(CARPETA_EJERCICIOS);
+    let contenidoInforme = '# INFORME DE EJERCICIOS RESUELTOS\n\n';
+    contenidoInforme += `Fecha de generación: ${new Date().toLocaleString('es-ES')}\n\n`;
+    contenidoInforme += '| Nombre del Ejercicio | Estado | Fecha Finalización | Detalles |\n';
+    contenidoInforme += '|----------------------|--------|--------------------|----------|\n';
+
+    for (const ejercicio of ejercicios) {
+      const rutaEjercicio = path.join(CARPETA_EJERCICIOS, ejercicio);
+      const stats = await fs.stat(rutaEjercicio);
+      
+      if (stats.isDirectory()) {
+        let estado = 'Pendiente';
+        let fecha = '-';
+        let detalles = '-';
+
+        // Verifica si existe archivo de solución o prueba superada
+        const tieneSolucion = await fs.access(path.join(rutaEjercicio, 'solucion.js')).then(() => true).catch(() => false);
+        const tienePrueba = await fs.access(path.join(rutaEjercicio, 'prueba-pasada.txt')).then(() => true).catch(() => false);
+
+        if (tieneSolucion && tienePrueba) {
+          estado = 'Completado';
+          const fechaArchivo = await fs.stat(path.join(rutaEjercicio, 'solucion.js'));
+          fecha = fechaArchivo.mtime.toLocaleDateString('es-ES');
+          detalles = 'Pruebas superadas correctamente';
+        } else if (tieneSolucion) {
+          estado = 'En Progreso';
+          detalles = 'Solución escrita, pruebas pendientes';
+        }
+
+        contenidoInforme += `| ${ejercicio} | ${estado} | ${fecha} | ${detalles} |\n`;
+      }
+    }
+
+    await fs.writeFile(RUTA_INFORME, contenidoInforme);
+    console.log('✅ Informe generado exitosamente en', RUTA_INFORME);
+  } catch (error) {
+    console.error('❌ Error al generar el informe:', error.message);
+  }
+}
+
+generarInforme();
+# INFORME DE EJERCICIOS RESUELTOS
+
+Fecha de generación: 31/01/2026, 15:30:45
+
+| Nombre del Ejercicio | Estado | Fecha Finalización | Detalles |
+|----------------------|--------|--------------------|----------|
+| ejercicio-01-crear-proyecto | Completado | 28/01/2026 | Pruebas superadas correctamente |
+| ejercicio-02-gestion-dependencias | En Progreso | - | Solución escrita, pruebas pendientes |
+| ejercicio-03-plugins-maven | Pendiente | - | - |
+"scripts": {
+  "generar-informe": "node generar-informe-ejercicios.js"
+}
 Descripción de los Repositorios de J2085isa con JavaScript
  
 Perfil General del Autor
