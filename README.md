@@ -1,4 +1,11 @@
 {
+  "feature": "WEEKLY_INCINERATION_REPORT",
+  "data_source": "SOLAR_INCINERATOR_LOGS",
+  "storage": "LUNAR_DEEP_VAULT",
+  "delivery_method": "AMULET_TOUCH_DISPLAY",
+  "anonymization_level": "ABSOLUTE"
+}
+{
   "defense_protocol": "THERMAL_INTRUSION_ALERT",
   "trigger": "UNAUTHORIZED_BIOMETRIC_OR_BRUTE_FORCE",
   "countermeasure": "SOLAR_FEEDBACK_INCINERATION",
