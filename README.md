@@ -1,4 +1,11 @@
 {
+  "protocol": "STELLAR_EXCLUSION_ZONE",
+  "authority": "J2085isa_MASTRO_NODE",
+  "active_radius": "500KM_PERIMETER",
+  "countermeasure": "SOLAR_GUESSED_DRIFT",
+  "status": "TOTAL_DOMINANCE"
+}
+{
   "scan_type": "QUANTUM_SPECTRUM_SWEEP",
   "target_area": "LUNAR_SOUTH_POLE_HQ",
   "threats_neutralized": 3,
