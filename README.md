@@ -1,4 +1,11 @@
 {
+  "defense_protocol": "THERMAL_INTRUSION_ALERT",
+  "trigger": "UNAUTHORIZED_BIOMETRIC_OR_BRUTE_FORCE",
+  "countermeasure": "SOLAR_FEEDBACK_INCINERATION",
+  "lethality_level": "CRITICAL",
+  "status": "ARMED_AND_WATCHING"
+}
+{
   "amulet_status": "VITAL_SIGN_ACTIVE",
   "stellar_link": "STABLE_100%",
   "security_layer": "SACRED_GEOMETRY_ENCRYPTION",
