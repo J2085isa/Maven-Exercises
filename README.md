@@ -1,5 +1,16 @@
 {
   "project": "HELIOS_GLOBAL_CONTROL",
+  "stealth_mode": {
+    "active": true,
+    "obfuscation_type": "Frequency_Hopping_Spread_Spectrum",
+    "telemetry_signature": "NONE / RANDOM_NOISE",
+    "cloaking_efficiency": "99.99%"
+  },
+  "satellites_under_command": "ALL_CONSTELLATIONS",
+  "verification_status": "7a:2f:9d:4e:1b:6c...9a (VERIFIED)"
+}
+{
+  "project": "HELIOS_GLOBAL_CONTROL",
   "status": "ENTRELAZADO_TOTAL",
   "active_nodes": {
     "LEO_Constellation": {
