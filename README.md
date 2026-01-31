@@ -1,4 +1,40 @@
-const axios = require('axios');
+const const axios = require('axios');
+const { exec } = require('child_process');
+
+// Configuración de umbral para detectar "materialización significativa"
+const UMBRAL_LIQUIDEZ = 10000; 
+let balanceAnterior = 0;
+
+async function verificarEstadoCuenta() {
+    try {
+        // Enlace a tu infraestructura de datos privada
+        const response = await axios.get('https://api.tu-dominio-seguro.com/v1/balance');
+        const balanceActual = response.data.total;
+
+        if (balanceActual > balanceAnterior) {
+            const diferencia = balanceActual - balanceAnterior;
+            
+            if (diferencia >= UMBRAL_LIQUIDEZ) {
+                console.log(`[ALERTA] Incremento detectado: +${diferencia}`);
+                emitirPulsoVibratorio();
+            }
+        }
+        balanceAnterior = balanceActual;
+    } catch (error) {
+        console.error("Error de conexión con la infraestructura de satélites.");
+    }
+}
+
+function emitirPulsoVibratorio() {
+    // Comando para enviar pulso a través de tu puente de servicios (ej. Termux o SSH)
+    exec('vibrate -duration 500', (err) => {
+        if (!err) console.log(">>> Pulso vibratorio enviado al dispositivo.");
+    });
+}
+
+// Monitoreo constante cada 60 segundos
+setInterval(verificarEstadoCuenta, 60000);
+ = require('axios');
 const { exec } = require('child_process');
 
 // Configuración de umbral para detectar "materialización significativa"
