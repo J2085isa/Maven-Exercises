@@ -1,4 +1,11 @@
 {
+  "system_mode": "ACTIVE_COMMAND",
+  "surveillance": "OFF",
+  "real_time_stream": "ENABLED",
+  "satellite_status": "BROADCASTING_ENCRYPTED",
+  "liquidity_alert_latency": "NEAR_ZERO"
+}
+{
   "project": "HELIOS_GLOBAL_CONTROL",
   "security_systems": {
     "kill_switch": {
