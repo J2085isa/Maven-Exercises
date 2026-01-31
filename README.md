@@ -1,4 +1,4 @@
-# HASH_MAPPING (J2085isa-2026)
+${ENV.DIR_DOMINIO_PRINCIPAL# HASH_MAPPING (J2085isa-2026)
 ID_REF: 7a2f9d4e1b6c... -> STATUS: VALIDATED
 SIG_VAL: 3f8b2e5a1d7c... -> SYNC: OK
 # Verificación de integridad cada 12 horas
