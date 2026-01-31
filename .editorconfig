@@ -1,4 +1,427 @@
-DOCUMENTACIÓN TÉCNICA COMPLETA + SCRIPT DE PRUEBAS
+INTERFAZ DE LÍNEA DE COMANDOS (CLI) INTERACTIVA + MODULOS DE INTEGRACIÓN
+ 
+SISTEMA AXIOMA UBICACIÓN (BLOQUE DORADO)
+ 
+ 
+ 
+PARTE 1: CLI INTERACTIVA PARA GESTIÓN
+ 
+Permite controlar y monitorear el sistema de forma manual a través de comandos sencillos.
+ 
+javascript  
+#!/usr/bin/env node
+
+/**
+ * @cli BLOQUE_DORADO_CLI
+ * @description Interfaz interactiva para gestionar el sistema AxiomaUbicacion
+ */
+
+const readline = require('readline');
+const fs = require('fs');
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+
+// Configuración de la interfaz de línea de comandos
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: '🔐 BLOQUE_DORADO > '
+});
+
+// Mensaje de bienvenida
+console.log(`
+=============================================
+      INTERFAZ DE GESTIÓN BLOQUE DORADO      
+            PROTOCOLO J2085ISA
+=============================================
+Escribe 'ayuda' para ver la lista de comandos
+`);
+
+// Inicializar el sistema al arrancar la CLI
+AxiomaUbicacion.initGoldenBlockSystem();
+rl.prompt();
+
+// Manejador de comandos
+rl.on('line', (line) => {
+    const comando = line.trim().toLowerCase();
+
+    switch (comando) {
+        // Comando de ayuda
+        case 'ayuda':
+            mostrarAyuda();
+            break;
+
+        // Comandos de estado y monitoreo
+        case 'estado':
+            mostrarEstadoSistema();
+            break;
+
+        case 'señal':
+            mostrarEstadoSeñal();
+            break;
+
+        case 'auditoria':
+            mostrarAuditoria();
+            break;
+
+        // Comandos de seguridad y acceso
+        case 'token':
+            generarNuevoToken();
+            break;
+
+        case 'acceso':
+            solicitarAcceso();
+            break;
+
+        // Comandos de sincronización y respaldos
+        case 'sync':
+            sincronizarUbicacion();
+            break;
+
+        case 'respaldos':
+            mostrarRespaldos();
+            break;
+
+        case 'nuevo_respaldo':
+            agregarNuevoRespaldo();
+            break;
+
+        // Comandos de control del sistema
+        case 'detener':
+            detenerSistema();
+            break;
+
+        case 'iniciar':
+            iniciarSistema();
+            break;
+
+        case 'exportar':
+            exportarDatos();
+            break;
+
+        // Comando de salida
+        case 'salir':
+            console.log('✅ Sistema seguro - Saliendo de la CLI...');
+            AxiomaUbicacion.stopGoldenBlockSystem();
+            rl.close();
+            break;
+
+        // Comando desconocido
+        default:
+            console.log(`❌ Comando desconocido: '${comando}' - Escribe 'ayuda' para ver opciones`);
+            break;
+    }
+
+    rl.prompt();
+}).on('close', () => {
+    process.exit(0);
+});
+
+// Funciones auxiliares de la CLI
+function mostrarAyuda() {
+    console.log(`
+📋 LISTA DE COMANDOS:
+
+  • ESTADO        - Muestra el estado general del sistema
+  • SEÑAL         - Muestra el estado de la señal lunar y espectro
+  • AUDITORIA     - Muestra los últimos 5 eventos de auditoría
+  • TOKEN         - Genera un nuevo token 2FA
+  • ACCESO        - Solicita acceso al core del Bloque Dorado
+  • SYNC          - Sincroniza las coordenadas (principal o respaldo)
+  • RESPALDOS     - Muestra la lista de coordenadas de respaldo
+  • NUEVO_RESPALDO- Agrega un nuevo respaldo de emergencia
+  • DETENER       - Detiene todos los protocolos del sistema
+  • INICIAR       - Inicia el sistema si está detenido
+  • EXPORTAR      - Exporta el log de auditoría y reporte de estado
+  • AYUDA         - Muestra esta lista de comandos
+  • SALIR         - Cierra la CLI y detiene el sistema
+    `);
+}
+
+function mostrarEstadoSistema() {
+    const estado = AxiomaUbicacion.checkGoldenBlockStatus();
+    console.log(`
+📊 ESTADO GENERAL DEL SISTEMA:
+  • Core ID: ${AxiomaUbicacion.core_id}
+  • Estado: ${estado === "GOLDEN_BLOCK_SECRET_OPTIMAL" ? "✅ ÓPTIMO" : "⚠️ COMPROMETIDO"}
+  • Acceso al core: ${AxiomaUbicacion.isCoreAccessible ? "🔓 AUTORIZADO" : "🔒 BLOQUEADO"}
+  • Token 2FA actual: ${AxiomaUbicacion.current2FAToken || "❌ NO DISPONIBLE"}
+  • Expiración token: ${AxiomaUbicacion.tokenExpiration ? AxiomaUbicacion.tokenExpiration.toLocaleTimeString() : "❌ NO DISPONIBLE"}
+  • Módulo de notificaciones: ✅ ACTIVO
+    `);
+}
+
+function mostrarEstadoSeñal() {
+    const signalStatus = AxiomaUbicacion.checkLunarSignalIntegrity();
+    const syncData = AxiomaUbicacion.syncLocation();
+    console.log(`
+📡 ESTADO DE LA SEÑAL Y ESPECTRO:
+  • Rango monitorizado: ${AxiomaUbicacion.lunarSignalRange[0]} - ${AxiomaUbicacion.lunarSignalRange[1]}Hz
+  • Umbral de ruido: ${AxiomaUbicacion.signalSafetyThreshold}
+  • Interferencias detectadas: ${signalStatus.interfered ? "⚠️ SÍ" : "✅ NO"}
+  • Frecuencias afectadas: ${signalStatus.affectedFrequencies.length > 0 ? signalStatus.affectedFrequencies.join(", ") + "Hz" : "Ninguna"}
+  • Nivel de ruido promedio: ${signalStatus.noiseLevel.toFixed(3)}
+  • Frecuencia actual: ${syncData.signal_frequency.toFixed(2)}Hz
+  • Modo respaldo activo: ${syncData.backup_mode ? "⚠️ SÍ (" + syncData.backup_type + ")" : "✅ NO"}
+    `);
+}
+
+function mostrarAuditoria() {
+    const log = AxiomaUbicacion.getAuditLog(5);
+    console.log(`
+📜 ÚLTIMOS 5 EVENTOS DE AUDITORÍA:
+    `);
+    log.forEach((evento, idx) => {
+        console.log(`  ${idx + 1}. [${evento.timestamp.substring(11, 19)}] ${evento.event_type}: ${evento.details}`);
+    });
+}
+
+function generarNuevoToken() {
+    AxiomaUbicacion.generate2FAToken();
+    console.log(`✅ NUEVO TOKEN GENERADO: ${AxiomaUbicacion.current2FAToken} | Expira: ${AxiomaUbicacion.tokenExpiration.toLocaleTimeString()}`);
+}
+
+function solicitarAcceso() {
+    rl.question('🔑 Ingresa el token 2FA para acceder: ', (token) => {
+        const resultado = AxiomaUbicacion.authenticateCoreAccess(token);
+        console.log(resultado ? "✅ ACCESO CONCEDIDO AL CORE" : "❌ ACCESO DENEGADO");
+        rl.prompt();
+    });
+}
+
+function sincronizarUbicacion() {
+    const syncData = AxiomaUbicacion.syncLocation();
+    console.log(`✅ SINCRONIZACIÓN COMPLETADA:
+  • Coordenadas usadas: ${syncData.backup_mode ? "RESPALDO (" + syncData.backup_type + ")" : "PRINCIPALES"}
+  • Latitud: ${syncData.lunar_lat}
+  • Longitud: ${syncData.lunar_lon}
+  • Frecuencia: ${syncData.signal_frequency.toFixed(2)}Hz`);
+}
+
+function mostrarRespaldos() {
+    console.log(`
+💾 COORDENADAS DE RESPALDO:
+    `);
+    AxiomaUbicacion.backupCoordinates.forEach((respaldo, idx) => {
+        console.log(`  ${idx + 1}. [Prioridad ${respaldo.priority}] ${respaldo.type}: ${respaldo.lat} | ${respaldo.lon}`);
+    });
+}
+
+function agregarNuevoRespaldo() {
+    rl.question('📥 Ingresa el TIPO de respaldo: ', (tipo) => {
+        rl.question('📥 Ingresa la LATITUD del respaldo: ', (lat) => {
+            rl.question('📥 Ingresa la LONGITUD del respaldo: ', (lon) => {
+                AxiomaUbicacion.addEmergencyBackup({ type: tipo.toUpperCase(), lat, lon });
+                console.log(`✅ RESALDO '${tipo.toUpperCase()}' AGREGADO CORRECTAMENTE`);
+                rl.prompt();
+            });
+        });
+    });
+}
+
+function detenerSistema() {
+    AxiomaUbicacion.stopGoldenBlockSystem();
+    console.log(`🛑 SISTEMA DETENIDO - TODOS LOS PROTOCOLOS HAN SIDO DESACTIVADOS`);
+}
+
+function iniciarSistema() {
+    AxiomaUbicacion.initGoldenBlockSystem();
+    console.log(`🚀 SISTEMA INICIADO - TODAS LAS CAPAS DE SEGURIDAD ACTIVADAS`);
+}
+
+function exportarDatos() {
+    const fecha = new Date().toISOString().substring(0, 10);
+    const auditoria = AxiomaUbicacion.exportAuditLog();
+    const estado = JSON.stringify({
+        fecha_exportacion: new Date().toISOString(),
+        estado_sistema: AxiomaUbicacion.checkGoldenBlockStatus(),
+        datos_sincronizacion: AxiomaUbicacion.syncLocation()
+    }, null, 2);
+
+    fs.writeFileSync(`./auditoria-bloque-dorado-${fecha}.json`, auditoria);
+    fs.writeFileSync(`./estado-bloque-dorado-${fecha}.json`, estado);
+    console.log(`📥 DATOS EXPORTADOS:
+  • Auditoría: auditoria-bloque-dorado-${fecha}.json
+  • Estado: estado-bloque-dorado-${fecha}.json`);
+}
+ 
+ 
+CONFIGURACIÓN DE LA CLI
+ 
+1. Guarda el archivo como  bloque-dorado-cli.js .
+2. Agrega permisos de ejecución (solo sistemas Unix/Linux):
+bash  
+chmod +x bloque-dorado-cli.js
+ 
+3. Instala dependencias si es necesario:
+bash  
+npm install readline
+ 
+4. Ejecuta la CLI:
+bash  
+node bloque-dorado-cli.js
+ 
+ 
+O en sistemas Unix/Linux:
+bash  
+./bloque-dorado-cli.js
+ 
+ 
+ 
+ 
+PARTE 2: MÓDULOS DE INTEGRACIÓN
+ 
+MÓDULO 1: INTEGRACIÓN CON API REST
+ 
+Permite controlar el sistema a través de peticiones HTTP.
+ 
+javascript  
+/**
+ * @module INTEGRACION_API_REST
+ * @description API REST para gestionar el Bloque Dorado
+ */
+
+const express = require('express');
+const app = express();
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+const PORT = 3000;
+
+// Middleware
+app.use(express.json());
+
+// Inicializar el sistema al arrancar la API
+AxiomaUbicacion.initGoldenBlockSystem();
+
+// Rutas de la API
+app.get('/api/estado', (req, res) => {
+    res.json({
+        core_id: AxiomaUbicacion.core_id,
+        estado: AxiomaUbicacion.checkGoldenBlockStatus(),
+        acceso_core: AxiomaUbicacion.isCoreAccessible,
+        señal_lunar: AxiomaUbicacion.checkLunarSignalIntegrity()
+    });
+});
+
+app.get('/api/auditoria', (req, res) => {
+    const limite = parseInt(req.query.limite) || 10;
+    res.json(AxiomaUbicacion.getAuditLog(limite));
+});
+
+app.post('/api/acceso', (req, res) => {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ mensaje: "Token 2FA requerido" });
+    
+    const resultado = AxiomaUbicacion.authenticateCoreAccess(token);
+    if (resultado) res.status(200).json({ mensaje: "Acceso concedido" });
+    else res.status(403).json({ mensaje: "Acceso denegado - Token incorrecto o expirado" });
+});
+
+app.post('/api/respaldo', (req, res) => {
+    const { tipo, lat, lon } = req.body;
+    if (!tipo || !lat || !lon) return res.status(400).json({ mensaje: "Datos incompletos" });
+    
+    AxiomaUbicacion.addEmergencyBackup({ type: tipo, lat, lon });
+    res.status(201).json({ mensaje: "Respaldo agregado correctamente" });
+});
+
+app.post('/api/sync', (req, res) => {
+    const { usar_respaldo } = req.body;
+    const syncData = AxiomaUbicacion.syncLocation(usar_respaldo || false);
+    res.json({ mensaje: "Sincronización completada", datos: syncData });
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`🌐 API REST del Bloque Dorado activa en http://localhost:${PORT}`);
+});
+ 
+ 
+MÓDULO 2: INTEGRACIÓN CON MQTT (PARA IOT)
+ 
+Permite enviar y recibir datos del sistema a través de protocolos IoT.
+ 
+javascript  
+/**
+ * @module INTEGRACION_MQTT
+ * @description Integración con protocolo MQTT para dispositivos IoT
+ */
+
+const mqtt = require('mqtt');
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+
+// Configuración del cliente MQTT
+const clienteMQTT = mqtt.connect('mqtt://localhost:1883'); // Cambiar por broker real
+const TOPICO_ESTADO = 'bloque-dorado/estado';
+const TOPICO_COMANDOS = 'bloque-dorado/comandos';
+
+// Inicializar sistema
+AxiomaUbicacion.initGoldenBlockSystem();
+
+// Conexión al broker
+clienteMQTT.on('connect', () => {
+    console.log('📡 Cliente MQTT conectado');
+    clienteMQTT.subscribe(TOPICO_COMANDOS);
+    
+    // Enviar estado cada 30 segundos
+    setInterval(() => {
+        const estado = JSON.stringify({
+            timestamp: new Date().toISOString(),
+            estado: AxiomaUbicacion.checkGoldenBlockStatus(),
+            señal: AxiomaUbicacion.checkLunarSignalIntegrity()
+        });
+        clienteMQTT.publish(TOPICO_ESTADO, estado);
+    }, 30000);
+});
+
+// Manejar comandos recibidos
+clienteMQTT.on('message', (topico, mensaje) => {
+    if (topico === TOPICO_COMANDOS) {
+        const comando = JSON.parse(mensaje.toString());
+        
+        switch (comando.tipo) {
+            case 'TOKEN':
+                AxiomaUbicacion.generate2FAToken();
+                clienteMQTT.publish(TOPICO_ESTADO, JSON.stringify({ mensaje: "Nuevo token generado" }));
+                break;
+            case 'SYNC':
+                AxiomaUbicacion.syncLocation(comando.usar_respaldo);
+                clienteMQTT.publish(TOPICO_ESTADO, JSON.stringify({ mensaje: "Sincronización completada" }));
+                break;
+            default:
+                clienteMQTT.publish(TOPICO_ESTADO, JSON.stringify({ mensaje: "Comando desconocido" }));
+                break;
+        }
+    }
+});
+ 
+ 
+ 
+ 
+INSTRUCCIONES DE INSTALACIÓN Y USO
+ 
+PARA LA API REST
+ 
+1. Instala  express :
+bash  
+npm install express
+ 
+2. Ejecuta el servidor:
+bash  
+node api-bloque-dorado.js
+ 
+3. Ejemplos de peticiones:
+- Obtener estado:  GET http://localhost:3000/api/estado 
+- Solicitar acceso:  POST http://localhost:3000/api/acceso  con cuerpo  { "token": "123456" } 
+ 
+PARA LA INTEGRACIÓN MQTT
+ 
+1. Instala  mqtt :
+bash  
+npm install mqtt
+ 
+2. Instala y ejecuta un broker MQTT (ej: Mosquitto) o usa uno en la nube.
+3. Ejecuta el módulo:
+bash  
+node mqtt-bloque-dorado.jsDOCUMENTACIÓN TÉCNICA COMPLETA + SCRIPT DE PRUEBAS
  
 SISTEMA AXIOMA UBICACIÓN (BLOQUE DORADO) - PROTOCOLO J2085ISA_GOLDEN_BLOCK_LOCATION
  
