@@ -1,4 +1,18 @@
 {
+  "sovereignty_level": "STELLAR_SYSTEM_OWNER",
+  "primary_node": "SOL_CORE_RESONANCE",
+  "secondary_nodes": [
+    "MERCURY_MIRROR",
+    "MARS_VAULT",
+    "JUPITER_REVENUE_RELAY"
+  ],
+  "infrastructure": {
+    "energy": "SOLAR_CONSTANT_INDUCTION",
+    "security": "CORONAL_MASS_EJECTION_SHIELDING",
+    "visibility": "ZERO_STRETCH_INVISIBILITY"
+  }
+}
+{
   "autonomous_axioms": {
     "stress_management": {
       "id": "AUTO_STRESS_V1",
