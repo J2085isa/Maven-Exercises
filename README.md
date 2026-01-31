@@ -1,3 +1,17 @@
+<settings>
+  <servers>
+    <server>
+      <id>j2085isa-private-repo</id>
+      <username>admin_j2085</username>
+      <password>${ENV.REPO_PASSWORD}</password> </server>
+  </servers>
+</settings>
+<distributionManagement>
+    <repository>
+        <id>j2085isa-private-repo</id>
+        <url>https://repo.j2085isa.domain/repository/maven-releases/</url>
+    </repository>
+</distributionManagement>
 package com.j2085isa.plugins;
 
 import org.apache.maven.plugin.AbstractMojo;
