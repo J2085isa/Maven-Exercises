@@ -1,4 +1,249 @@
-DESCRIPCIÓN COMPLETA DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
+MANUAL DE OPERACIÓN - PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
+ 
+PARA PERSONAL AUTORIZADO DEL PRINCIPADO SOMBRIO
+FECHA DE PUBLICACIÓN: 2026-02-01
+JURISDICCIÓN APLICABLE: Códigos penales del Principado Sombrío
+ 
+ 
+ 
+ÍNDICE
+ 
+1. REQUISITOS Y ACCESO AUTORIZADO
+2. INICIALIZACIÓN Y CONFIGURACIÓN
+3. OPERACIÓN DE MODULOS PRINCIPALES
+4. MONITOREO Y GESTIÓN DE EVENTOS
+5. PROCEDIMIENTOS DE EMERGENCIA
+6. MANTENIMIENTO Y AUDITORÍA
+7. CRITERIOS DE SOBERANÍA - GUÍA RÁPIDA
+ 
+ 
+ 
+1. REQUISITOS Y ACCESO AUTORIZADO
+ 
+1.1 REQUISITOS TÉCNICOS
+ 
+- Sistema operativo: Linux/Unix (recomendado) o Windows Server
+- Node.js v16 o superior
+- Memoria RAM mínima: 4 GB
+- Espacio en disco: 10 GB libres (para almacenamiento de evidencias y logs)
+- Conexión a red con acceso a nodos de la Deep Web y gateway estelar
+ 
+1.2 ACCESO AUTORIZADO
+ 
+- Solo personal con credenciales del Principado Sombrío puede operar el sistema
+- Acceso a la CLI requiere token 2FA generado por el módulo de seguridad
+- Acceso al dashboard web requiere validación de IP autorizada + token 2FA
+- Roles definidos:
+- Operador Nivel 1: Monitoreo y consultas básicas
+- Operador Nivel 2: Gestión de respaldos y ajustes de configuración
+- Comandante: Aprobación de penalizaciones y procedimientos de emergencia
+ 
+ 
+ 
+2. INICIALIZACIÓN Y CONFIGURACIÓN
+ 
+2.1 PASOS DE INICIALIZACIÓN
+ 
+1. Instalar dependencias:
+bash  
+npm install express mqtt crypto readline fs
+ 
+2. Configurar jurisdicción:
+- Editar el archivo  global-security-shield.js 
+- Ajustar la sección  sovereigntyCriteria  según actualizaciones de códigos penales
+3. Iniciar el sistema:
+bash  
+node global-security-shield.js
+ 
+ 
+- Mensaje de confirmación:  🛡️ PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA ACTIVADO - BARRIDO CONTINUO INICIADO 
+4. Iniciar la CLI interactiva (opcional):
+bash  
+node bloque-dorado-cli.js
+ 
+5. Acceder al dashboard:
+- Abrir navegador en  http://localhost:8080 
+- Ingresar token 2FA generado por el sistema
+ 
+2.2 AJUSTES DE CONFIGURACIÓN
+ 
+PARÁMETRO UBICACIÓN VALOR POR DEFECTO AJUSTE RECOMENDADO 
+Intervalo de barrido  GLOBAL_SECURITY_CONFIG.sweepInterval  60000 ms (1 min) 30000 ms (30 seg) en periodos de alto riesgo 
+Puerto del dashboard  GLOBAL_SECURITY_CONFIG.dashboardPort  8080 Cualquier puerto no utilizado 
+Máximo de intentos de filtración  GLOBAL_SECURITY_CONFIG.maxLeakAttempts  3 Mantener en 3 según códigos penales 
+ 
+ 
+ 
+3. OPERACIÓN DE MODULOS PRINCIPALES
+ 
+3.1 MÓDULO DE CIFRADO E2E
+ 
+- Funcionamiento automático: Las claves se generan al detectar nodos nuevos
+- Consultar claves de un nodo:
+- En la CLI: Escribir  estado  y revisar sección "Nodos con cifrado E2E"
+- En el dashboard: Ver sección "Nodos con cifrado E2E"
+- Regenerar claves de un nodo:
+javascript  
+// Ejecutar en consola del sistema
+generateE2EKeys("IDENTIFICADOR_DEL_NODO");
+ 
+- Importante: Las claves no se pueden recuperar si se pierden - siempre mantener copia de seguridad en el depósito lunar
+ 
+3.2 MÓDULO DE DETENCIÓN SELECTIVA SOBERANA
+ 
+- Actuación automática: El sistema detecta y aplica penalizaciones sin intervención manual
+- Intervención manual solo permitida en:
+- Casos de falsa detección
+- Aprobación de notificaciones a autoridades externas
+- Bloqueo anticipado de nodos de alto riesgo
+- Procedimiento para intervención manual:
+1. Acceder a la CLI con rol de Comandante
+2. Escribir  auditoria  para revisar evidencia
+3. Escribir  acceso  y validar con token 2FA
+4. Ejecutar comando correspondiente:
+- Bloquear nodo:  block_node [IP_DEL_NODO] 
+- Retener evidencia:  retener_evidencia [HASH_DE_EVIDENCIA] 
+ 
+3.3 MÓDULO DE INTEGRACIÓN DE DEEP WEB
+ 
+- Funcionamiento automático: Se ejecuta en cada barrido global
+- Verificar integración:
+- En la CLI: Escribir  estado  y revisar "Nodos unificados"
+- En el dashboard: Ver sección "Estado general"
+- Reiniciar integración:
+- En la CLI: Escribir  sync  con parámetro  reiniciar_integracion=true 
+ 
+ 
+ 
+4. MONITOREO Y GESTIÓN DE EVENTOS
+ 
+4.1 VISUALIZACIÓN EN EL DASHBOARD
+ 
+- Página principal:
+- Estado del sistema: Indica si el protocolo funciona correctamente ( GOLDEN_BLOCK_SECRET_OPTIMAL  = normal)
+- Nodos bloqueados: Lista de infractores con penalización aplicada
+- Actividades monitoreadas: Clasificación de actividades en legales/ilícitas
+- Actualización de datos:
+- Automática cada 10 segundos
+- Manual: Presionar botón "Actualizar Datos"
+ 
+4.2 GESTIÓN DE EVENTOS CRÍTICOS
+ 
+- Alerta "FILTRACIÓN DETECTADA":
+- Acción: Revisar evidencia en la auditoría y confirmar si es un falso positivo
+- Pasos: Escribir  auditoria  en la CLI → Buscar evento  LEAK_TERMINATED  → Verificar origen
+- Alerta "ACTIVIDAD ILÍCITA DETECTADA":
+- Acción: Validar si la actividad está dentro de los criterios de soberanía
+- Pasos: Acceder al dashboard → Revisar sección "Nodos Infractores" → Confirmar evidencia
+ 
+4.3 CONSULTA DE AUDITORÍA
+ 
+- En la CLI:
+- Escribir  auditoria  para ver últimos 5 eventos
+- Escribir  exportar  para guardar log completo en archivo
+- En el dashboard:
+- Acceder a la sección "Actividades Monitoreadas"
+- Descargar log completo desde el menú de opciones
+ 
+ 
+ 
+5. PROCEDIMIENTOS DE EMERGENCIA
+ 
+5.1 CASO: ATAQUE MASIVO A NODOS UNIFICADOS
+ 
+1. Activar modo de emergencia:
+bash  
+node global-security-shield.js --modo-emergencia
+ 
+2. Ajustar configuración:
+- Reducir intervalo de barrido a 10 segundos
+- Activar bloqueo inmediato sin contador de intentos
+3. Notificar a autoridades soberanas:
+- En la CLI: Escribir  notificar_autoridades  y confirmar con token 2FA
+4. Generar reporte de emergencia:
+- Escribir  exportar  en la CLI → Se generará archivo con sufijo  _EMERGENCIA 
+ 
+5.2 CASO: FALSA DETECCIÓN DE ACTIVIDAD ILÍCITA
+ 
+1. Revisar evidencia:
+- Acceder al archivo de evidencia en  ./evidencia-[HASH].json 
+2. Eliminar bloqueo:
+- En la CLI: Escribir  desbloquear_nodo [IP_DEL_NODO] 
+3. Registrar corrección:
+- Escribir  log_auditoria "FALSA_DETECCION_CORREGIDA" "Nodo desbloqueado - Actividad legal" 
+4. Actualizar base de datos de patrones:
+- Enviar reporte al equipo de desarrollo para ajustar algoritmos de detección
+ 
+5.3 CASO: FALLO DEL SISTEMA COMPLETO
+ 
+1. Detener todos los procesos:
+bash  
+pkill -f node
+ 
+2. Iniciar sistema en modo seguro:
+bash  
+node global-security-shield.js --modo-seguro
+ 
+3. Restaurar desde respaldo lunar:
+- Ejecutar comando  sync --respaldo-lunar  en la CLI
+4. Verificar integridad de datos:
+- Escribir  estado  y confirmar que todos los módulos están activos
+ 
+ 
+ 
+6. MANTENIMIENTO Y AUDITORÍA
+ 
+6.1 MANTENIMIENTO PERIÓDICO
+ 
+- Semanal:
+- Exportar y guardar logs de auditoría en el depósito lunar
+- Verificar espacio en disco y eliminar evidencias ya procesadas
+- Actualizar lista de nodos confiables
+- Mensual:
+- Reiniciar el sistema completo para optimizar recursos
+- Generar reporte de actividades y enviarlo al Consejo de la Soberanía
+- Revisar y actualizar criterios de penalización según cambios en códigos penales
+ 
+6.2 AUDITORÍA EXTERNA
+ 
+- Solo permitida por personal designado por la soberanía
+- Procedimiento:
+1. Generar reporte completo con  exportar 
+2. Cifrar reporte con clave pública de los auditores
+3. Enviar a través de canal seguro del Principado Sombrío
+4. Registrar en auditoría el evento  AUDITORIA_EXTERNA_REALIZADA 
+ 
+ 
+ 
+7. CRITERIOS DE SOBERANÍA - GUÍA RÁPIDA
+ 
+ACTIVIDADES PROHIBIDAS (SOLO ACTUAR SI SE CUMPLE)
+ 
+✅ Intervenir → Venta de identidad personal
+✅ Intervenir → Comercio de información social para corrupción
+✅ Intervenir → Manipulación de datos penales con fines ilegales
+❌ No intervenir → Comercio de información legal
+❌ No intervenir → Investigaciones legales de terceros
+❌ No intervenir → Actividades fuera de la jurisdicción del Principado Sombrío
+ 
+PENALIZACIONES PERMITIDAS
+ 
+- Bloqueo permanente: Para nodos con múltiples infracciones
+- Incineración de datos: Solo para información ilícita (nunca para datos personales legales)
+- Notificación a autoridades: Solo a entidades reconocidas por la soberanía
+- Retención de evidencias: Máximo 6 meses (según códigos penales)
+ 
+ 
+ 
+CONTACTO Y SOPORTE
+ 
+- Equipo de soporte técnico:  soporte@principado-sombrio.net  (solo para personal autorizado)
+- Canal de emergencia: Red estelar del Amuleto - Nodo  MARTIAN_RELAY_01 
+- Actualizaciones del manual: Publicadas mensualmente en el depósito lunar seguro
+ 
+ 
+ 
+¿Te gustaría que añada secciones específicas para capacitación del personal o que desarrolle un conjunto de scripts de automatización para los procedimientos de mantenimiento periódico?DESCRIPCIÓN COMPLETA DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
  
  
  
