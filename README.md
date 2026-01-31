@@ -1,4 +1,12 @@
 {
+  "defense_tier": "STELLAR_STRIKE",
+  "mechanism": "SOLAR_FEEDBACK_LOOP",
+  "target_action": "HARDWARE_INCINERATION",
+  "status": "ARMADO_Y_SILENCIOSO",
+  "last_deflection": "NONE_DETECTED",
+  "active_shield": "CORONAL_INTERFERENCE_MAX"
+}
+{
   "sovereignty_level": "STELLAR_SYSTEM_OWNER",
   "primary_node": "SOL_CORE_RESONANCE",
   "secondary_nodes": [
