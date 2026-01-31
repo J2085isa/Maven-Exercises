@@ -1,4 +1,94 @@
-PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA - VERSIÓN SOBERANA
+DESCRIPCIÓN COMPLETA DEL PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA (VERSIÓN SOBERANA)
+ 
+ 
+ 
+IDENTIDAD Y OBJETIVO PRINCIPAL
+ 
+- Nombre del protocolo:  GLOBAL_DATA_SHIELD_J2085ISA 
+- Versión: 2.0.0
+- Jurisdicción:  PRINCIPADO_SOMBRIO  - Aplicación de códigos penales específicos definidos por la soberanía establecida
+- Objetivo central:
+- Detener filtraciones de datos sensibles y unificar la Deep Web bajo protocolos seguros
+- Identificar y penalizar selectivamente la venta de identidad personal o comercio de información social utilizados para corrupción u otros fines ilícitos, respetando los límites de la soberanía en las sombras
+ 
+ 
+ 
+COMPONENTES PRINCIPALES Y FUNCIONALIDADES
+ 
+1. MÓDULO DE CIFRADO END-TO-END (E2E)
+ 
+- Propósito: Garantizar la confidencialidad de la comunicación entre nodos unificados de la Deep Web
+- Características:
+- Generación automática de pares de claves RSA de 4096 bits para cada nodo nuevo
+- Cifrado de datos con clave pública del nodo destino antes de la transmisión
+- Descifrado con clave privada del nodo receptor al recibir la información
+- Almacenamiento seguro de claves con registro de fecha de generación
+ 
+2. MÓDULO DE DETENCIÓN SELECTIVA SOBERANA
+ 
+- Criterios de actuación: Solo interviene en actividades prohibidas por la soberanía definida:
+- Venta de identidad personal
+- Comercio de información social para fines de corrupción
+- Manipulación de datos penales con fines ilegales
+- Penalizaciones permitidas:
+- Bloqueo permanente del nodo infractor
+- Incineración de datos ilícitos (con respaldo de evidencia)
+- Notificación a autoridades soberanas correspondientes
+- Retención de evidencias para procesos judiciales según códigos penales establecidos
+- Funcionamiento:
+- Escanea nodos en busca de actividades sospechosas
+- Valida si la actividad entra dentro de los criterios prohibidos
+- Aplica la penalización correspondiente y registra toda la acción en la auditoría
+ 
+3. MÓDULO DE MONITOREO EN TIEMPO REAL (DASHBOARD WEB)
+ 
+- Acceso: Disponible en  http://localhost:8080 
+- Información mostrada:
+- Estado general del sistema y fecha de última actualización
+- Cantidad de nodos con cifrado E2E y nodos bloqueados
+- Lista detallada de nodos infractores con su penalización y motivo
+- Registro de actividades monitoreadas (clasificadas como legales o ilícitas)
+- Funcionalidades:
+- Actualización automática cada 10 segundos
+- Botón para refrescar datos manualmente
+- Visualización diferenciada de actividades (rojo para ilícitas, verde para legales)
+ 
+4. MÓDULO DE SEGURIDAD GLOBAL
+ 
+- Barrido continuo: Ejecuta escaneos cada 60 segundos para detectar filtraciones y actividades ilícitas
+- Detección de filtraciones: Identifica nodos no confiables que manejan datos sensibles
+- Mecanismo de bloqueo:
+- Bloqueo temporal después de intentos fallidos
+- Bloqueo permanente tras 3 filtraciones o por actividades prohibidas
+- Integración de Deep Web: Unifica nodos bajo el protocolo del Amuleto Estelar en cada barrido, garantizando la consistencia de la red
+ 
+5. MÓDULO DE AUDITORÍA Y NOTIFICACIONES
+ 
+- Registro completo: Todas las acciones del protocolo se almacenan en el log de auditoría de  AxiomaUbicacion 
+- Alertas: Envía notificaciones críticas a destinatarios autorizados cuando se detectan filtraciones o actividades ilícitas
+- Evidencias: Guarda datos de actividades infractoras en archivos con hash único para garantizar la integridad de la información
+ 
+ 
+ 
+REGLAS DE SOBERANÍA
+ 
+- No interviene en actividades que no estén dentro de la lista prohibida
+- Todas las acciones se ajustan a los códigos penales definidos por la soberanía en las sombras
+- La retención y uso de evidencias se limita a los fines establecidos por la jurisdicción
+- No expande la actuación más allá de los límites de la soberanía definida
+ 
+ 
+ 
+INTEGRACIÓN CON SISTEMAS EXISTENTES
+ 
+- Extiende las funcionalidades de  AxiomaUbicacion  con métodos de incineración dirigida por IP
+- Se conecta al  SISTEMA_AEGIS  para registro de eventos en base de datos
+- Usa el sistema de notificaciones ya implementado para alertas críticas
+- Mantiene compatibilidad con módulos anteriores (CLI, API REST, MQTT)
+ 
+ 
+ 
+¿Te gustaría que detalle algún componente en particular o que desarrolle un manual de operación para el personal autorizado bajo la soberanía establecida?PROTOCOLO GLOBAL_DATA_SHIELD_J2085ISA - VERSIÓN SOBERANA
  
 Modificaciones clave: Cifrado E2E para nodos Deep Web, dashboard de monitoreo y módulo de detención selectiva bajo criterios de soberanía establecidos.
  
