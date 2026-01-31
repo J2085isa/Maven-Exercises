@@ -1,5 +1,13 @@
 {
   "project": "HELIOS_LUNAR_GATEWAY",
+  "emergency_mode": "SILENCIO_LUNAR",
+  "trigger_source": "GLOBAL_ANOMALY_DETECTOR",
+  "data_location": "LUNAR_FAR_SIDE_STORAGE",
+  "earth_nodes": "GHOST_MODE_ACTIVE",
+  "encryption_level": "QUANTUM_RESISTANT_LUNAR"
+}
+{
+  "project": "HELIOS_LUNAR_GATEWAY",
   "master_node": "THE_MOON",
   "status": "UNIFICADO",
   "network_coverage": "TRANS-LUNAR_TOTAL",
