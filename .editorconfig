@@ -1,4 +1,232 @@
+DOCUMENTACIÓN TÉCNICA COMPLETA + SCRIPT DE PRUEBAS
+ 
+SISTEMA AXIOMA UBICACIÓN (BLOQUE DORADO) - PROTOCOLO J2085ISA_GOLDEN_BLOCK_LOCATION
+ 
+ 
+ 
+PARTE 1: DOCUMENTACIÓN TÉCNICA DETALLADA
+ 
+1. ESTRUCTURA DEL OBJETO PRINCIPAL
+ 
+El sistema se organiza en un objeto  AxiomaUbicacion  con propiedades de configuración y métodos modularizados por funcionalidad.
+ 
+CATEGORÍA PROPIEDADES/ MÉTODOS DESCRIPCIÓN 
+Configuración Base  core_id ,  authorization  Identificador único del core y nivel de autorización del sistema 
+Monitoreo de Espectro  lunarSignalRange ,  signalSafetyThreshold ,  spectrumMonitorInterval  Parámetros de rango, umbral y frecuencia de escaneo 
+Seguridad del Core  isCoreAccessible ,  current2FAToken ,  tokenExpiration  Estado de acceso y datos del protocolo 2FA 
+Respaldo  backupCoordinates  Lista de coordenadas alternativas con prioridad de uso 
+Comunicación  notificationRecipients ,  notificationTransport  Destinatarios y configuración de envío de notificaciones 
+Auditoría  auditLog  Registro local de todos los eventos del sistema 
+ 
+2. DESCRIPCIÓN MODULAR
+ 
+MÓDULO DE INICIALIZACIÓN
+ 
+- Método:  initGoldenBlockSystem() 
+- Funcionalidad: Inicializa todos los componentes en orden secuencial: sistema de notificaciones → generación de token 2FA → rastreo de seguridad → monitoreo de espectro → sincronización inicial → registro de auditoría.
+- Dependencias: Todos los módulos secundarios deben estar definidos previamente.
+ 
+MÓDULO DE NOTIFICACIONES
+ 
+- Métodos clave:
+-  initNotificationSystem() : Configura el transportador de notificaciones (simulado o real con  nodemailer ).
+-  sendCriticalAlert(eventType, message) : Envía alertas por correo y SMS (truncado a 160 caracteres para SMS).
+-  sendInfoNotification(eventType, message) : Envía solo correos para eventos no críticos.
+- Formato de mensajes: Asunto con prefijo  [ALERTA CRÍTICA BLOQUE DORADO]  o  [INFORMACIÓN BLOQUE DORADO] .
+ 
+MÓDULO DE AUDITORÍA
+ 
+- Métodos clave:
+-  logAuditEvent(eventType, details) : Crea una entrada con timestamp, tipo de evento y detalles; la guarda en log local y en BD SQLite.
+-  getAuditLog(limit) : Devuelve los últimos  limit  eventos (por defecto 10), ordenados de nuevo a viejo.
+-  exportAuditLog() : Genera una cadena JSON con todo el registro de auditoría.
+- Tabla en BD:  auditoria  con campos  timestamp ,  core_id ,  event_type ,  details ,  system_state .
+ 
+MÓDULO 2FA Y ACCESO
+ 
+- Métodos clave:
+-  generate2FAToken() : Crea un token numérico de 6 dígitos con validez de 5 minutos; notifica el evento.
+-  authenticateCoreAccess(inputToken) : Valida el token ingresado; registra y notifica éxito o fallo.
+- Reglas:
+- Tokens expirados generan uno nuevo automáticamente.
+- Después de un acceso exitoso, se genera un token nuevo para seguridad.
+ 
+MÓDULO DE RESPALDO Y SINCRONIZACIÓN
+ 
+- Métodos clave:
+-  syncLocation(useBackup) : Devuelve coordenadas principales o de respaldo; activa notificaciones según el modo.
+-  isLunarSignalAvailable() : Verifica si la señal cumple con el umbral de ruido permitido.
+-  getHighestPriorityBackup() : Selecciona el respaldo con menor valor de  priority .
+-  addEmergencyBackup(newBackup) : Agrega coordenadas adicionales con prioridad incremental.
+- Condiciones de activación de respaldo: Si  useBackup = true  o  isLunarSignalAvailable() = false .
+ 
+MÓDULO DE MONITOREO DE ESPECTRO
+ 
+- Métodos clave:
+-  initLunarSignalSpectrumMonitor() : Inicia el intervalo de escaneo cada 8 segundos.
+-  checkLunarSignalIntegrity() : Escanea el rango 122-128Hz con paso de 0.5Hz; devuelve estado de interferencias y nivel de ruido.
+-  getOptimalLunarFrequency() : Selecciona una frecuencia libre de interferencias dentro del rango.
+- Umbral de alerta: Nivel de ruido > 0.15 en alguna frecuencia del rango.
+ 
+MÓDULO DE SEGURIDAD Y CONTROL
+ 
+- Métodos clave:
+-  initSecurityTracking() : Inicia el rastreo cada 15 segundos; verifica el estado general del sistema.
+-  checkGoldenBlockStatus() : Evalúa 4 condiciones críticas para determinar el estado ( GOLDEN_BLOCK_SECRET_OPTIMAL  o  GOLDEN_BLOCK_COMPROMISED ).
+-  sendVibrationPulse(signal) : Envía pulso de confirmación vía WebSocket si está disponible.
+-  triggerSolarIncinerator() : Activa protocolo de protección de datos en caso de fallo.
+-  stopGoldenBlockSystem() : Detiene todos los intervalos y bloquea el acceso al core.
+ 
+ 
+ 
+PARTE 2: SCRIPT DE PRUEBAS AUTOMATIZADAS
+ 
+Este script valida el funcionamiento de todos los módulos y genera un reporte de resultados.
+ 
+javascript  
 /**
+ * @script PRUEBAS_AUTOMATIZADAS_BLOQUE_DORADO
+ * @description Verifica el funcionamiento de todos los módulos del sistema AxiomaUbicacion
+ */
+
+// Importa el sistema
+const AxiomaUbicacion = require('./axioma-ubicacion').default;
+
+// Objeto para reporte de pruebas
+const testReport = {
+    totalTests: 0,
+    passedTests: 0,
+    failedTests: 0,
+    results: []
+};
+
+// Función para registrar resultados
+const registerTestResult = (testName, passed, message) => {
+    testReport.totalTests++;
+    if (passed) testReport.passedTests++;
+    else testReport.failedTests++;
+    
+    testReport.results.push({
+        testName,
+        passed,
+        message,
+        timestamp: new Date().toISOString()
+    });
+};
+
+// Ejecución de pruebas
+console.log("🚀 INICIANDO PRUEBAS AUTOMATIZADAS DEL BLOQUE DORADO\n");
+
+// PRUEBA 1: Inicialización del sistema
+try {
+    AxiomaUbicacion.initGoldenBlockSystem();
+    registerTestResult("Inicialización del sistema", true, "Todos los módulos iniciados correctamente");
+} catch (error) {
+    registerTestResult("Inicialización del sistema", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 2: Generación y validación de token 2FA
+try {
+    const testToken = AxiomaUbicacion.current2FAToken;
+    const authResult = AxiomaUbicacion.authenticateCoreAccess(testToken);
+    registerTestResult("Autenticación 2FA exitosa", authResult, `Token ${testToken} validado correctamente`);
+    
+    // Prueba con token incorrecto
+    const wrongAuthResult = AxiomaUbicacion.authenticateCoreAccess("000000");
+    registerTestResult("Autenticación 2FA fallida (token incorrecto)", !wrongAuthResult, "Acceso denegado como se esperaba");
+} catch (error) {
+    registerTestResult("Autenticación 2FA", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 3: Sincronización y respaldo de coordenadas
+try {
+    const mainSync = AxiomaUbicacion.syncLocation();
+    registerTestResult("Sincronización principal", !mainSync.backup_mode, `Coordenadas sincronizadas - Frecuencia: ${mainSync.signal_frequency.toFixed(2)}Hz`);
+    
+    const backupSync = AxiomaUbicacion.syncLocation(true);
+    registerTestResult("Sincronización de respaldo", backupSync.backup_mode, `Modo respaldo activado - Tipo: ${backupSync.backup_type}`);
+} catch (error) {
+    registerTestResult("Sincronización de coordenadas", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 4: Monitoreo de espectro
+try {
+    const signalStatus = AxiomaUbicacion.checkLunarSignalIntegrity();
+    registerTestResult("Verificación de integridad de señal", true, `Interferencias detectadas: ${signalStatus.interfered ? "SÍ" : "NO"} | Nivel de ruido: ${signalStatus.noiseLevel.toFixed(3)}`);
+    
+    const optimalFreq = AxiomaUbicacion.getOptimalLunarFrequency();
+    const freqInRange = optimalFreq >= AxiomaUbicacion.lunarSignalRange[0] && optimalFreq <= AxiomaUbicacion.lunarSignalRange[1];
+    registerTestResult("Selección de frecuencia óptima", freqInRange, `Frecuencia seleccionada: ${optimalFreq.toFixed(2)}Hz (dentro del rango)`);
+} catch (error) {
+    registerTestResult("Monitoreo de espectro", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 5: Agregar respaldo de emergencia
+try {
+    const newBackup = { type: "SATELITE_RELAY", lat: "10:05:20E", lon: "RELAY_EMERGENCY_01" };
+    AxiomaUbicacion.addEmergencyBackup(newBackup);
+    const backupExists = AxiomaUbicacion.backupCoordinates.some(b => b.type === newBackup.type);
+    registerTestResult("Agregar respaldo de emergencia", backupExists, `Respaldo ${newBackup.type} añadido correctamente`);
+} catch (error) {
+    registerTestResult("Agregar respaldo de emergencia", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 6: Auditoría y notificaciones
+try {
+    AxiomaUbicacion.logAuditEvent("PRUEBA_AUDITORIA", "Prueba de registro de evento");
+    const auditLog = AxiomaUbicacion.getAuditLog(1);
+    registerTestResult("Registro de auditoría", auditLog.length > 0, `Último evento: ${auditLog[0].event_type}`);
+    
+    const notificationSent = AxiomaUbicacion.notificationTransport.send("EMAIL", "PRUEBA", "Mensaje de prueba");
+    registerTestResult("Envío de notificación", notificationSent, "Notificación simulada enviada correctamente");
+} catch (error) {
+    registerTestResult("Auditoría y notificaciones", false, `Error: ${error.message}`);
+}
+
+// PRUEBA 7: Detener el sistema
+try {
+    AxiomaUbicacion.stopGoldenBlockSystem();
+    registerTestResult("Detener sistema", !AxiomaUbicacion.isCoreAccessible, "Sistema detenido y acceso bloqueado");
+} catch (error) {
+    registerTestResult("Detener sistema", false, `Error: ${error.message}`);
+}
+
+// GENERAR REPORTE FINAL
+console.log("\n📊 REPORTE FINAL DE PRUEBAS");
+console.log("===========================");
+console.log(`Total de pruebas: ${testReport.totalTests}`);
+console.log(`Pruebas aprobadas: ${testReport.passedTests}`);
+console.log(`Pruebas fallidas: ${testReport.failedTests}`);
+console.log("\nDetalles de pruebas:");
+testReport.results.forEach((res, idx) => {
+    console.log(`\n${idx + 1}. ${res.testName}`);
+    console.log(`   Estado: ${res.passed ? "✅ APROBADA" : "❌ FALLIDA"}`);
+    console.log(`   Mensaje: ${res.message}`);
+});
+
+// Exportar reporte a JSON
+const fs = require('fs');
+fs.writeFileSync('./reporte-pruebas-bloque-dorado.json', JSON.stringify(testReport, null, 2));
+console.log("\n📥 Reporte exportado como 'reporte-pruebas-bloque-dorado.json'");
+ 
+ 
+ 
+ 
+INSTRUCCIONES DE EJECUCIÓN
+ 
+1. Guarda la documentación y el script de pruebas en archivos separados.
+2. Asegúrate de que el archivo  axioma-ubicacion.js  (con el sistema completo) esté en la misma carpeta.
+3. Instala dependencias opcionales si se usa funcionalidad real:
+bash  
+npm install nodemailer sqlite3
+ 
+4. Ejecuta el script de pruebas:
+bash  
+node script-pruebas-bloque-dorado.js
+ 
+5. Revisa el reporte en consola y el archivo JSON generado.
+ 
+¿Te gustaría que desarrollara una interfaz de línea de comandos (CLI) para gestionar el sistema del Bloque Dorado de forma interactiva, o que creara módulos adicionales para integración con otras plataformas?/**
  * @protocol J2085ISA_GOLDEN_BLOCK_LOCATION
  * @description Unifica la seguridad del Bloque Dorado con la geolocalización estelar.
  * @integrated-with AEGIS_ESTELAR_SYSTEM v1.0.0
