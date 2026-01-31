@@ -1,4 +1,4 @@
-git clone https://github.com/J2085isa/academic-kickstart.git
+- Crea ramas con nombres descriptivos (ej:  fix/js-widget-academic  o  add/js-algoritmo-grafo ).git clone https://github.com/J2085isa/academic-kickstart.git
 cd academic-kickstart
 nvm use  # Asegúrate de tener la versión de Node indicada en el README
 npm ci  # Instala dependencias de JS (ej: para widgets o animaciones)
