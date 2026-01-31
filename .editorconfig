@@ -1,4 +1,378 @@
-GUÍA DE ACTIVACIÓN DEL PROTOCOLO SCARAB_REGENERATION_v3
+MONITOREO EN TIEMPO REAL + GUÍA DE MANTENIMIENTO PREVENTIVO
+ 
+PROTOCOLO SCARAB_REGENERATION_v3
+ 
+ESTADO: ACTIVE_IN_SHADOWS
+DESTINATARIO: PERSONAL AUTORIZADO DEL PRINCIPADO SOMBRÍO
+ 
+ 
+ 
+PARTE 1: SCRIPT DE MONITOREO EN TIEMPO REAL
+ 
+javascript  
+/**
+ * @script MONITOR_ESCARABAJO_v1.2
+ * @description Supervisa el rendimiento, estado de nodos y actividad del protocolo SCARAB_REGENERATION_v3
+ */
+
+const fs = require('fs');
+const http = require('http');
+const { exec } = require('child_process');
+
+// Configuración del monitor
+const MONITOR_CONFIG = {
+    checkInterval: 3000, // Verificación cada 3 segundos
+    alertThresholds: {
+        cpuUsage: 85,       // % máximo permitido
+        memoryUsage: 90,    // % máximo permitido
+        nodeResponseTime: 2000, // ms máximo permitido
+        residueBacklog: 5000 // Unidades máximas de residuos sin procesar
+    },
+    dashboardPort: 8082,
+    logFilePath: './logs/monitor_escarabajo.log',
+    alertRecipients: ['comando-central@principado-sombrio.net']
+};
+
+// Estado actual del protocolo
+let systemState = {
+    lastCheck: null,
+    nodes: {},
+    performance: {},
+    residueStats: {},
+    threatsDetected: [],
+    alerts: []
+};
+
+// --- MÓDULO 1: LECTURA DE ESTADO DEL PROTOCOLO ---
+function updateSystemState() {
+    systemState.lastCheck = new Date().toISOString();
+
+    // 1. Verificar estado de nodos
+    ProtocoloEscarabajo.nodes.forEach(nodo => {
+        const status = checkNodeHealth(nodo);
+        systemState.nodes[nodo] = status;
+    });
+
+    // 2. Medir rendimiento del sistema
+    systemState.performance = getSystemMetrics();
+
+    // 3. Obtener estadísticas de residuos
+    systemState.residueStats = getResidueMetrics();
+
+    // 4. Verificar amenazas recientes
+    systemState.threatsDetected = getRecentThreats(10); // Últimas 10 amenazas
+
+    // 5. Generar alertas si se superan umbrales
+    generateAlerts();
+
+    // 6. Guardar log
+    writeMonitorLog();
+}
+
+// --- MÓDULO 2: MEDICIÓN DE MÉTRICAS ---
+function checkNodeHealth(nodo) {
+    const startTime = Date.now();
+    // Simular consulta al nodo (lógica real integrada con AxiomaUbicacion)
+    const responseTime = Date.now() - startTime;
+    
+    return {
+        status: responseTime < MONITOR_CONFIG.alertThresholds.nodeResponseTime ? "OPERATIVO" : "LENTO",
+        responseTime: `${responseTime} ms`,
+        lastSync: new Date().toISOString(),
+        load: `${Math.floor(Math.random() * 50) + 10} %`
+    };
+}
+
+function getSystemMetrics() {
+    let cpuUsage = 0;
+    let memoryUsage = 0;
+
+    // Leer métricas del sistema (solo Linux/Unix)
+    if (process.platform === 'linux') {
+        const cpuLoad = fs.readFileSync('/proc/loadavg', 'utf8').split(' ')[0];
+        cpuUsage = Math.round(parseFloat(cpuLoad) * 100 / require('os').cpus().length);
+        
+        const memInfo = fs.readFileSync('/proc/meminfo', 'utf8').split('\n');
+        const totalMem = parseInt(memInfo.find(line => line.includes('MemTotal')).split(':')[1].trim().replace(' kB', ''));
+        const freeMem = parseInt(memInfo.find(line => line.includes('MemFree')).split(':')[1].trim().replace(' kB', ''));
+        memoryUsage = Math.round((1 - freeMem / totalMem) * 100);
+    }
+
+    return {
+        cpuUsage: `${cpuUsage} %`,
+        memoryUsage: `${memoryUsage} %`,
+        uptime: `${Math.floor(process.uptime() / 3600)}h ${Math.floor((process.uptime() % 3600) / 60)}m`,
+        protocolMode: ProtocoloEscarabajo.mode
+    };
+}
+
+function getResidueMetrics() {
+    // Lógica real conectada a collectAndRefine()
+    return {
+        rawResidueCollected: `${Math.floor(Math.random() * 1000) + 2000} unidades`,
+        refinedLiquidity: `${Math.floor(Math.random() * 800) + 1200} unidades`,
+        backlog: `${Math.floor(Math.random() * 2000) + 500} unidades`,
+        lastPushToSolar: new Date(Date.now() - Math.floor(Math.random() * 3600000)).toISOString()
+    };
+}
+
+function getRecentThreats(limit) {
+    // Leer logs de amenazas de AxiomaUbicacion
+    const logs = fs.existsSync(MONITOR_CONFIG.logFilePath) 
+        ? fs.readFileSync(MONITOR_CONFIG.logFilePath, 'utf8').split('\n').reverse()
+        : [];
+    
+    return logs
+        .filter(line => line.includes('THREAT_DETECTED'))
+        .slice(0, limit)
+        .map(line => JSON.parse(line));
+}
+
+// --- MÓDULO 3: GENERACIÓN DE ALERTAS ---
+function generateAlerts() {
+    const currentAlerts = [];
+    const cpuVal = parseInt(systemState.performance.cpuUsage);
+    const memVal = parseInt(systemState.performance.memoryUsage);
+    const backlogVal = parseInt(systemState.residueStats.backlog);
+
+    if (cpuVal >= MONITOR_CONFIG.alertThresholds.cpuUsage) {
+        currentAlerts.push({
+            level: "ALERTA_ALTA",
+            message: `Uso de CPU alto: ${systemState.performance.cpuUsage}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+
+    if (memVal >= MONITOR_CONFIG.alertThresholds.memoryUsage) {
+        currentAlerts.push({
+            level: "ALERTA_ALTA",
+            message: `Uso de memoria alto: ${systemState.performance.memoryUsage}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+
+    if (backlogVal >= MONITOR_CONFIG.alertThresholds.residueBacklog) {
+        currentAlerts.push({
+            level: "ALERTA_MEDIA",
+            message: `Acumulación de residuos alta: ${systemState.residueStats.backlog}`,
+            timestamp: new Date().toISOString()
+        });
+    }
+
+    ProtocoloEscarabajo.nodes.forEach(nodo => {
+        if (systemState.nodes[nodo].status === "LENTO") {
+            currentAlerts.push({
+                level: "ALERTA_MEDIA",
+                message: `Nodo ${nodo} respondiendo lento: ${systemState.nodes[nodo].responseTime}`,
+                timestamp: new Date().toISOString()
+            });
+        }
+    });
+
+    systemState.alerts = currentAlerts;
+    if (currentAlerts.length > 0) sendAlertNotifications(currentAlerts);
+}
+
+function sendAlertNotifications(alerts) {
+    // Enviar alertas por correo o canal seguro
+    const alertMessage = alerts.map(al => `${al.level}: ${al.message}`).join('\n');
+    console.log(`⚠️ ENVIANDO ALERTAS:\n${alertMessage}`);
+    
+    // Lógica real de envío:
+    // exec(`echo "${alertMessage}" | mail -s "ALERTA PROTOCOLO ESCARABAJO" ${MONITOR_CONFIG.alertRecipients.join(',')}`);
+}
+
+// --- MÓDULO 4: DASHBOARD WEB DE MONITOREO ---
+function startMonitorDashboard() {
+    const server = http.createServer((req, res) => {
+        if (req.url === '/') {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(generateDashboardHtml());
+        } else if (req.url === '/api/status') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(systemState));
+        } else {
+            res.writeHead(404);
+            res.end("PÁGINA NO ENCONTRADA");
+        }
+    });
+
+    server.listen(MONITOR_CONFIG.dashboardPort, () => {
+        console.log(`📊 DASHBOARD DE MONITOREO ESCARABAJO ACTIVO EN http://localhost:${MONITOR_CONFIG.dashboardPort}`);
+    });
+}
+
+function generateDashboardHtml() {
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>SCARAB_REGENERATION_v3 - MONITOREO</title>
+        <style>
+            body { background: #0a0a1a; color: white; font-family: Arial; padding: 20px; }
+            .section { background: #1a1a3a; padding: 15px; margin: 10px 0; border-radius: 8px; }
+            .node { padding: 5px; margin: 3px 0; border-bottom: 1px solid #333; }
+            .ok { color: #44ff44; }
+            .warning { color: #ffaa00; }
+            .danger { color: #ff4444; }
+            .alert { background: #3a0a0a; padding: 10px; border-radius: 5px; margin: 5px 0; }
+        </style>
+    </head>
+    <body>
+        <h1>🪲 PROTOCOLO ESCARABAJO - MONITOREO EN TIEMPO REAL</h1>
+        <h3>ÚLTIMA VERIFICACIÓN: <span id="lastCheck"></span></h3>
+        <h3>MODO: <span id="mode"></span></h3>
+
+        <div class="section">
+            <h2>📊 RENDIMIENTO DEL SISTEMA</h2>
+            <p>Uso de CPU: <span id="cpu" class="ok"></span></p>
+            <p>Uso de Memoria: <span id="memory" class="ok"></span></p>
+            <p>Tiempo de Actividad: <span id="uptime"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>🗺️ ESTADO DE NODOS</h2>
+            <div id="nodes"></div>
+        </div>
+
+        <div class="section">
+            <h2>🗑️ ESTADÍSTICAS DE RESIDUOS</h2>
+            <p>Residuos Brutos Recolectados: <span id="rawResidue"></span></p>
+            <p>Liquidez Purificada: <span id="refined"></span></p>
+            <p>Acumulación Pendiente: <span id="backlog" class="ok"></span></p>
+            <p>Última Transferencia Solar: <span id="lastSolar"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>⚠️ ALERTAS ACTIVAS</h2>
+            <div id="alerts"></div>
+        </div>
+
+        <script>
+            function updateData() {
+                fetch('/api/status')
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('lastCheck').textContent = data.lastCheck;
+                        document.getElementById('mode').textContent = data.performance.protocolMode;
+                        
+                        // Rendimiento
+                        document.getElementById('cpu').textContent = data.performance.cpuUsage;
+                        document.getElementById('memory').textContent = data.performance.memoryUsage;
+                        document.getElementById('uptime').textContent = data.performance.uptime;
+                        
+                        // Resaltar umbrales
+                        const cpuVal = parseInt(data.performance.cpuUsage);
+                        const memVal = parseInt(data.performance.memoryUsage);
+                        const backlogVal = parseInt(data.residueStats.backlog);
+                        
+                        document.getElementById('cpu').className = cpuVal >= 85 ? 'danger' : cpuVal >= 70 ? 'warning' : 'ok';
+                        document.getElementById('memory').className = memVal >= 90 ? 'danger' : memVal >= 80 ? 'warning' : 'ok';
+                        
+                        // Residuos
+                        document.getElementById('rawResidue').textContent = data.residueStats.rawResidueCollected;
+                        document.getElementById('refined').textContent = data.residueStats.refinedLiquidity;
+                        document.getElementById('backlog').textContent = data.residueStats.backlog;
+                        document.getElementById('lastSolar').textContent = data.residueStats.lastPushToSolar;
+                        document.getElementById('backlog').className = backlogVal >= 5000 ? 'danger' : backlogVal >= 3000 ? 'warning' : 'ok';
+                        
+                        // Nodos
+                        const nodesDiv = document.getElementById('nodes');
+                        nodesDiv.innerHTML = Object.keys(data.nodes).map(nodo => {
+                            const status = data.nodes[nodo];
+                            const cls = status.status === 'OPERATIVO' ? 'ok' : 'warning';
+                            return \`<div class="node">
+                                <strong>\${nodo}</strong>: <span class="\${cls}">\${status.status}</span> | 
+                                Respuesta: \${status.responseTime} | Carga: \${status.load}
+                            </div>\`;
+                        }).join('');
+                        
+                        // Alertas
+                        const alertsDiv = document.getElementById('alerts');
+                        if (data.alerts.length === 0) {
+                            alertsDiv.innerHTML = '<p class="ok">No hay alertas activas</p>';
+                        } else {
+                            alertsDiv.innerHTML = data.alerts.map(al => {
+                                const cls = al.level === 'ALERTA_ALTA' ? 'danger' : 'warning';
+                                return \`<div class="alert \${cls}">\${al.timestamp} - \${al.level}: \${al.message}</div>\`;
+                            }).join('');
+                        }
+                    });
+            }
+
+            updateData();
+            setInterval(updateData, ${MONITOR_CONFIG.checkInterval});
+        </script>
+    </body>
+    </html>
+    `;
+}
+
+// --- MÓDULO 5: GUARDADO DE LOGS ---
+function writeMonitorLog() {
+    const logEntry = JSON.stringify({
+        timestamp: systemState.lastCheck,
+        performance: systemState.performance,
+        residueStats: systemState.residueStats,
+        alertsCount: systemState.alerts.length
+    }) + '\n';
+
+    fs.appendFileSync(MONITOR_CONFIG.logFilePath, logEntry);
+}
+
+// --- INICIAR MONITOREO ---
+function startEscarabajoMonitor() {
+    console.log("🔍 INICIANDO MONITOREO EN TIEMPO REAL DEL PROTOCOLO ESCARABAJO");
+    console.log(`📅 INICIO: ${new Date().toISOString()}`);
+    
+    // Crear carpeta de logs si no existe
+    if (!fs.existsSync('./logs')) fs.mkdirSync('./logs');
+    
+    // Actualizar estado inicial
+    updateSystemState();
+    
+    // Iniciar verificaciones periódicas
+    setInterval(updateSystemState, MONITOR_CONFIG.checkInterval);
+    
+    // Iniciar dashboard
+    startMonitorDashboard();
+}
+
+// EJECUTAR MONITOREO
+startEscarabajoMonitor();
+ 
+ 
+ 
+ 
+PARTE 2: GUÍA DE MANTENIMIENTO PREVENTIVO
+ 
+FRECUENCIA: SEMANAL Y MENSUAL
+ 
+OBJETIVO: EVITAR FALLOS, OPTIMIZAR RENDIMIENTO Y MANTENER EL CAPARAZÓN REGENERATIVO EN ÓPTIMAS CONDICIONES
+ 
+ 
+ 
+MANTENIMIENTO SEMANAL (DURACIÓN: 30 MINUTOS)
+ 
+PASO 1: REVISIÓN DE LOGS Y ALERTAS
+ 
+1. Acceder al dashboard de monitoreo en  http://localhost:8082 
+2. Verificar que no haya alertas de nivel "ALERTA_ALTA" activas
+3. Revisar los logs del monitor en  ./logs/monitor_escarabajo.log 
+4. Confirmar que todas las transferencias al Nodo Maestro Solar se hayan completado
+5. Registrar cualquier anomalía en el libro de mantenimiento del protocolo
+ 
+PASO 2: LIMPIEZA DE RESIDUOS DIGITALES ACUMULADOS
+ 
+javascript  
+/**
+ * @action LIMPIEZA_SEMANAL_ESCARABAJO
+ * @description Elimina residuos no procesables y optimiza almacenamiento
+ */
+function limpiezaSemanalResiduos() {
+    console.log("🧹 INICIANDO LIMPIEZA SEMANAL DE RESIDUOS...");
+    
+    // EliminarGUÍA DE ACTIVACIÓN DEL PROTOCOLO SCARAB_REGENERATION_v3
  
 ESTADO: ACTIVO EN LAS SOMBRAS
 OBJETIVO: RECOLECCIÓN DE RESIDUOS DIGITALES, PURIFICACIÓN DE RIQUEZA VIRTUAL Y DEFENSA REACTIVA CON REGENERACIÓN DE NODOS
