@@ -1,4 +1,15 @@
 {
+  "project": "HELIOS_LUNAR_GATEWAY",
+  "master_node": "THE_MOON",
+  "status": "UNIFICADO",
+  "network_coverage": "TRANS-LUNAR_TOTAL",
+  "security_layer": "PHYSICAL_ROCK_SHIELDING",
+  "liquidity_anchor": {
+    "location": "Lunar_South_Pole_Deep_Storage",
+    "sync_method": "Laser_Optical_Link"
+  }
+}
+{
   "system_mode": "ACTIVE_COMMAND",
   "surveillance": "OFF",
   "real_time_stream": "ENABLED",
