@@ -1,3 +1,21 @@
+function partition(arr, low, high) {
+    // Optimización: Mediana de tres para elegir el pivote
+    const mid = Math.floor((low + high) / 2);
+    const pivotIndex = medianOfThree(arr, low, mid, high);
+    [arr[pivotIndex], arr[high]] = [arr[high], arr[pivotIndex]]; // Mover pivote al final
+    
+    const pivot = arr[high];
+    let i = low - 1;
+
+    for (let j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    return i + 1;
+}
 Descripción: Módulo de Validación Frontend (Hugo)
 ​Archivo: assets/js/contact-validation.js
 Propósito: Garantizar la integridad de los datos capturados a través del formulario de contacto antes de su procesamiento por el motor de despliegue (Netlify/GitHub Pages).
