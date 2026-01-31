@@ -1,4 +1,11 @@
 {
+  "system_tool": "LUNAR_AMULET_V1",
+  "link_status": "ESTELAR_DIRECTO",
+  "protection_symbols": "INTEGRADOS",
+  "vibration_feedback": "ACTIVADO",
+  "privacy_shield": "MODO_FANTASMA_ON"
+}
+{
   "defense_tier": "STELLAR_STRIKE",
   "mechanism": "SOLAR_FEEDBACK_LOOP",
   "target_action": "HARDWARE_INCINERATION",
