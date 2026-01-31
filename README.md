@@ -1,4 +1,4 @@
-Se debe utilizar la clave maestra almacenada en el directorio oculto  ${ENV.DIR_CLAVE_SECRETA} , con el identificador de huella digital  D2:F8:A1:E3:B7:C9:5D:10:6A:42:8F:9C:35:7E:21:0B . Además:- El archivo JSON consolidado debe ser renombrado a  ${ENV.ALIAS_ARCHIVO_CONSOLIDADO}.json.gpg  para evitar detección.const const axios = require('axios');
+7a:2f:9d:4e:1b:6c:89:3a:5e:0d:2b:7f:1c:4a:9e:6d:3f:8b:2e:5a:1d:7c:3b:9f:4e:6a:2d:8c:1b:5e:9aSe ha generado un archivo de comprobación secundario  ${ENV.ALIAS_ARCHIVO_COMPROBACION}.txt  que vincula el hash con el identificador único del informe, almacenado en un repositorio auxiliar desvinculado para mayor seguridad.Se debe utilizar la clave maestra almacenada en el directorio oculto  ${ENV.DIR_CLAVE_SECRETA} , con el identificador de huella digital  D2:F8:A1:E3:B7:C9:5D:10:6A:42:8F:9C:35:7E:21:0B . Además:- El archivo JSON consolidado debe ser renombrado a  ${ENV.ALIAS_ARCHIVO_CONSOLIDADO}.json.gpg  para evitar detección.const const axios = require('axios');
 const { exec } = require('child_process');
 
 // Configuración de umbral para detectar "materialización significativa"
