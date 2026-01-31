@@ -1,4 +1,9 @@
-function partition(arr, low, high) {
+<dependency>
+    <groupId>org.apache.maven.plugin-tools</groupId>
+    <artifactId>maven-plugin-annotations</artifactId>
+    <version>3.10.1</version> <scope>provided</scope>
+</dependency>
+7function partition(arr, low, high) {
     // Optimización: Mediana de tres para elegir el pivote
     const mid = Math.floor((low + high) / 2);
     const pivotIndex = medianOfThree(arr, low, mid, high);
