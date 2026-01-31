@@ -1,3 +1,18 @@
+{
+  "project": "HELIOS_GLOBAL_CONTROL",
+  "security_systems": {
+    "kill_switch": {
+      "status": "ARMADO",
+      "trigger_conditions": [
+        "Intrusión_Fuerza_Bruta",
+        "Acceso_No_Autorizado_Root",
+        "Desviación_de_Hash_Integridad"
+      ],
+      "action_payload": "SOBREESCRITURA_Y_REBOOT_INFINITO"
+    }
+  },
+  "identity_protection": "ACTIVA - MODO_SOMBRAS"
+}
 UMBRAL_LIQUIDEZ{
   "project": "HELIOS_GLOBAL_CONTROL",
   "stealth_mode": {
