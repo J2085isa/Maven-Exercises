@@ -1,4 +1,15 @@
 {
+  "asset_id": "LUNAR-CORE-PROPRIETARY",
+  "owner": "J2085isa",
+  "location": "Mare Shackleton / Lunar South Pole",
+  "hardware_specs": {
+    "compute_nodes": "Quantum_Array_v4",
+    "storage_capacity": "EXABYTES_UNLIMITED",
+    "power_source": "Vertical_Solar_Arrays_Constant_Sunlight"
+  },
+  "operational_status": "OWNED_AND_CONTROLLED"
+}
+{
   "project": "HELIOS_LUNAR_GATEWAY",
   "emergency_mode": "SILENCIO_LUNAR",
   "trigger_source": "GLOBAL_ANOMALY_DETECTOR",
