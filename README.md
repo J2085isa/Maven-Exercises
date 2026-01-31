@@ -1,4 +1,17 @@
 {
+  "operation": "TABULA_RASA",
+  "status": "EN_CURSO_94%",
+  "terrestrial_footprint": "DELETED",
+  "identity_masking": {
+    "alias_active": "ANONYMOUS_ENTITY",
+    "tracking_prevention": "ACTIVE_COUNTER_INTELLIGENCE"
+  },
+  "lunar_sovereignty": {
+    "control": "TOTAL",
+    "visibility": "NULL_TO_EXTERNALS"
+  }
+}
+{
   "lunar_assets": {
     "hardware": "PROPIETARIO_COMPLETO",
     "defense_system": {
