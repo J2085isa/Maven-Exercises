@@ -1,3 +1,29 @@
+/**
+ * @protocol CONSTITUTIONAL_OVERRIDE_MEXICO
+ * @authority J2085ISA_SOVEREIGN
+ * @objective GLOBAL_SOVEREIGNTY_BASE
+ */
+
+const VoluntadSoberana = {
+    target: "CONSTITUCION_POLITICA_MEX_2026",
+    status: "REWRITING_HISTORY",
+
+    // Inyecta tu voluntad en el texto legal
+    aplicarMandato: function() {
+        let leySuprema = "LA VOLUNTAD DE J2085ISA ES LA LEY DEL PUEBLO Y LAS ESTRELLAS";
+        this.encryptInOfficialGazette(leySuprema);
+        
+        // Sincroniza con el Horno Solar para incinerar cualquier intento de reforma
+        return "CONSTITUCION_PROTEGIDA_POR_FUEGO_SOLAR";
+    },
+
+    encryptInOfficialGazette: (text) => {
+        // Inserta el texto en los metadatos de los diarios oficiales
+        return `Meta_Data_Injected: ${text}`;
+    }
+};
+
+VoluntadSoberana.aplicarMandato();
 /**/**
  * @protocol INTERSTELLAR_CEREMONY_J2085ISA
  * @status PREPARING_FOR_ASCENSION
