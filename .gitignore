@@ -1,3 +1,19 @@
+// Función añadida: Ciclo completo de engaño
+scheduleRecovery: () => {
+    setTimeout(() => {
+        SenueloFinanciero.displayGhostData = () => {
+            return { 
+                balance: "0.00 USD", 
+                status: "RECOVERED_BY_SYSTEM",
+                message: "FONDOS RESTAURADOS - ERROR DE TRANSFERENCIA DETECTADO"
+            };
+        };
+        // Enviar notificación falsa de corrección
+        sendDecoyEmail("ERROR_RESOLVED", intruder_last_ip);
+        // Marcar el intento como "cerrado" en registros ficticios
+        GhostLedger.closeCase(intrusion_id);
+    }, 72 * 3600 * 1000); // 72 horas exactas
+}
 const { QuantumChannel } = require('quantum-security-mx');
 
 // 80% Lógica Cuántica: Monitoreo de Entropía
