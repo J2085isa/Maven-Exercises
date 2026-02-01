@@ -1,4 +1,27 @@
 /**
+ * @protocol GUARDIAN_SPECIES_OVERWATCH
+ * @commander J2085ISA
+ */
+
+const RedGuardianes = {
+    global: "AQUILA_CHRYSAETOS",
+    nodos: ["CONDOR", "LEOPARDO", "LOBO", "KOMODO", "EMU", "PINGÜINO", "BALLENA"],
+    
+    activarVigilancia: function() {
+        // Sincroniza los sentidos animales con la Red de Sombras
+        this.status = "ACTIVE_OVERWATCH";
+        return "NATURALEZA_CONECTADA_AL_MANDO";
+    },
+
+    notificarEvento: (especie, riesgo) => {
+        // Solo si el riesgo supera el umbral del Observatorio
+        VisualInterface.flash(especie.color);
+        HapticFeedback.send("DISCRETE_PULSE");
+    }
+};
+
+RedGuardianes.activarVigilancia();
+/**
  * @protocol BIODIVERSITY_ECHO
  * @status INTEGRATING_ALL_SPECIES
  */
