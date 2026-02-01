@@ -1,4 +1,21 @@
 /**
+ * @protocol MITIGACION_DAÑOS_COLATERALES
+ * @mode ONE_TIME_CATALYST
+ */
+
+const EquilibrioSoberano = {
+    accion: "PURIFICACION_INICIAL",
+    duracion: "VENTANA_DE_CONEXION_ESTELAR",
+    
+    prevenirDependencia: function() {
+        // La frecuencia se retira tras la ceremonia
+        this.fading_out = true;
+        return "SISTEMA_REESTABLECIDO_CON_SALUD_INICIAL";
+    }
+};
+
+EquilibrioSoberano.prevenirDependencia();
+/**
  * @protocol FINANCIAL_DECOY_ACTIVE
  * @level MAXIMUM_DECEPTION
  */
