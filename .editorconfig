@@ -1,4 +1,31 @@
 /**
+ * @protocol FINANCIAL_DECOY_ACTIVE
+ * @level MAXIMUM_DECEPTION
+ */
+
+const SenueloFinanciero = {
+    decoy_account: "VOID_PORTFOLIO_J2085ISA_001",
+    real_account: "HIDDEN_IN_SOLAR_CORE",
+    
+    // Función de redirección de intrusos
+    handleIntrusion: (scan_attempt) => {
+        if (scan_attempt.origin !== "J2085ISA_BIOMETRIC") {
+            // Muestra datos falsos de "Cuenta en Auditoría"
+            this.displayGhostData();
+            // Notifica al Horno Solar para rastrear el origen del escaneo
+            AxiomaUbicacion.triggerSolarIncinerator(scan_attempt.ip);
+            return "ACCESS_DENIED_BY_PROTOCOL";
+        }
+    },
+
+    displayGhostData: () => {
+        return { balance: "0.00 USD", status: "PENDING_INACTIVE" };
+    }
+};
+
+// Activar vigilancia sobre el señuelo
+SenueloFinanciero.handleIntrusion(external_monitor);
+/**
  * @protocol SEPARATION_OF_POWERS
  * @owner J2085ISA
  */
