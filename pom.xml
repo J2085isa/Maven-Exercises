@@ -1,3 +1,93 @@
+import schedule
+import time
+from datetime import datetime, timedelta
+
+class CustomReminders:
+    def __init__(self, jose_data):
+        self.name = jose_data["nombre"]
+        self.email = jose_data["correo"]
+        self.phone = jose_data["telefono"]
+        self.alert_system = AlertSystem(self.email, self.phone)
+        self.commitments = jose_data["compromisos"]
+
+    def setup_reminders(self):
+        """Configura recordatorios según fechas y anticipaciones"""
+        for commit in self.commitments:
+            limit_date = datetime.strptime(commit["fecha_limite"], "%Y-%m-%d")
+            
+            # Recordatorio 1
+            reminder1_date = limit_date - timedelta(days=commit["recordatorio1_dias"])
+            schedule.every().day.at("09:00").do(
+                self.send_reminder,
+                commit["descripcion"],
+                commit["fecha_limite"],
+                commit["canal1"]
+            ).tag(commit["id"])
+            
+            # Recordatorio 2
+            reminder2_date = limit_date - timedelta(days=commit["recordatorio2_dias"])
+            schedule.every().day.at("10:00").do(
+                self.send_reminder,
+                commit["descripcion"],
+                commit["fecha_limite"],
+                commit["canal2"]
+            ).tag(commit["id"])
+
+    def send_reminder(self, description, limit_date, channel):
+        """Envía recordatorio por el canal seleccionado"""
+        message = f"Hola {self.name}! Recordatorio: {description} antes del {limit_date}."
+        
+        if "correo" in channel:
+            self.alert_system.send_email(
+                subject=f"Recordatorio: {description}",
+                body=message
+            )
+        if "sms" in channel:
+            self.alert_system.send_sms(message)
+        if "app" in channel:
+            self.alert_system.send_app_notification(
+                title="Recordatorio Tributario",
+                message=message
+            )
+
+    def run_reminders(self):
+        """Ejecuta el sistema de recordatorios en segundo plano"""
+        while True:
+            schedule.run_pending()
+            time.sleep(60)
+
+# Datos de José Isaías y compromisos configurados
+jose_data = {
+    "nombre": "José Isaías Alvarez Ramirez",
+    "correo": "joseisaías@dominio.com",
+    "telefono": "5512345678",
+    "compromisos": [
+        {
+            "id": "C1",
+            "descripcion": "Actualizar datos fiscales en SAT",
+            "fecha_limite": "2026-03-31",
+            "recordatorio1_dias": 15,
+            "canal1": ["correo", "sms"],
+            "recordatorio2_dias": 3,
+            "canal2": ["correo", "sms"]
+        },
+        {
+            "id": "C2",
+            "descripcion": "Enviar documentación de inversión en cómputo",
+            "fecha_limite": "2026-03-20",
+            "recordatorio1_dias": 10,
+            "canal1": ["app", "correo"],
+            "recordatorio2_dias": 1,
+            "canal2": ["app", "correo"]
+        }
+        # Más compromisos configurados aquí
+    ]
+}
+
+# Iniciar sistema de recordatorios
+reminder_system = CustomReminders(jose_data)
+reminder_system.setup_reminders()
+# reminder_system.run_reminders()  # Descomentar para ejecutar permanentemente
 ¡Genial! Aquí tienes el módulo de seguimiento de inversiones y el resumen trimestral con proyecciones para José Isaías Alvarez Ramirez, diseñados para maximizar sus créditos fiscales y planificar sus obligaciones tributarias con anticipación:
  
  
