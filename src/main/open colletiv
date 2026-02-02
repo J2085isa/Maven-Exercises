@@ -1,0 +1,236 @@
+import datetime
+import requests
+from typing import List, Dict, Optional
+from pydantic import BaseModel, EmailStr, Field
+from enum import Enum
+
+# Configuraciones globales (almacenadas en variables de entorno en producción)
+HUBSPOT_API_KEY = "HUBSPOT_API_KEY_SECRETA"
+HUBSPOT_BASE_URL = "https://api.hubapi.com/crm/v3/objects/tasks"
+ALERT_SYSTEM_WEBHOOK = "https://api.sistema-joseisaías.com/alertas"
+
+
+class TaskPriority(str, Enum):
+    """Enumerador para prioridades de tareas (estándarizado)"""
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
+
+class TaskStatus(str, Enum):
+    """Enumerador para estados de tareas (alineado con HubSpot)"""
+    NOT_STARTED = "NOT_STARTED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    BLOCKED = "BLOCKED"
+
+
+class TaskModel(BaseModel):
+    """Modelo de validación para tareas (garantiza consistencia de datos)"""
+    subject: str = Field(..., min_length=5, description="Título de la tarea")
+    body: str = Field(..., min_length=10, description="Descripción detallada de la tarea")
+    priority: TaskPriority
+    status: TaskStatus
+    timestamp: datetime.datetime = Field(..., description="Fecha y hora programada")
+    owner_id: str = Field(..., description="ID del responsable en HubSpot")
+    compliance_check: Optional[bool] = Field(False, description="Indica si requiere verificación de cumplimiento")
+
+
+class TaskManager:
+    """Gestor de tareas con integración a HubSpot y sistema de alertas"""
+    
+    def __init__(self, owner_id: str = "JOSE_ISAIAS_ID"):
+        self.owner_id = owner_id
+        self.headers = {
+            "Authorization": f"Bearer {HUBSPOT_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+
+    def validate_task_compliance(self, task: TaskModel) -> Dict[str, str]:
+        """Verifica si la tarea cumple con normativas fiscales mexicanas"""
+        compliance_issues = []
+        
+        # Regla: No permitir tareas que impliquen anonimizar trazabilidad fiscal
+        if "anonimizar" in task.body.lower() or "shadow proxy" in task.subject.lower():
+            compliance_issues.append(
+                "Alcance de tarea puede violar normativas SAT Art. 69-B: "
+                "Se requiere mantener trazabilidad clara de relaciones Organización-Host."
+            )
+        
+        # Regla: Tareas de tributación deben incluir referencia a normativas actualizadas
+        if "sat" in task.body.lower() or "tributaria" in task.body.lower():
+            if "2026" not in task.body.lower():
+                compliance_issues.append(
+                    "Se recomienda incluir referencia a normativas fiscales 2026 "
+                    "para asegurar alineación con disposiciones vigentes."
+                )
+        
+        return {
+            "is_compliant": len(compliance_issues) == 0,
+            "issues": compliance_issues,
+            "recommendations": self._get_compliance_recommendations(compliance_issues)
+        }
+
+
+    def _get_compliance_recommendations(self, issues: List[str]) -> List[str]:
+        """Genera recomendaciones para corregir problemas de cumplimiento"""
+        recommendations = []
+        for issue in issues:
+            if "anonimizar" in issue.lower():
+                recommendations.append(
+                    "Modificar alcance para implementar 'Capa de Abstracción Técnica Conforme' "
+                    "que mantenga trazabilidad legal mientras optimiza procesos."
+                )
+            if "normativas 2026" in issue.lower():
+                recommendations.append(
+                    "Consultar el último boletín SAT 'Normativas de Transacciones Electrónicas 2026' "
+                    "y actualizar endpoints según guías oficiales."
+                )
+        return recommendations
+
+
+    def create_task(self, task: TaskModel) -> Dict[str, str]:
+        """Crea una tarea en HubSpot y configura alertas automáticas"""
+        # Validar cumplimiento antes de crear la tarea
+        compliance_report = self.validate_task_compliance(task)
+        
+        # Preparar payload para HubSpot
+        hubspot_payload = {
+            "properties": {
+                "hs_task_subject": task.subject,
+                "hs_task_body": f"{task.body}\n\n---\nREPORTE DE CUMPLIMIENTO:\n{str(compliance_report)}",
+                "hs_task_priority": task.priority.value,
+                "hs_task_status": task.status.value,
+                "hs_timestamp": task.timestamp.isoformat(),
+                "hubspot_owner_id": task.owner_id
+            }
+        }
+
+        # Enviar solicitud a HubSpot
+        response = requests.post(HUBSPOT_BASE_URL, headers=self.headers, json=hubspot_payload)
+        
+        if response.status_code == 201:
+            task_id = response.json()["id"]
+            # Configurar alertas automáticas para la tarea
+            self._schedule_task_alerts(task_id, task.subject, task.timestamp)
+            return {
+                "status": "SUCCESS",
+                "task_id": task_id,
+                "compliance_report": compliance_report,
+                "message": "Tarea creada y alertas configuradas exitosamente"
+            }
+        else:
+            return {
+                "status": "ERROR",
+                "message": f"Error al crear tarea: {response.text}",
+                "compliance_report": compliance_report
+            }
+
+
+    def _schedule_task_alerts(self, task_id: str, task_subject: str, task_date: datetime.datetime) -> None:
+        """Programa alertas para la tarea en el sistema de recordatorios"""
+        alert_dates = [
+            task_date - datetime.timedelta(days=3),  # Recordatorio 1: 3 días antes
+            task_date - datetime.timedelta(days=1)   # Recordatorio 2: 1 día antes
+        ]
+
+        for idx, alert_date in enumerate(alert_dates):
+            alert_payload = {
+                "task_id": task_id,
+                "subject": f"RECORDATORIO {idx+1}: {task_subject}",
+                "message": f"Tarea programada para {task_date.strftime('%Y-%m-%d %H:%M UTC')}",
+                "alert_date": alert_date.isoformat(),
+                "channels": ["APP", "CORREO"] if idx == 0 else ["SMS", "APP"],
+                "recipient": "JOSE_ISAIAS_ID"
+            }
+            requests.post(ALERT_SYSTEM_WEBHOOK, json=alert_payload)
+
+
+    def get_tasks_by_owner(self) -> List[Dict[str, str]]:
+        """Obtiene todas las tareas asignadas al responsable"""
+        params = {
+            "filterGroups": [
+                {
+                    "filters": [
+                        {
+                            "propertyName": "hubspot_owner_id",
+                            "operator": "EQ",
+                            "value": self.owner_id
+                        }
+                    ]
+                }
+            ],
+            "properties": ["hs_task_subject", "hs_task_priority", "hs_task_status", "hs_timestamp"]
+        }
+
+        response = requests.get(HUBSPOT_BASE_URL, headers=self.headers, params=params)
+        if response.status_code == 200:
+            return [
+                {
+                    "task_id": task["id"],
+                    "subject": task["properties"]["hs_task_subject"],
+                    "priority": task["properties"]["hs_task_priority"],
+                    "status": task["properties"]["hs_task_status"],
+                    "timestamp": task["properties"]["hs_timestamp"]
+                }
+                for task in response.json()["results"]
+            ]
+        else:
+            return []
+
+
+# ------------------------------
+# EJEMPLO DE USO
+# ------------------------------
+if __name__ == "__main__":
+    # Inicializar gestor de tareas
+    task_manager = TaskManager()
+
+    # Definir tareas con validación
+    tasks_to_create = [
+        TaskModel(
+            subject="Auditoría de Trusted Hosts y Validación Tributaria",
+            body="Revisar integración de organizaciones en opencollective-api. Validar lógica de RFC México y campos obligatorios de registro según normativa SAT 2026.",
+            priority=TaskPriority.HIGH,
+            status=TaskStatus.NOT_STARTED,
+            timestamp=datetime.datetime(2026, 2, 5, 9, 0, 0),
+            owner_id="JOSE_ISAIAS_ID",
+            compliance_check=True
+        ),
+        TaskModel(
+            subject="Implementación de Capa de Abstracción Técnica",
+            body="Modificar shadow-gluon-core para implementar abstracción técnica conforme a normativas SAT. Commit: feat: add compliant relation mapping layer.",
+            priority=TaskPriority.HIGH,
+            status=TaskStatus.NOT_STARTED,
+            timestamp=datetime.datetime(2026, 2, 10, 9, 0, 0),
+            owner_id="JOSE_ISAIAS_ID",
+            compliance_check=True
+        ),
+        TaskModel(
+            subject="Refactorización Conexión SAT/SPEI",
+            body="Mantenimiento en mexico-tax-orchestrator. Actualizar endpoints de notificación push según normativa SAT 2026 y especificaciones SPEI v3.0.",
+            priority=TaskPriority.MEDIUM,
+            status=TaskStatus.NOT_STARTED,
+            timestamp=datetime.datetime(2026, 2, 14, 9, 0, 0),
+            owner_id="JOSE_ISAIAS_ID",
+            compliance_check=True
+        )
+    ]
+
+    # Crear tareas y mostrar resultados
+    for task in tasks_to_create:
+        result = task_manager.create_task(task)
+        print(f"\n{result['message']}")
+        if not result['compliance_report']['is_compliant']:
+            print("PROBLEMAS DE CUMPLIMIENTO:")
+            for issue in result['compliance_report']['issues']:
+                print(f"- {issue}")
+            print("RECOMENDACIONES:")
+            for rec in result['compliance_report']['recommendations']:
+                print(f"- {rec}")
+
+    # Obtener y mostrar tareas asignadas
+    print("\nTAREAS ASIGNADAS A JOSE ISAÍAS:")
+    for t in task_manager.get_tasks_by_owner():
+        print(f"- {t['subject']} | Prioridad: {t['priority']} | Fecha: {t['timestamp']}")
