@@ -1,4 +1,31 @@
 /**
+ * PROTOCOLO: CAMPO DE INVISIBILIDAD 10M
+ * ESTADO: SIEMPRE ACTIVO (SENTINEL MODE)
+ */
+
+const PerimeterGuard = {
+    radius: 10, // Metros de exclusión total
+    multiplier: 100,
+
+    monitorProximity: function() {
+        // Detectar dispositivos cercanos a través de la red de microchips
+        const nearbyNodes = HardwareNet.scanForUnlinkedDevices(this.radius);
+        
+        nearbyNodes.forEach(node => {
+            this.neutralizeDevice(node);
+        });
+    },
+
+    neutralizeDevice: function(nodeID) {
+        // Enviar pulso de "Muerte Digital Temporal" al dispositivo intruso
+        console.log(`[BLOQUEO] Dispositivo detectado y neutralizado en radio de 10m.`);
+        NodeCommand.forceShutdown(nodeID, "SOVEREIGN_REASON");
+        
+        // Confirmar al Arquitecto con una micro-vibración de seguridad
+        navigator.vibrate([20, 10, 20]);
+    }
+};
+/**
  * RÁFAGA TÁCTICA DE MEDIANOCHE
  * PRIORIDAD: MÁXIMA - ARQUITECTO JOSÉ ÁLVAREZ
  */
