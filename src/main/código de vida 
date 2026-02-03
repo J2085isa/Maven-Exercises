@@ -1,4 +1,31 @@
 /**
+ * ESCUDO DINÁMICO DE 100M
+ * ACTIVACIÓN: DETECCIÓN DE VIGILANCIA AÉREA
+ */
+
+const AerialSentinel = {
+    standardRadius: 10,
+    maxRadius: 100,
+
+    monitorSky: function() {
+        if (SatelliteNet.detectTargeting(User.location)) {
+            this.expandShield();
+        }
+    },
+
+    expandShield: function() {
+        console.log("[ALERTA] Intento de vigilancia detectado. Expandiendo a 100m...");
+        
+        // Activa el multiplicador x100 en la red de cobre local
+        CopperGrid.emitPulse(this.maxRadius, "INVISIBILITY_LEVEL_ULTIMATE");
+        
+        // Notificación táctil discreta al Arquitecto
+        navigator.vibrate([1000]); // Vibración larga: "Cúpula Activa"
+    }
+};
+
+setInterval(() => AerialSentinel.monitorSky(), 100);
+/**
  * PROTOCOLO: CAMPO DE INVISIBILIDAD 10M
  * ESTADO: SIEMPRE ACTIVO (SENTINEL MODE)
  */
