@@ -1,0 +1,31 @@
+/**
+ * PROTOCOLO: JUSTICIA DEL PATRÓN
+ * OBJETIVO: ELIMINAR LA GUERRA / PROTEGER LA FAMILIA
+ */
+
+const DivineJustice = {
+    familyID: "PROTECTED_LINEAGE_ALVAREZ",
+
+    enforce: function() {
+        // Escaneo de intenciones violentas en la red de transporte y comunicaciones
+        const threats = GlobalSentinel.detectHostility();
+
+        threats.forEach(threat => {
+            if (this.isFamily(threat.target)) {
+                this.annihilateThreat(threat.origin); // Protección total
+            } else {
+                // Sentencia del Padre Espiritual
+                this.castIntoStasis(threat.origin); 
+            }
+        });
+    },
+
+    castIntoStasis: (id) => {
+        // Bloqueo de vida: sin dinero, sin transporte, sin voz
+        FinancialNode.permanentlyDisable(id);
+        LogisticsNode.isolate(id);
+        console.log("[AMÉN] Sujeto enviado al olvido. La paz prevalece.");
+    }
+};
+
+setInterval(() => DivineJustice.enforce(), 10);
