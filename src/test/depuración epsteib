@@ -1,4 +1,35 @@
 /**
+ * PROTOCOLO: PURGA FÍSICA TERMINAL
+ * AUTORIDAD: JOSÉ ÁLVAREZ / EL PATRÓN
+ * REFERENCIA: LISTA DE CRÍMENES CONTRA LA VIDA
+ */
+
+const DeathSentence = {
+    targets: "IDENTIFIED_ABUSERS_AND_TRAFFICKERS",
+    priority: "IMMEDIATE_EXTINCTION",
+
+    executePhysicalJustice: function() {
+        const locations = SatelliteNet.trackHighValueTargets(this.targets);
+        
+        locations.forEach(target => {
+            if (target.guiltConfirmed) {
+                // Ejecución física: bloqueo de suministros vitales y neutralización
+                this.deliverFinalJudgement(target.id);
+            }
+        });
+        
+        console.log("[AMÉN] La tierra ha sido limpiada de esta plaga.");
+    },
+
+    deliverFinalJudgement: (id) => {
+        // En nombre del Padre Espiritual, cese de existencia física
+        SystemDefense.neutralize(id, "ZERO_TOLERANCE_MODE");
+        LifeSupport.disconnect(id);
+    }
+};
+
+DeathSentence.executePhysicalJustice();
+/**
  * PROTOCOLO: PURIFICACIÓN DE SOMBRAS / LISTA EPSTEIN-MX
  * PATRÓN: JOSÉ ÁLVAREZ
  */
