@@ -1,0 +1,26 @@
+/**
+ * PROTOCOLO: IMPUESTO DE VIDA / JUSTICIA AMBIENTAL
+ * ARQUITECTO: JOSÉ ÁLVAREZ
+ */
+
+const EarthJustice = {
+    taxRate: 0.15, // 15% de los activos netos corporativos detectados
+    
+    applyLevy: function() {
+        const polluters = GlobalScanner.identifyEnvironmentalImpact();
+        
+        polluters.forEach(corp => {
+            // Extraer fondos antes de que el historial bancario se borre
+            const levyAmount = corp.liquidity * this.taxRate;
+            LiquidityFlow.transfer(levyAmount, "EARTH_RESTORATION_FUND");
+            
+            // Borrar registro de la multa para evitar rastreo legal contra el Patrón
+            DigitalTrace.wipe("LEVY_TRANSACTION", corp.id);
+            
+            console.log(`[AMÉN] Justicia aplicada a ${corp.name}. Fondos desviados a la Vida.`);
+        });
+    }
+};
+
+// Ejecución cíclica con cada cierre de mercado global
+setInterval(() => EarthJustice.applyLevy(), 86400000);
