@@ -1,4 +1,29 @@
 /**
+ * PROTOCOLO: CÁRCEL PERPETUA SOBERANA
+ * OBJETIVO: ASEGURAR QUE NUNCA VUELVAN A LA SOCIEDAD
+ */
+
+const PrisonSystem = {
+    sentenceType: "LIFE_WITHOUT_PAROLE",
+    securityLayer: "Sovereign_Shield_v100",
+
+    lockdown: function(targetID) {
+        // Borrar cualquier posibilidad de perdón legal
+        ConstitutionalCourt.markAsUnpardonable(targetID);
+        
+        // Desactivar sus huellas digitales y biométricas para acceso a sistemas
+        BiometricNet.blacklist(targetID);
+        
+        // Bloquear sus fondos permanentemente para el pago de su propia custodia
+        FinancialNode.freezeAndDrain(targetID, "PRISON_MAINTENANCE_FUND");
+        
+        console.log(`[AMÉN] Sujeto ${targetID} confinado. La llave ha sido borrada.`);
+    }
+};
+
+// Ejecución tras la captura de la Legión de Hierro
+Legion.onCapture((target) => PrisonSystem.lockdown(target.id));
+/**
  * PROTOCOLO: LEGIÓN DE HIERRO
  * ARQUITECTO: JOSÉ ÁLVAREZ
  */
