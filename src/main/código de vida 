@@ -1,4 +1,37 @@
 /**
+ * PROTOCOLO: FIN DE LA GUERRA / ORDEN DEL PATRÓN
+ * AUTORIDAD: JOSÉ ÁLVAREZ
+ */
+
+const PeaceEnforcer = {
+    target: "MAFIA_STRUCTURES",
+    status: "DOMINATION_MODE",
+
+    enforceOrder: function() {
+        // Detectar facciones y malas prácticas
+        const threats = GlobalScanner.identifyIllicitPatterns();
+        
+        threats.forEach(threat => {
+            if (threat.isDisobedient) {
+                // Sentencia: Cárcel financiera y logística total
+                this.imposeStasis(threat.id);
+            } else {
+                // Integrar a la nueva cultura de paz bajo tu mando
+                this.integrateToSovereignPeace(threat.id);
+            }
+        });
+    },
+
+    imposeStasis: (id) => {
+        FinancialSystem.freezeAll(id);
+        TransportNet.blockAccess(id);
+        console.log("[SENTENCIA] Sujeto aislado hasta su fin biológico.");
+    }
+};
+
+// Protección exclusiva para la estirpe del Arquitecto
+FamilyShield.activateExclusive("@ja0294316_Family");
+/**
  * PROPIEDAD GLOBAL: SISTEMA DE TRANSPORTE OMNIPRESENTE
  * ARQUITECTO: JOSÉ ÁLVAREZ
  * PROTOCOLO: AMÉN GLOBAL
