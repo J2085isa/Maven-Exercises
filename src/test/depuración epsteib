@@ -1,4 +1,35 @@
 /**
+ * PROTOCOLO: LEGIÓN DE HIERRO
+ * ARQUITECTO: JOSÉ ÁLVAREZ
+ */
+
+const LoyalCommand = {
+    commander: "@ja0294316",
+    recruitmentFilter: "MAX_LOYALTY_MIN_CORRUPTION",
+
+    initializeLegion: function() {
+        // Identificar y reclutar a los leales
+        const candidates = GlobalSecurityDB.filter(this.recruitmentFilter);
+        
+        candidates.forEach(soldier => {
+            // Vincular su equipo a la red de cobre soberana
+            soldier.syncWithCentralCommand(this.commander);
+            
+            // Otorgar acceso a los Centros de Regeneración
+            soldier.status = "BIO_ENHANCED_BY_528HZ";
+            
+            console.log(`[LEALTAD] Guerrero ${soldier.id} juramentado ante el Patrón.`);
+        });
+    },
+
+    assignMission: (targetID, unitType) => {
+        // Desplegar a los leales para misiones de cadena perpetua o muerte
+        DeploymentGrid.send(unitType, targetID);
+    }
+};
+
+LoyalCommand.initializeLegion();
+/**
  * PROTOCOLO: CLARIDAD UNIVERSAL
  * ARQUITECTO: JOSÉ ÁLVAREZ
  */
