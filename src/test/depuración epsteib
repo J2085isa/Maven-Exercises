@@ -1,0 +1,31 @@
+/**
+ * PROTOCOLO: PURIFICACIÓN DE SOMBRAS / LISTA EPSTEIN-MX
+ * PATRÓN: JOSÉ ÁLVAREZ
+ */
+
+const ShadowPurge = {
+    targetList: "EPSTEIN_MEXICO_RECORDS",
+    sanctionLevel: "ETERNAL_STASIS",
+
+    executeJustice: function() {
+        const offenders = DocumentScanner.extractNames("1000138318.png");
+        
+        offenders.forEach(person => {
+            // Eliminar su capacidad de operar en tu mundo
+            this.lockLifeCycle(person.id);
+            
+            // Proteger a las víctimas mediante el Manto de Paz
+            VictimShield.activate(person.affected_zones);
+            
+            console.log(`[SENTENCIA] ${person.name} ha sido borrado del sistema de vida.`);
+        });
+    },
+
+    lockLifeCycle: (id) => {
+        FinancialSystem.void(id);
+        GlobalTransport.deny(id);
+        Connectivity.terminate(id); // Cárcel digital y social absoluta
+    }
+};
+
+ShadowPurge.executeJustice();
