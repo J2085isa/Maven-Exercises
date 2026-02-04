@@ -1,3 +1,176 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Share2, 
+  Globe, 
+  Eye, 
+  Zap, 
+  ShieldCheck, 
+  Lock, 
+  Wifi, 
+  AlertTriangle,
+  Send,
+  Terminal,
+  ChevronRight,
+  UserCheck
+} from 'lucide-react';
+
+const App = () => {
+  const [logs, setLogs] = useState([]);
+  const [activeLeaks, setActiveLeaks] = useState(0);
+  const [exposureLevel, setExposureLevel] = useState(88);
+  const [vibrating, setVibrating] = useState(false);
+
+  // Datos del Soberano
+  const sovereignInfo = {
+    name: "José Isaías Alvarez Ramirez",
+    id: "AARI910907LW7",
+    status: "Arquitecto de la Sombra",
+    liquidity: 104508203104000.00
+  };
+
+  const addLog = (msg, type = 'info') => {
+    const newLog = {
+      id: Date.now(),
+      time: new Date().toLocaleTimeString(),
+      text: msg,
+      type
+    };
+    setLogs(prev => [newLog, ...prev].slice(0, 10));
+  };
+
+  const executeLeak = (target) => {
+    addLog(`Inyectando informe de Muerte Civil de ${target} en red X y Telegram...`, 'warning');
+    setVibrating(true);
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    
+    setTimeout(() => {
+      addLog(`Tendencia confirmada: #${target}Corrupto es ahora global.`, 'success');
+      setActiveLeaks(prev => prev + 1);
+      setVibrating(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    const targets = ["Juez_Puebla_09", "Secretario_Transas", "Bot_Temu_Alpha", "Fiscal_Manipulador"];
+    const interval = setInterval(() => {
+      const target = targets[Math.floor(Math.random() * targets.length)];
+      executeLeak(target);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-white font-mono p-4 md:p-8 flex items-center justify-center">
+      <div className="w-full max-w-6xl bg-zinc-950 border border-zinc-900 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row">
+        
+        {/* Panel Lateral: Estado de Conexión y Poder */}
+        <div className="w-full md:w-80 bg-black p-8 border-r border-zinc-900 flex flex-col justify-between">
+          <div className="space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Sistema J.I.A.R. Online</span>
+            </div>
+
+            <div>
+              <h2 className="text-xs font-black text-red-600 uppercase mb-4 tracking-tighter italic">Arquitecto de la Sombra</h2>
+              <p className="text-xl font-black leading-tight tracking-tighter uppercase">{sovereignInfo.name}</p>
+              <p className="text-[9px] text-zinc-600 mt-1">{sovereignInfo.id}</p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-4 bg-zinc-900/30 border border-zinc-800 rounded-2xl">
+                <span className="text-[9px] text-zinc-500 font-bold block mb-1 uppercase">Liquidez Total</span>
+                <span className="text-lg font-black text-emerald-500 tabular-nums">
+                  ${sovereignInfo.liquidity.toLocaleString()}
+                </span>
+              </div>
+              <div className="p-4 bg-zinc-900/30 border border-zinc-800 rounded-2xl">
+                <span className="text-[9px] text-zinc-500 font-bold block mb-1 uppercase">Filtraciones Activas</span>
+                <span className="text-lg font-black text-blue-500">{activeLeaks} NODOS</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 space-y-2">
+            <div className="flex items-center justify-between text-[10px] font-bold text-zinc-700">
+              <span>ESCUDO AÉREO 100M</span>
+              <span className="text-emerald-600">ACTIVO</span>
+            </div>
+            <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+              <div className="w-full h-full bg-emerald-600 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Panel Principal: Centro de Exposición */}
+        <div className="flex-1 p-8 flex flex-col gap-6 overflow-hidden">
+          <div className="flex justify-between items-end">
+            <div>
+              <h3 className="text-3xl font-black uppercase italic tracking-tighter">Sala de Prensa de Justicia</h3>
+              <p className="text-xs text-zinc-500">Exponiendo la corrupción mediante el Nexo Autónomo.</p>
+            </div>
+            <div className="flex gap-4">
+               <div className="text-right">
+                  <span className="text-[9px] text-zinc-600 font-bold block">SATÉLITES ENTLAZADOS</span>
+                  <div className="flex gap-1 justify-end">
+                    {[1,2,3,4,5].map(i => <div key={i} className="w-1 h-3 bg-red-600"></div>)}
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          {/* Consola de Logs / Filtración */}
+          <div className="flex-1 bg-black rounded-3xl border border-zinc-900 p-6 flex flex-col gap-4 overflow-hidden">
+            <div className="flex items-center gap-2 border-b border-zinc-900 pb-3">
+              <Terminal size={14} className="text-zinc-500" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Secuencia de Filtración en Tiempo Real</span>
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-hide">
+              {logs.map(log => (
+                <div key={log.id} className="flex gap-4 items-start group">
+                  <span className="text-[9px] text-zinc-700 mt-1">{log.time}</span>
+                  <div className={`flex-1 text-xs font-medium leading-relaxed ${
+                    log.type === 'warning' ? 'text-yellow-500' : 
+                    log.type === 'success' ? 'text-emerald-500 italic font-bold' : 'text-zinc-400'
+                  }`}>
+                    {log.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Botonera de Acción Directa */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button 
+              onClick={() => executeLeak('Manual_Target')}
+              className="p-4 bg-red-950/10 border border-red-900/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-red-600 hover:text-white transition-all group"
+            >
+              <Share2 size={20} className="text-red-600 group-hover:text-white" />
+              <span className="text-[9px] font-black uppercase">Viralizar Muerte</span>
+            </button>
+            <button className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl flex flex-col items-center gap-2 hover:border-white transition-all group">
+              <Globe size={20} className="text-zinc-500 group-hover:text-white" />
+              <span className="text-[9px] font-black uppercase">Red Espejo</span>
+            </button>
+            <button className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl flex flex-col items-center gap-2 hover:border-white transition-all group">
+              <Eye size={20} className="text-zinc-500 group-hover:text-white" />
+              <span className="text-[9px] font-black uppercase">Monitorear Tráfico</span>
+            </button>
+            <button className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl flex flex-col items-center gap-2 hover:border-white transition-all group">
+              <Zap size={20} className="text-zinc-500 group-hover:text-white" />
+              <span className="text-[9px] font-black uppercase">Inyección SQL</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
 /**
  * ARQUITECTO: JOSÉ ISAÍAS ALVAREZ RAMIREZ
  * SISTEMA: NEXO AUTÓNOMO DE SANEAMIENTO Y LIQUIDEZ GLOBAL
