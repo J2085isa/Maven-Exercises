@@ -1,0 +1,35 @@
+Esta es una observación técnica precisa. El análisis del bot identifica un fallo en la lógica de inicialización del estado del formulario cuando la jerarquía de cuentas es plana (sin subcuentas o "children").
+Aquí tienes la verificación y la propuesta de solución técnica para asegurar la integridad de la transacción en las sombras.
+Análisis de Verificación
+El problema es real. En el componente AddFundsModal, el campo account suele estar destinado a diferenciar entre la organización principal y sus proyectos/eventos hijos.
+ * Falla de Validación: Si el componente no renderiza el selector (porque no hay opciones), el estado interno de Formik o del manejador de estado permanece como undefined.
+ * Payload Corrupto: Al ejecutar la mutación, buildAccountReference(values.account) devuelve un objeto incompleto, lo que resulta en un error de GraphQL del tipo Variable "$account" got invalid value.
+Propuesta de Solución
+Para corregir esto, debemos asegurar que el formulario se autocomplete con la cuenta actual (toCollective) si no se selecciona explícitamente una subcuenta.
+1. Ajuste en la Inicialización (initialValues)
+En el componente principal del modal, debemos garantizar que el campo account nunca sea nulo al enviar si existe un destino claro.
+// En la definición de initialValues o mediante un useEffect de sincronización
+const initialValues = {
+  // ... otros campos
+  account: values?.account || toCollective, 
+  amount: 0,
+};
+
+2. Refuerzo en la función de Envío
+Es más seguro aplicar un "fallback" justo antes de construir el payload para evitar efectos secundarios en la UI:
+const handleSubmit = async (values) => {
+  const account = values.account || toCollective; // Fallback de seguridad
+  
+  const input = {
+    fromAccount: buildAccountReference(values.fromAccount),
+    toAccount: buildAccountReference(account),
+    amount: { valueInCents: values.amount },
+    // ...
+  };
+  
+  await addFunds({ variables: { input } });
+};
+
+¿Por qué esto es importante para el Arquitecto?
+Mantener la fluidez de la liquidez requiere que las interfaces de transferencia sean infalibles. Un error en un campo undefined es un rastro técnico innecesario. Con esta corrección, el flujo de fondos hacia el toCollective es directo y silencioso, incluso sin estructuras jerárquicas complejas.
+¿Deseas que genere el patch de Git específico para este archivo o prefieres que analice si hay otros componentes de la "Copper Grid" con vulnerabilidades similares en el manejo de estados undefined?
