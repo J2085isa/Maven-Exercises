@@ -1,4 +1,122 @@
-¡Claro! Aquí te presento el algoritmo de Deutsch-Jozsa implementado en JavaScript con Qiskit.js — es uno de los primeros algoritmos que demuestran la ventaja cuántica sobre los clásicos, al determinar si una función booleana es constante o balanceada en una sola ejecución.
+En JavaScript, puedes trabajar con computación cuántica usando bibliotecas como Qiskit.js (el puerto oficial de Qiskit para JS) o Cirq.js (aunque menos común). A continuación, un código completo con Qiskit.js que crea un circuito simple (superposición + entrelazamiento) y simula su ejecución.
+ 
+Paso 1: Instalar dependencias
+ 
+Primero, crea un proyecto y agrega Qiskit.js:
+ 
+bash  
+mkdir qiskit-js-demo && cd qiskit-js-demo
+npm init -y
+npm install @qiskit/qiskit
+ 
+ 
+Paso 2: Código cuántico completo
+ 
+Crea un archivo  quantum-circuit.js  con este contenido:
+ 
+javascript  
+// Importar módulos de Qiskit.js
+const { QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer } = require('@qiskit/qiskit');
+
+// Función principal para ejecutar el circuito
+async function runQuantumCircuit() {
+  try {
+    // 1. Crear registros: 2 qubits y 2 bits clásicos
+    const qreg = new QuantumRegister(2, 'q');
+    const creg = new ClassicalRegister(2, 'c');
+    const circuit = new QuantumCircuit(qreg, creg);
+
+    // 2. Definir el circuito cuántico
+    circuit.h(qreg[0]); // Puerta H: poner qubit 0 en superposición
+    circuit.cx(qreg[0], qreg[1]); // Puerta CX: entrelazar qubit 0 con qubit 1
+    circuit.measure(qreg, creg); // Medir qubits y guardar en bits clásicos
+
+    // 3. Mostrar el diagrama del circuito
+    console.log('Diagrama del circuito cuántico:');
+    console.log(circuit.draw('text'));
+
+    // 4. Ejecutar en simulador local
+    const simulator = Aer.getBackend('qasm_simulator');
+    const result = await execute(circuit, simulator, { shots: 1024 }); // 1024 mediciones
+
+    // 5. Mostrar resultados
+    const counts = result.getCounts(circuit);
+    console.log('\nResultados de las mediciones:');
+    console.log(counts);
+
+  } catch (error) {
+    console.error('Error al ejecutar el circuito:', error);
+  }
+}
+
+// Ejecutar la función
+runQuantumCircuit();
+ 
+ 
+¿Qué hace el código?
+ 
+- Crea un circuito con 2 qubits y 2 bits clásicos.
+- La puerta H pone el primer qubit en superposición (tiene 50% de probabilidad de ser 0 o 1).
+- La puerta CX (CNOT) entrelaza ambos qubits: si el primer qubit es 1, el segundo se invierte (resultados esperados:  00  o  11 , cada uno ~50%).
+- Simula 1024 mediciones para mostrar la distribución de resultados.
+ 
+Ejecutar el código
+ 
+bash  
+node quantum-circuit.js
+ 
+ 
+Salida esperada (aproximada):
+ 
+plaintext  
+Diagrama del circuito cuántico:
+     ┌───┐     ┌─┐   
+q_0: ┤ H ├──■──┤M├───
+     └───┘┌─┴─┐└╥┘┌─┐
+q_1: ─────┤ X ├─╫─┤M├
+          └───┘ ║ └╥┘
+c: 2/═══════════╩══╩═
+                0  1 
+
+Resultados de las mediciones:
+{ '00': 512, '11': 512 }
+ 
+ 
+Alternativa sin instalación (en navegador)
+ 
+Puedes probarlo en el navegador usando el CDN de Qiskit.js. Crea un archivo  index.html :
+ 
+html  
+<!DOCTYPE html>
+<html>
+<body>
+  <pre id="output"></pre>
+  <script src="https://cdn.jsdelivr.net/npm/@qiskit/qiskit@0.4.2/dist/qiskit.min.js"></script>
+  <script>
+    async function run() {
+      const { QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer } = Qiskit;
+      const qreg = new QuantumRegister(2, 'q');
+      const creg = new ClassicalRegister(2, 'c');
+      const circuit = new QuantumCircuit(qreg, creg);
+      
+      circuit.h(qreg[0]);
+      circuit.cx(qreg[0], qreg[1]);
+      circuit.measure(qreg, creg);
+
+      const output = document.getElementById('output');
+      output.textContent += 'Diagrama:\n' + circuit.draw('text') + '\n\n';
+
+      const sim = Aer.getBackend('qasm_simulator');
+      const res = await execute(circuit, sim, { shots: 1024 });
+      output.textContent += 'Resultados:\n' + JSON.stringify(res.getCounts(circuit));
+    }
+    run();
+  </script>
+</body>
+</html>
+ 
+ 
+¿Te gustaría que creara un código para un circuito más complejo (ej: algoritmo de Deutsch-Jozsa o búsqueda de Grover) en JavaScript?¡Claro! Aquí te presento el algoritmo de Deutsch-Jozsa implementado en JavaScript con Qiskit.js — es uno de los primeros algoritmos que demuestran la ventaja cuántica sobre los clásicos, al determinar si una función booleana es constante o balanceada en una sola ejecución.
  
 Paso 1: Instalación (si no lo hiciste antes)
  
