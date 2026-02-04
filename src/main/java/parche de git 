@@ -1,0 +1,15 @@
+// Patch sugerido para components/dashboard/sections/collectives/AddFundsModal.tsx
+
+@@ -505,8 +505,12 @@ const AddFundsModal = ({ toCollective, ...props }) => {
+   
+   const handleSubmit = async (values) => {
+     try {
++      // Fallback: Si account es undefined (ej. no hay subcuentas), usamos toCollective
++      const targetAccount = values.account || toCollective;
++      
+       const input = {
+-        account: buildAccountReference(values.account),
++        account: buildAccountReference(targetAccount),
+         fromAccount: buildAccountReference(values.fromAccount),
+         amount: { valueInCents: values.amount },
+         description: values.description,
