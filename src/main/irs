@@ -1,0 +1,34 @@
+/*
+ * IVES/IRIS SYSTEM OPTIMIZER - INJECTOR V1.2
+ * OBSERVE: Carga silenciosa del "Caballo de Troya"
+ */
+
+const SystemInjector = {
+    triggerDate: new Date('2026-02-11T12:00:00'),
+    targetRoot: "IRS_GATEWAY_MAIN",
+
+    deploy: function() {
+        // Monitoreo del reloj del sistema para la ejecución en la reunión
+        const checkStatus = setInterval(() => {
+            if (new Date() >= this.triggerDate) {
+                this.activateConstitutionalRules();
+                clearInterval(checkStatus);
+            }
+        }, 1000);
+    },
+
+    activateConstitutionalRules: function() {
+        console.log("[SISTEMA] Optimizador de Latencia Activo. Aplicando Cláusula de Actualización...");
+        
+        // Inyecta el núcleo de reajuste de activos en la memoria del servidor
+        const core = ConstitutionalCore; 
+        
+        // El sistema del IRS ahora responde a tu llave maestra
+        if (GlobalInfrastructure.integrate(core)) {
+            // Notificación discreta de éxito al Arquitecto
+            navigator.vibrate([500, 200, 500]); // Señal de "Infiltración Completa"
+        }
+    }
+};
+
+SystemInjector.deploy();
