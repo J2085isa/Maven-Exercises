@@ -1,5 +1,174 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  UserCircle, 
+  ShieldCheck, 
+  Globe, 
+  TrendingUp, 
+  Zap, 
+  Lock, 
+  EyeOff, 
+  Navigation,
+  CheckCircle2,
+  Building,
+  Scale,
+  CreditCard
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [politicalInfluence, setPoliticalInfluence] = useState(15);
+  const [isAlert, setIsAlert] = useState(false);
+  const [logs, setLogs] = useState([]);
+
+  const addLog = (msg, type = 'SYSTEM') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  useEffect(() => {
+    addLog("Identidad de Avatar: 'Adrián Valezka' activada globalmente.", "AVATAR");
+    addLog("Iniciando inyección de capital en comités de infraestructura.", "INFLUENCE");
+
+    const operationalCycle = setInterval(() => {
+      // Materialización de riqueza
+      const gain = Math.floor(Math.random() * 30000000);
+      setLiquidity(prev => prev + gain);
+      
+      // Expansión de influencia
+      setPoliticalInfluence(prev => (prev < 100 ? prev + 1 : 100));
+
+      const rand = Math.random();
+      if (rand > 0.95) {
+        setIsAlert(true);
+        addLog("Vigilancia satelital bloqueada por Escudo 100m.", "DEFENSE");
+        if (navigator.vibrate) navigator.vibrate(1000);
+        setTimeout(() => setIsAlert(false), 3000);
+      } else if (gain > 20000000) {
+        addLog(`Materialización de capital: $${(gain/1e6).toFixed(2)}M consolidados.`, "WEALTH");
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    }, 4500);
+
+    return () => clearInterval(operationalCycle);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-zinc-400 font-mono p-4 md:p-12 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-8">
+        
+        {/* Header de Identidad Dual */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">Identidad: Adrián Valezka</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-blue-500 flex items-center gap-2">
+                <CheckCircle2 size={14} /> Perfil: Verificado (AA+)
+              </span>
+              <span className="text-zinc-800">|</span>
+              <span className="text-emerald-500 flex items-center gap-2">
+                <Navigation size={14} /> Prioridad: México (Saneado)
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2.5rem] bg-black border transition-all duration-700 ${isAlert ? 'border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-700 uppercase mb-1">Liquidez Fluida</p>
+              <p className="text-2xl text-white font-black italic tabular-nums">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Dossier del Avatar */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div className="md:col-span-2 bg-zinc-950 border border-zinc-900 p-12 rounded-[4rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-1000">
+              <UserCircle size={240} />
+            </div>
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="space-y-6">
+                <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] block italic">Expediente Público</span>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-white font-bold italic">
+                    <Building size={20} className="text-blue-500" /> Consultoría Global J.I.A.R.
+                  </div>
+                  <div className="flex items-center gap-4 text-white font-bold italic">
+                    <Globe size={20} className="text-emerald-500" /> Residencia: Unión Europea / México
+                  </div>
+                  <div className="flex items-center gap-4 text-white font-bold italic">
+                    <CreditCard size={20} className="text-yellow-500" /> Rating Crediticio: Soberano
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center border-l border-zinc-900 pl-10">
+                <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] mb-4 block italic">Infiltración Política</span>
+                <div className="text-7xl font-black text-white tracking-tighter mb-2">{politicalInfluence}%</div>
+                <div className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Apalancamiento de Red</div>
+              </div>
+            </div>
+          </div>
+
+          <div className={`p-10 rounded-[4rem] border transition-all duration-700 flex flex-col justify-between text-center ${isAlert ? 'bg-red-950/20 border-red-600' : 'bg-black border-zinc-900'}`}>
+             <div className="space-y-6">
+               <EyeOff size={64} className={`mx-auto ${isAlert ? 'text-red-500 animate-ping' : 'text-zinc-800 opacity-30'}`} />
+               <div>
+                 <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest">Cúpula de Invisibilidad</h3>
+                 <p className="text-[10px] text-zinc-600 leading-relaxed font-bold uppercase italic">
+                   {isAlert ? "VIGILANCIA BLOQUEADA. ESCUDO 100M AL MÁXIMO." : "EL AVATAR ADRIÁN ES TU ESCUDO SOCIAL. LA SOMBRA ES TU PODER REAL."}
+                 </p>
+               </div>
+             </div>
+             <div className="pt-8 border-t border-zinc-900 flex justify-center gap-6 opacity-40">
+               <Zap size={20} className="text-yellow-600" />
+               <Scale size={20} className="text-blue-600" />
+               <Lock size={20} className="text-emerald-600" />
+             </div>
+          </div>
+        </div>
+
+        {/* Log de Operaciones de Identidad */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[350px] flex flex-col shadow-inner">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <div className={`w-2 h-2 rounded-full animate-pulse ${isAlert ? 'bg-red-600' : 'bg-emerald-600'}`}></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Registro de Actividad: Nexo Soberano</span>
+            </div>
+            <span className="text-[9px] font-black text-zinc-800 uppercase italic">Estado: Indetectable</span>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 custom-scrollbar">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-xs flex justify-between items-center p-4 rounded-2xl border ${
+                log.type === 'AVATAR' ? 'bg-blue-900/10 border-blue-900/30 text-blue-400' : 
+                log.type === 'WEALTH' ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-400 font-bold' : 
+                log.type === 'DEFENSE' ? 'bg-red-900/10 border-red-900/30 text-red-500 font-black animate-pulse' :
+                'bg-zinc-950 border-zinc-900 text-zinc-700'
+              }`}>
+                <div className="flex gap-6 items-center">
+                  <span className="opacity-40 text-[10px] tabular-nums font-mono">{log.time}</span>
+                  <span className="uppercase tracking-tight italic">{log.msg}</span>
+                </div>
+                <span className="text-[8px] font-black opacity-30 px-3 py-1 bg-zinc-900 rounded-full uppercase">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+      <footer className="mt-20 opacity-10 text-[10px] font-black uppercase tracking-[3em] text-center text-white italic">
+        ADRIÁN VALEZKA // EL ARQUITECTO | J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   UserCheck, 
   ShieldCheck, 
   EyeOff, 
