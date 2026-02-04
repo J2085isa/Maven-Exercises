@@ -1,4 +1,124 @@
-En JavaScript, puedes trabajar con computación cuántica usando bibliotecas como Qiskit.js (el puerto oficial de Qiskit para JS) o Cirq.js (aunque menos común). A continuación, un código completo con Qiskit.js que crea un circuito simple (superposición + entrelazamiento) y simula su ejecución.
+¡Claro! Aquí te presento el algoritmo de Deutsch-Jozsa implementado en JavaScript con Qiskit.js — es uno de los primeros algoritmos que demuestran la ventaja cuántica sobre los clásicos, al determinar si una función booleana es constante o balanceada en una sola ejecución.
+ 
+Paso 1: Instalación (si no lo hiciste antes)
+ 
+Si usas Node.js, asegúrate de tener Qiskit.js instalado:
+ 
+bash  
+npm install @qiskit/qiskit
+ 
+ 
+Paso 2: Código completo del algoritmo Deutsch-Jozsa
+ 
+Crea el archivo  deutsch-jozsa.js :
+ 
+javascript  
+const { QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer } = require('@qiskit/qiskit');
+
+// Función para construir la "caja negra" (oráculo) de la función booleana
+// Tipo: 'constante' (todos los outputs iguales) o 'balanceada' (mitad 0, mitad 1)
+function buildOracle(numQubits, type) {
+  const oracle = new QuantumCircuit(numQubits + 1, `oracle-${type}`); // +1 qubit objetivo
+
+  if (type === 'constante') {
+    // Opción 1: todos los outputs = 0 (no hace nada)
+    // Opción 2: todos los outputs = 1 (aplica puerta X al qubit objetivo)
+    if (Math.random() > 0.5) oracle.x(numQubits);
+  } else if (type === 'balanceada') {
+    // Aplica puertas CX entre qubits de entrada y objetivo (ej: liga el primer qubit)
+    for (let i = 0; i < numQubits; i++) {
+      if (Math.random() > 0.5) oracle.cx(i, numQubits);
+    }
+  }
+
+  return oracle;
+}
+
+// Función principal del algoritmo
+async function runDeutschJozsa(numInputQubits = 3, functionType = 'balanceada') {
+  try {
+    // 1. Configurar registros: qubits de entrada + qubit objetivo + bits clásicos
+    const inputQubits = new QuantumRegister(numInputQubits, 'input');
+    const targetQubit = new QuantumRegister(1, 'target');
+    const classicalBits = new ClassicalRegister(numInputQubits, 'output');
+    const circuit = new QuantumCircuit(inputQubits, targetQubit, classicalBits);
+
+    // 2. Preparar el estado inicial
+    circuit.x(targetQubit); // Poner qubit objetivo en |1>
+    circuit.h(inputQubits); // Superponer qubits de entrada
+    circuit.h(targetQubit); // Superponer qubit objetivo
+    circuit.barrier(); // Separar etapas
+
+    // 3. Agregar el oráculo (caja negra)
+    const oracle = buildOracle(numInputQubits, functionType);
+    circuit.compose(oracle, [...inputQubits, ...targetQubit], false);
+    circuit.barrier();
+
+    // 4. Aplicar puertas H y medir qubits de entrada
+    circuit.h(inputQubits);
+    circuit.measure(inputQubits, classicalBits);
+
+    // 5. Mostrar circuito
+    console.log('Circuito completo Deutsch-Jozsa:');
+    console.log(circuit.draw('text'));
+
+    // 6. Simular ejecución
+    const simulator = Aer.getBackend('qasm_simulator');
+    const result = await execute(circuit, simulator, { shots: 1 }); // Solo 1 medición basta!
+
+    // 7. Interpretar resultados
+    const counts = result.getCounts(circuit);
+    const measurement = Object.keys(counts)[0];
+    const isConstant = measurement === '0'.repeat(numInputQubits);
+
+    console.log('\nResultado de la medición:', measurement);
+    console.log(`La función es ${isConstant ? 'CONSTANTE' : 'BALANCEADA'}`);
+
+  } catch (error) {
+    console.error('Error en el algoritmo:', error);
+  }
+}
+
+// Ejecutar: prueba con 'constante' o 'balanceada'
+runDeutschJozsa(3, 'balanceada');
+ 
+ 
+¿Cómo funciona?
+ 
+- Entrada:  n  qubits de entrada + 1 qubit objetivo.
+- Preparación: Los qubits de entrada pasan a superposición con puertas H; el objetivo se pone en |1> y también superpuesto.
+- Oración: Caja negra que implementa la función booleana — constante (todos los outputs iguales) o balanceada (mitad 0, mitad 1).
+- Medición: Después de aplicar puertas H nuevamente, si la medición es  000...0  → función constante; cualquier otro valor → balanceada.
+- Ventaja cuántica: Un algoritmo clásico necesita al menos  2^(n-1)+1  evaluaciones; este lo hace en 1.
+ 
+Ejecutar el código
+ 
+bash  
+node deutsch-jozsa.js
+ 
+ 
+Salida esperada para función balanceada:
+ 
+plaintext  
+Circuito completo Deutsch-Jozsa:
+(Diagrama simplificado)
+ input_0: ──H──■──H──M───
+ input_1: ──H──┼──H──M───
+ input_2: ──H──┼──H──M───
+ target_0: ─X──H──X──■──■──■──H──
+                         
+Resultado de la medición: 101
+La función es BALANCEADA
+ 
+ 
+Salida para función constante:
+ 
+plaintext  
+Resultado de la medición: 000
+La función es CONSTANTE
+ 
+ 
+¿Te gustaría que implementara el algoritmo de Grover (para búsqueda no estructurada) o algún otro circuito cuántico específico en JavaScript?En JavaScript, puedes trabajar con computación cuántica usando bibliotecas como Qiskit.js (el puerto oficial de Qiskit para JS) o Cirq.js (aunque menos común). A continuación, un código completo con Qiskit.js que crea un circuito simple (superposición + entrelazamiento) y simula su ejecución.
  
 Paso 1: Instalar dependencias
  
