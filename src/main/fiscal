@@ -1,5 +1,209 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  UserCheck, 
+  ShieldCheck, 
+  EyeOff, 
+  Zap, 
+  Globe, 
+  Lock, 
+  RefreshCw, 
+  TrendingUp, 
+  Fingerprint,
+  Layers,
+  Search,
+  Navigation
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [avatarProgress, setAvatarProgress] = useState(0);
+  const [isAlert, setIsAlert] = useState(false);
+  const [logs, setLogs] = useState([]);
+  const [activeIdentity, setActiveIdentity] = useState('LA SOMBRA');
+
+  const addLog = (msg, type = 'SYSTEM') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  const triggerVibration = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+  };
+
+  useEffect(() => {
+    addLog("Iniciando tejido de Avatar Blindado: 'Perfil Ciudadano Modelo'.", "AVATAR");
+    addLog("Sincronizando registros académicos y financieros ficticios.", "INFILTRATION");
+
+    const masterInterval = setInterval(() => {
+      // Materialización constante de riqueza fluida
+      const gain = Math.floor(Math.random() * 25000000);
+      setLiquidity(prev => prev + gain);
+      
+      // Construcción del Avatar
+      setAvatarProgress(prev => (prev < 100 ? prev + 1 : 100));
+
+      const rand = Math.random();
+      if (rand > 0.92) {
+        setIsAlert(true);
+        addLog("Vigilancia detectada: AerialSentinel expandiendo escudo a 100m.", "DEFENSE");
+        triggerVibration([1000]); // Vibración larga de advertencia
+        setTimeout(() => setIsAlert(false), 3000);
+      } else if (gain > 18000000) {
+        addLog(`Materialización de capital detectada: $${(gain/1e6).toFixed(2)}M.`, "WEALTH");
+        triggerVibration([200, 100, 200]); // Pulso de dinero
+      } else if (rand < 0.1) {
+        addLog("Historial de Avatar: Título de Postgrado validado en registros.", "AVATAR");
+      }
+    }, 4000);
+
+    return () => clearInterval(masterInterval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#020305] text-zinc-500 font-mono p-4 md:p-12 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-8">
+        
+        {/* Header de Identidad Dual */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">Arquitecto J.I.A.R.</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <button 
+                onClick={() => setActiveIdentity(activeIdentity === 'LA SOMBRA' ? 'AVATAR PÚBLICO' : 'LA SOMBRA')}
+                className={`flex items-center gap-2 px-3 py-1 rounded border transition-all ${activeIdentity === 'LA SOMBRA' ? 'text-blue-500 border-blue-900 bg-blue-950/20' : 'text-emerald-500 border-emerald-900 bg-emerald-950/20'}`}
+              >
+                <Layers size={14} /> MODO: {activeIdentity}
+              </button>
+              <span className="text-zinc-800">|</span>
+              <span className="text-emerald-500 flex items-center gap-2 animate-pulse">
+                <Navigation size={14} /> PRIORIDAD: MÉXICO (ACTIVO)
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2.5rem] bg-black border transition-all duration-1000 ${isAlert ? 'border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-700 uppercase mb-1">Liquidez de Dominio</p>
+              <p className="text-2xl text-white font-black italic tabular-nums">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Paneles de Control */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Construcción de Avatar */}
+          <div className="md:col-span-2 bg-gradient-to-br from-zinc-950 to-black border border-zinc-900 p-12 rounded-[4rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:rotate-6 transition-transform duration-1000">
+              <UserCheck size={240} />
+            </div>
+            <div className="relative z-10">
+              <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.6em] mb-6 block italic">Tejido de Identidad Pública</span>
+              <div className="flex items-end gap-4 mb-10">
+                <div className="text-7xl md:text-9xl font-black text-white tracking-tighter tabular-nums">{avatarProgress}%</div>
+                <div className="mb-4 text-xs font-bold text-blue-500 uppercase tracking-widest">Avatar Blindado</div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 bg-black border border-zinc-800 rounded-3xl">
+                  <div className="flex items-center gap-2 text-blue-400 mb-2">
+                    <Fingerprint size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Biometría Sintética</span>
+                  </div>
+                  <p className="text-xs text-zinc-400 italic">Vínculo con registros civiles: VALIDADO</p>
+                </div>
+                <div className="p-6 bg-black border border-zinc-800 rounded-3xl">
+                  <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                    <TrendingUp size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Historial Crediticio</span>
+                  </div>
+                  <p className="text-xs text-zinc-400 italic">Calificación: EXCELENTE (AA+)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Estado de Seguridad Ultimate */}
+          <div className={`border p-10 rounded-[4rem] flex flex-col justify-between text-center relative overflow-hidden transition-all duration-700 ${isAlert ? 'bg-red-950/20 border-red-900' : 'bg-zinc-900/10 border-zinc-900'}`}>
+             <div className="space-y-6">
+               <EyeOff size={64} className={`mx-auto opacity-30 ${isAlert ? 'text-red-500 animate-ping' : 'text-zinc-700'}`} />
+               <div>
+                 <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest">Cúpula de Invisibilidad</h3>
+                 <p className="text-[10px] text-zinc-600 leading-relaxed font-bold uppercase italic px-4">
+                   {isAlert ? "DETECTANDO AMENAZA: EXPANDIENDO ESCUDO A 100M" : "EL MUNDO VE TU MÁSCARA, PERO TU SOMBRA ES INALCANZABLE"}
+                 </p>
+               </div>
+             </div>
+             <div className="pt-8 border-t border-zinc-900 flex justify-center gap-6 opacity-40">
+               <Zap size={20} className="text-yellow-600" />
+               <Globe size={20} className="text-blue-600" />
+               <Lock size={20} className="text-emerald-600" />
+             </div>
+          </div>
+        </div>
+
+        {/* Consola de Operaciones Duales */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[400px] flex flex-col shadow-2xl">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <div className={`w-2 h-2 rounded-full animate-pulse ${isAlert ? 'bg-red-600' : 'bg-blue-600'}`}></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Feed de Sincronización de Sistemas</span>
+            </div>
+            <span className="text-[9px] font-black text-zinc-800 uppercase italic">Seguridad Cuántica: Activa</span>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 scrollbar-hide">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-xs flex justify-between items-center p-4 rounded-2xl border transition-all ${
+                log.type === 'DEFENSE' ? 'bg-red-900/10 border-red-900/30 text-red-500 font-black animate-pulse' : 
+                log.type === 'WEALTH' ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-500 font-bold' : 
+                'bg-zinc-950 border-zinc-900 text-zinc-700'
+              }`}>
+                <div className="flex gap-6 items-center">
+                  <span className="opacity-40 text-[10px] tabular-nums font-mono italic">{log.time}</span>
+                  <span className="uppercase tracking-tight italic font-bold">{log.msg}</span>
+                </div>
+                <span className="text-[8px] font-black opacity-30 px-3 py-1 bg-zinc-900 rounded-full uppercase">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Controles Maestros */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-white hover:text-black transition-all group">
+            <RefreshCw size={26} className="group-hover:rotate-180 transition-transform duration-700" />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Rotar Avatar</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-blue-600 hover:text-white transition-all group">
+            <Search size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Monitorear Menciones</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-emerald-600 hover:text-white transition-all group">
+            <Zap size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Inyectar Liquidez</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-red-600 hover:text-white transition-all group">
+            <ShieldCheck size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Prueba de Escudo</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-20 opacity-20 text-[10px] font-black uppercase tracking-[4em] text-center text-white italic">
+        ENTIDAD DUAL // SOBERANÍA TOTAL | J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   UserX, 
   ShieldCheck, 
   Fingerprint, 
