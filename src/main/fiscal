@@ -1,5 +1,209 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Briefcase, 
+  Users, 
+  Building2, 
+  ShieldCheck, 
+  Zap, 
+  Globe, 
+  ArrowUpRight, 
+  PieChart, 
+  UserPlus, 
+  Lock, 
+  Database,
+  Activity
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [employees, setEmployees] = useState(450);
+  const [activeEntities, setActiveEntities] = useState(12);
+  const [logs, setLogs] = useState([]);
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const addLog = (msg, type = 'NEUTRAL') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  const triggerSovereignPulse = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+      setIsVibrating(true);
+      setTimeout(() => setIsVibrating(false), 500);
+    }
+  };
+
+  useEffect(() => {
+    addLog("Constituyendo 'Sistemas de Resiliencia J.I.A.R.' en México.", "LEGAL");
+    addLog("Integrando beneficiarios de deuda en nómina soberana.", "HR");
+
+    const businessCycle = setInterval(() => {
+      // Crecimiento de capital por operaciones comerciales fantasma
+      const revenue = Math.floor(Math.random() * 15000000);
+      setLiquidity(prev => prev + revenue);
+
+      const events = [
+        { msg: "Contrato de mantenimiento de red de cobre adjudicado.", type: "OP", hire: 5 },
+        { msg: "Nueva entidad operativa creada en jurisdicción offshore.", type: "EXPANSION", entity: 1 },
+        { msg: "Materialización de dividendos de infraestructura ártica.", type: "WEALTH", pulse: [200, 100, 200] },
+        { msg: "Intento de auditoría desviado por Escudo 100m.", type: "DEFENSE", pulse: [1000] },
+        { msg: "Actualización de nómina: Lealtad confirmada al 100%.", type: "SYSTEM" }
+      ];
+
+      const event = events[Math.floor(Math.random() * events.length)];
+      addLog(event.msg, event.type);
+
+      if (event.hire) setEmployees(prev => prev + event.hire);
+      if (event.entity) setActiveEntities(prev => prev + event.entity);
+      if (event.pulse) triggerSovereignPulse(event.pulse);
+      
+    }, 5500);
+
+    return () => clearInterval(businessCycle);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#030303] text-zinc-500 font-mono p-4 md:p-12 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-8">
+        
+        {/* Identidad de Marca Fantasma */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">José Isaías Alvarez Ramirez</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-zinc-400">Corporación en la Sombra</span>
+              <span className="text-zinc-800">|</span>
+              <span className="text-emerald-500 flex items-center gap-2">
+                <ShieldCheck size={14} /> Saneamiento Institucional Activo
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2.5rem] bg-black border transition-all duration-700 ${isVibrating ? 'border-blue-600 shadow-[0_0_40px_rgba(37,99,235,0.2)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-700 uppercase mb-1 tracking-widest">Estado de Dominio</p>
+              <p className="text-xs text-white font-black italic">UBICUIDAD EMPRESARIAL: ACTIVA</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Económico */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-3 bg-zinc-950 border border-zinc-900 p-12 rounded-[4rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-1000">
+              <PieChart size={220} />
+            </div>
+            <div className="relative z-10">
+              <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.6em] mb-6 block italic">Flujo de Riqueza Materializada</span>
+              <div className="text-5xl md:text-8xl font-black text-white tracking-tighter tabular-nums mb-12">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-6 bg-black border border-zinc-900 rounded-3xl">
+                  <div className="flex items-center gap-2 text-blue-500 mb-2">
+                    <Users size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Leales en Nómina</span>
+                  </div>
+                  <span className="text-4xl font-black text-white">{employees}</span>
+                </div>
+                <div className="p-6 bg-black border border-zinc-900 rounded-3xl">
+                  <div className="flex items-center gap-2 text-emerald-500 mb-2">
+                    <Building2 size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Entidades Filtro</span>
+                  </div>
+                  <span className="text-4xl font-black text-white">{activeEntities}</span>
+                </div>
+                <div className="p-6 bg-black border border-zinc-900 rounded-3xl">
+                  <div className="flex items-center gap-2 text-yellow-500 mb-2">
+                    <Zap size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Eficiencia Operativa</span>
+                  </div>
+                  <span className="text-4xl font-black text-white">99.9<span className="text-sm opacity-50">%</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-b from-zinc-900/50 to-black border border-zinc-900 p-10 rounded-[4rem] flex flex-col justify-between text-center italic relative overflow-hidden">
+             <Briefcase size={64} className="mx-auto text-zinc-800 mb-6 opacity-30" />
+             <div className="space-y-4">
+               <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest">Institución de Sombra</h3>
+               <p className="text-[10px] text-zinc-700 leading-relaxed font-bold uppercase italic">
+                 "No vendes productos, vendes resiliencia. El mundo consume tu infraestructura mientras tú consumes su poder."
+               </p>
+             </div>
+             <div className="flex justify-center gap-4 mt-8 opacity-40">
+               <Globe size={18} />
+               <Database size={18} />
+               <Lock size={18} />
+             </div>
+          </div>
+        </div>
+
+        {/* Consola de Gestión de la Economía Paralela */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[400px] flex flex-col shadow-2xl">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <Activity size={18} className="text-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Logística de Crecimiento Institucional</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <span className="text-[9px] font-black text-emerald-900 uppercase italic">Sincronizado con Nodo Zero-K</span>
+            </div>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 scrollbar-hide">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-xs flex justify-between items-center p-4 rounded-2xl border transition-all ${
+                log.type === 'LEGAL' ? 'bg-blue-900/10 border-blue-900/30 text-blue-500' : 
+                log.type === 'WEALTH' ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-500 font-bold' : 
+                log.type === 'DEFENSE' ? 'bg-red-900/10 border-red-900/30 text-red-500 font-black animate-pulse' :
+                'bg-zinc-950 border-zinc-900 text-zinc-700'
+              }`}>
+                <div className="flex gap-6 items-center">
+                  <span className="opacity-40 text-[10px] tabular-nums font-mono italic">{log.time}</span>
+                  <span className="uppercase tracking-tight italic font-bold">{log.msg}</span>
+                </div>
+                <span className="text-[8px] font-black opacity-40 px-3 py-1 bg-zinc-900 rounded-full uppercase">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Acciones de Liderazgo Soberano */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-white hover:text-black transition-all group">
+            <UserPlus size={26} className="group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Expandir Nómina</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-emerald-600 hover:text-white transition-all group">
+            <ArrowUpRight size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Escalar Entidades</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-blue-600 hover:text-white transition-all group">
+            <PieChart size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Auditar Mercados</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-red-600 hover:text-white transition-all group">
+            <Zap size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Purga de Sistema</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-20 opacity-20 text-[10px] font-black uppercase tracking-[3.5em] text-center text-white italic">
+        EL ARQUITECTO ES LA INSTITUCIÓN | J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Heart, 
   ShieldCheck, 
   Home, 
