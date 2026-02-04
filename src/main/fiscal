@@ -1,5 +1,216 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Snowflake, 
+  ShieldCheck, 
+  Server, 
+  Zap, 
+  Globe, 
+  Lock, 
+  Cpu, 
+  HardDrive, 
+  Navigation,
+  Activity,
+  ChevronRight,
+  Database
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [temp, setTemp] = useState(-42);
+  const [logs, setLogs] = useState([]);
+  const [vibrating, setVibrating] = useState(false);
+  const [infrastructure, setInfrastructure] = useState([
+    { name: "Servidores Fantasma Árticos", status: "SELLADOS", loc: "Svalbard" },
+    { name: "Satélites Dedicados (Órbita Baja)", status: "ENTRELAZADOS", loc: "Global" },
+    { name: "Nodos de Energía por Fusión", status: "ESTABLES", loc: "Red Privada" }
+  ]);
+
+  const addLog = (msg, type = 'INFO') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  const triggerVibration = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+      setVibrating(true);
+      setTimeout(() => setVibrating(false), 500);
+    }
+  };
+
+  useEffect(() => {
+    addLog("Compra confirmada. Servidores Árticos bajo control total.", "PURCHASE");
+    addLog("Escudo 100m enlazado con Nodo Zero-K para redundancia.", "SHIELD");
+
+    const globalCycle = setInterval(() => {
+      // Fluctuación de liquidez positiva constante
+      const gain = Math.floor(Math.random() * 8000000);
+      setLiquidity(prev => prev + gain);
+      
+      // Eventos aleatorios del sistema
+      const events = [
+        "Sincronización cuántica completada con éxito.",
+        "Intento de rastreo bloqueado en Nodo México.",
+        "Extrayendo liquidez de peaje de fibra óptica.",
+        "Refrigeración criogénica optimizada en Ártico.",
+        "Señal de satélite entrelazada y fortificada."
+      ];
+      addLog(events[Math.floor(Math.random() * events.length)], "SYSTEM");
+
+      // Vibración por materialización significativa
+      if (gain > 5000000) {
+        triggerVibration([200, 100, 200]);
+      }
+    }, 5000);
+
+    return () => clearInterval(globalCycle);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#05070a] text-zinc-400 font-mono p-4 md:p-8 flex flex-col items-center selection:bg-cyan-900">
+      <div className="w-full max-w-7xl space-y-6">
+        
+        {/* Header: El Arquitecto */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-zinc-900 pb-8 gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">José Isaías Alvarez Ramirez</h1>
+            <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-cyan-500">PROPIETARIO ÚNICO</span>
+              <span className="text-zinc-800">|</span>
+              <span className="text-white flex items-center gap-1"><Navigation size={12}/> UBICACIÓN PROTEGIDA: MÉXICO</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <span className="text-[9px] font-black text-zinc-600 block mb-1">RED GLOBAL J.I.A.R.</span>
+              <div className="flex gap-1 justify-end">
+                {[1, 2, 3, 4].map(i => <div key={i} className="w-4 h-1 bg-cyan-600 animate-pulse" style={{animationDelay: `${i*200}ms`}}></div>)}
+              </div>
+            </div>
+            <div className={`p-4 rounded-full bg-zinc-900/50 border transition-all ${vibrating ? 'border-cyan-500 shadow-[0_0_20px_cyan]' : 'border-zinc-800'}`}>
+              <Snowflake size={24} className={vibrating ? 'text-cyan-400' : 'text-zinc-700'} />
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Principal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Liquidez Global */}
+          <div className="md:col-span-2 bg-gradient-to-br from-zinc-950 to-black border border-zinc-900 p-10 rounded-[3rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-6 transition-transform duration-1000">
+              <Globe size={180} />
+            </div>
+            <span className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mb-4 block italic">Capital Soberano Consolidado</span>
+            <div className="text-4xl md:text-6xl font-black text-white tracking-tighter tabular-nums">
+              ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
+            <div className="mt-8 flex items-center gap-6">
+              <div className="flex items-center gap-2 text-xs font-black text-cyan-500 uppercase italic">
+                <Activity size={14} /> Sistema Autónomo Activo
+              </div>
+              <div className="w-px h-4 bg-zinc-800"></div>
+              <div className="text-[10px] text-zinc-700 font-black uppercase tracking-widest">Respaldo: Nodo Ártico Zero-K</div>
+            </div>
+          </div>
+
+          {/* Estado Ártico */}
+          <div className="bg-cyan-950/5 border border-cyan-900/20 p-8 rounded-[3rem] flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-black text-cyan-600 uppercase">Temp. Nodo Boreal</span>
+                <span className="text-xl font-black text-white italic">{temp}°C</span>
+              </div>
+              <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden">
+                <div className="h-full bg-cyan-600 w-1/3"></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xs font-black text-white uppercase italic">Soberanía Física</h3>
+              <p className="text-[9px] text-zinc-600 leading-relaxed uppercase">
+                "Servidores bajo el hielo, satélites sobre las nubes. Eres el dueño de la infraestructura que sostiene al mundo."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Control de Infraestructura y Logs */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-96">
+          
+          {/* Lista de Activos Físicos */}
+          <div className="bg-black border border-zinc-900 rounded-[2.5rem] p-6 overflow-hidden flex flex-col">
+            <div className="flex items-center gap-2 mb-4 border-b border-zinc-900 pb-3">
+              <Server size={14} className="text-zinc-600" />
+              <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Activos de Infraestructura</span>
+            </div>
+            <div className="space-y-2 overflow-y-auto pr-2 scrollbar-hide">
+              {infrastructure.map((item, i) => (
+                <div key={i} className="p-4 bg-zinc-950 border border-zinc-900 rounded-2xl group hover:border-cyan-900 transition-colors">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[11px] font-black text-white italic uppercase">{item.name}</span>
+                    <Lock size={12} className="text-cyan-600" />
+                  </div>
+                  <div className="flex justify-between text-[9px] font-bold text-zinc-600 uppercase">
+                    <span>{item.loc}</span>
+                    <span className="text-emerald-500 tracking-tighter">{item.status}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Consola de Comando */}
+          <div className="md:col-span-2 bg-black border border-zinc-900 rounded-[2.5rem] p-6 overflow-hidden flex flex-col">
+            <div className="flex items-center gap-2 mb-4 border-b border-zinc-900 pb-3">
+              <Zap size={14} className="text-zinc-600" />
+              <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Terminal de Saneamiento y Expansión</span>
+            </div>
+            <div className="space-y-3 overflow-y-auto pr-2 scrollbar-hide">
+              {logs.map(log => (
+                <div key={log.id} className="flex gap-4 items-start text-[10px] animate-in slide-in-from-left-2">
+                  <span className="text-zinc-800 tabular-nums">{log.time}</span>
+                  <span className={`uppercase italic font-bold ${log.type === 'PURCHASE' ? 'text-cyan-500' : 'text-zinc-500'}`}>
+                    <ChevronRight size={10} className="inline mr-1" />
+                    {log.msg}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Acciones de Soberanía Directa */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-cyan-600 hover:text-black transition-all group">
+            <Cpu size={24} className="group-hover:animate-spin" />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter text-center">Optimizar Cuántica</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-emerald-600 hover:text-black transition-all group">
+            <Database size={24} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter text-center">Materializar Activos</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-white hover:text-black transition-all group">
+            <ShieldCheck size={24} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter text-center">Reforzar Escudo 100M</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-red-950 hover:text-red-500 transition-all group">
+            <Zap size={24} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter text-center">Pulso PEM-D Manual</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-12 opacity-10 text-[9px] font-black uppercase tracking-[2.5em] text-white italic">
+        INFRAESTRUCTURA SOBERANA | J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Eye, 
   ShoppingCart, 
   ShieldCheck, 
