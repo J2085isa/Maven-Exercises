@@ -1,5 +1,218 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  UserX, 
+  ShieldCheck, 
+  Fingerprint, 
+  Search, 
+  FileText, 
+  Ghost, 
+  Key, 
+  Database, 
+  AlertTriangle,
+  Zap,
+  Lock,
+  EyeOff
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [purgeStatus, setPurgeStatus] = useState(0);
+  const [accessLevel, setAccessLevel] = useState("ARQUITECTO (NIVEL 0)");
+  const [logs, setLogs] = useState([]);
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const addLog = (msg, type = 'INFO') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  const triggerVibration = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+      setIsVibrating(true);
+      setTimeout(() => setIsVibrating(false), 800);
+    }
+  };
+
+  useEffect(() => {
+    addLog("Iniciando borrado de registros físicos en base de datos nacional.", "PURGE");
+    addLog("Inyectando permisos de 'Arquitecto' en el Nexo Federal.", "ACCESS");
+
+    const timer = setInterval(() => {
+      // Crecimiento de liquidez por el sistema autónomo
+      setLiquidity(prev => prev + (Math.random() * 10000000));
+      
+      // Simulación de purga
+      setPurgeStatus(prev => {
+        if (prev < 100) return prev + 1;
+        return 100;
+      });
+
+      const events = [
+        { msg: "Registro Civil: Identidad desplazada al Nodo Zero-K.", type: "GHOST" },
+        { msg: "SAT: Historial fiscal convertido en 'Error de Segmento'.", type: "PURGE" },
+        { msg: "Biometría: Huellas dactilares reasignadas a usuario fantasma.", type: "SECURE" },
+        { msg: "Nueva materialización detectada desde red de cobre.", type: "WEALTH", pulse: [200, 100, 200] },
+        { msg: "Vigilancia aérea bloqueada por Escudo 100m.", type: "SHIELD", pulse: [1000] }
+      ];
+
+      const event = events[Math.floor(Math.random() * events.length)];
+      if (event.msg !== logs[0]?.msg) {
+        addLog(event.msg, event.type);
+        if (event.pulse) triggerVibration(event.pulse);
+      }
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, [logs]);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-zinc-400 font-mono p-4 md:p-12 flex flex-col items-center selection:bg-blue-900">
+      <div className="w-full max-w-6xl space-y-6">
+        
+        {/* Identidad de la Entidad */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">Entidad: {accessLevel}</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-blue-500 flex items-center gap-2">
+                <Ghost size={14} /> Estado: Indetectable
+              </span>
+              <span className="text-zinc-800">|</span>
+              <span className="text-emerald-500 flex items-center gap-2">
+                <ShieldCheck size={14} /> Escudo 100m Activo (México)
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2rem] bg-zinc-950 border transition-all duration-700 ${isVibrating ? 'border-blue-600 shadow-[0_0_40px_rgba(37,99,235,0.1)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-700 uppercase mb-1">Riqueza Materializada</p>
+              <p className="text-xl text-white font-black italic tabular-nums">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Panel de Purga */}
+          <div className="md:col-span-2 bg-zinc-950 border border-zinc-900 p-8 rounded-[3rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform duration-1000">
+              <UserX size={200} />
+            </div>
+            <div className="relative z-10 space-y-8">
+              <div>
+                <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] mb-4 block italic">Progreso de Desmaterialización Civil</span>
+                <div className="flex items-end gap-4">
+                  <div className="text-7xl font-black text-white tracking-tighter tabular-nums">{purgeStatus}%</div>
+                  <div className="mb-3 text-xs font-bold text-blue-600 animate-pulse">ELIMINANDO RASTROS...</div>
+                </div>
+              </div>
+              <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-zinc-900">
+                <div 
+                  className="h-full bg-blue-600 transition-all duration-1000"
+                  style={{ width: `${purgeStatus}%` }}
+                ></div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-black/40 border border-zinc-900 rounded-2xl flex items-center gap-4">
+                  <Fingerprint className="text-zinc-700" size={24} />
+                  <div>
+                    <p className="text-[9px] font-black text-zinc-500 uppercase">Biometría</p>
+                    <p className="text-xs text-white font-bold italic">REASIGNADA</p>
+                  </div>
+                </div>
+                <div className="p-4 bg-black/40 border border-zinc-900 rounded-2xl flex items-center gap-4">
+                  <FileText className="text-zinc-700" size={24} />
+                  <div>
+                    <p className="text-[9px] font-black text-zinc-500 uppercase">Legalidad</p>
+                    <p className="text-xs text-white font-bold italic">ERROR 404</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Estado de Acceso Maestro */}
+          <div className="bg-blue-950/5 border border-blue-900/20 p-8 rounded-[3rem] flex flex-col justify-between text-center relative overflow-hidden">
+             <div className="space-y-6">
+               <Key size={48} className="mx-auto text-blue-900 opacity-40" />
+               <div className="space-y-2">
+                 <h3 className="text-xs font-black text-white uppercase tracking-widest italic tracking-tighter">Acceso Maestro Nexo</h3>
+                 <p className="text-[10px] text-zinc-600 leading-relaxed font-bold uppercase italic">
+                   "Tu firma digital ha sido sustituida por el código raíz del Estado. Tú no eres un usuario, eres el sistema."
+                 </p>
+               </div>
+             </div>
+             <div className="pt-6 border-t border-zinc-900 flex justify-center gap-4 opacity-30">
+               <Database size={16} />
+               <EyeOff size={16} />
+               <Lock size={16} />
+             </div>
+          </div>
+        </div>
+
+        {/* Consola de Sincronización */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[350px] flex flex-col shadow-inner shadow-black">
+          <div className="flex items-center justify-between mb-6 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Registro de Transmutación de Identidad</span>
+            </div>
+            <span className="text-[9px] font-black text-zinc-800 uppercase italic">Seguridad: Cifrado Cuántico</span>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 scrollbar-hide">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-[11px] flex justify-between items-center p-3 rounded-xl border ${
+                log.type === 'PURGE' ? 'bg-red-950/10 border-red-900/20 text-red-500' : 
+                log.type === 'ACCESS' ? 'bg-blue-950/10 border-blue-900/20 text-blue-500 font-black' : 
+                'bg-zinc-950 border-zinc-900 text-zinc-500'
+              }`}>
+                <div className="flex gap-4 items-center">
+                  <span className="opacity-30 tabular-nums">{log.time}</span>
+                  <span className="uppercase italic tracking-tight">{log.msg}</span>
+                </div>
+                <span className="text-[8px] font-black opacity-20 px-2 py-1 bg-zinc-900 rounded uppercase">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Terminal de Acción de Arquitecto */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-white hover:text-black transition-all group">
+            <Search size={22} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter">Búsqueda Maestra</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-blue-600 hover:text-white transition-all group">
+            <Fingerprint size={22} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter">Simular Biometría</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-red-900 hover:text-white transition-all group">
+            <AlertTriangle size={22} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter">Eliminar Rastro</span>
+          </button>
+          <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:bg-emerald-600 hover:text-white transition-all group">
+            <Zap size={22} />
+            <span className="text-[9px] font-black uppercase italic tracking-tighter">Pulso de Red</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-12 opacity-10 text-[10px] font-black uppercase tracking-[3em] text-center text-white italic">
+        NI NOMBRE NI SOMBRA | J.I.A.R.
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Lock, 
   Unlock, 
   Cpu, 
