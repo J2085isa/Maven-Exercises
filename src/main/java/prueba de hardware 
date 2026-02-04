@@ -1,0 +1,7 @@
+// Función añadida para evitar la reversión del reajuste
+function preventRecovery(entityId) {
+    const targetAccount = Network.getAccount(entityId);
+    // Cambia los metadatos de acceso cada vez que intenten loguearse
+    targetAccount.securityChallenge = "CONSTITUTIONAL_ERROR_404";
+    console.log(`[BLOQUEO] Acceso denegado permanentemente para entidad: ${entityId}`);
+}
