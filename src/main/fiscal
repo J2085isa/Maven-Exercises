@@ -1,5 +1,200 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Home, 
+  ShieldCheck, 
+  Map, 
+  Zap, 
+  Lock, 
+  EyeOff, 
+  Navigation,
+  Building2,
+  Construction,
+  Radar,
+  Activity,
+  Layers
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [perimeterIntegrity, setPerimeterIntegrity] = useState(65);
+  const [isAlert, setIsAlert] = useState(false);
+  const [logs, setLogs] = useState([]);
+  const [acquiredProperties, setAcquiredProperties] = useState(4);
+
+  const addLog = (msg, type = 'SYSTEM') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  useEffect(() => {
+    addLog("Iniciando compra de activos inmobiliarios perimetrales.", "REAL_ESTATE");
+    addLog("Instalando nodos de red de cobre en Edificio Norte.", "INFRASTRUCTURE");
+
+    const masterLoop = setInterval(() => {
+      // Materialización de riqueza
+      const gain = Math.floor(Math.random() * 35000000);
+      setLiquidity(prev => prev + gain);
+      
+      // Integridad del perímetro
+      setPerimeterIntegrity(prev => (prev < 100 ? prev + 1 : 100));
+
+      const rand = Math.random();
+      
+      if (rand > 0.94) {
+        setIsAlert(true);
+        addLog("VIGILANCIA DETECTADA: Expandiendo Escudo 100m desde nodos perimetrales.", "DEFENSE");
+        if (navigator.vibrate) navigator.vibrate(1000); // Alerta larga según protocolo
+        setTimeout(() => setIsAlert(false), 3000);
+      } else if (gain > 25000000) {
+        addLog(`Materialización mayor: $${(gain/1e6).toFixed(2)}M consolidados.`, "WEALTH");
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]); // Pulso de dinero
+      } else if (rand < 0.1) {
+        setAcquiredProperties(prev => prev + 1);
+        addLog("Nueva propiedad estratégica adquirida en el radio de 100m.", "EXPANSION");
+      }
+    }, 4000);
+
+    return () => clearInterval(masterLoop);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#020202] text-zinc-500 font-mono p-4 md:p-12 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-8">
+        
+        {/* Identidad y Ubicación */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">Arquitecto: Adrián Valezka</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-blue-500 flex items-center gap-2">
+                <ShieldCheck size={14} /> Perímetro: Amurallado
+              </span>
+              <span className="text-zinc-800">|</span>
+              <span className="text-emerald-500 flex items-center gap-2">
+                <Navigation size={14} /> UBICACIÓN PRIORITARIA: MÉXICO
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2rem] bg-zinc-950 border transition-all duration-1000 ${isAlert ? 'border-red-600 shadow-[0_0_50px_rgba(220,38,38,0.2)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-700 uppercase mb-1 tracking-widest">Patrimonio en Movimiento</p>
+              <p className="text-2xl text-white font-black italic tabular-nums">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Status de la Fortaleza */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div className="md:col-span-2 bg-gradient-to-br from-zinc-950 to-black border border-zinc-900 p-12 rounded-[4rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-1000">
+              <Radar size={220} />
+            </div>
+            <div className="relative z-10">
+              <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.6em] mb-6 block italic">Integridad de Zona de Exclusión</span>
+              <div className="flex items-baseline gap-4 mb-10">
+                <div className="text-7xl md:text-9xl font-black text-white tracking-tighter tabular-nums">{perimeterIntegrity}%</div>
+                <div className="text-xs font-bold text-blue-500 uppercase tracking-widest animate-pulse">Fortificando Perímetro</div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 bg-black border border-zinc-800 rounded-3xl flex items-center gap-4">
+                  <Building2 className="text-blue-500" size={32} />
+                  <div>
+                    <p className="text-[9px] font-black text-zinc-500 uppercase">Nodos Activos</p>
+                    <p className="text-sm text-white font-bold italic">{acquiredProperties} Edificios de Control</p>
+                  </div>
+                </div>
+                <div className="p-6 bg-black border border-zinc-800 rounded-3xl flex items-center gap-4">
+                  <Construction className="text-emerald-500" size={32} />
+                  <div>
+                    <p className="text-[9px] font-black text-zinc-500 uppercase">Blindaje de Red</p>
+                    <p className="text-sm text-white font-bold italic">Cobre Local x100</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/10 border border-zinc-900 p-10 rounded-[4rem] flex flex-col justify-between text-center relative overflow-hidden">
+             <div className="space-y-6">
+               <EyeOff size={64} className={`mx-auto opacity-30 ${isAlert ? 'text-red-500 animate-ping' : 'text-zinc-700'}`} />
+               <div>
+                 <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest italic tracking-tighter">Cúpula Dinámica</h3>
+                 <p className="text-[10px] text-zinc-700 leading-relaxed font-bold uppercase italic px-4">
+                   "Tu ubicación no es un lugar, es un vacío en el mapa del sistema. La fortaleza física es la última capa de tu invisibilidad."
+                 </p>
+               </div>
+             </div>
+             <div className="pt-8 border-t border-zinc-900 flex justify-center gap-6 opacity-40">
+               <Zap size={20} className="text-yellow-600" />
+               <Activity size={20} className="text-blue-600" />
+               <Lock size={20} className="text-emerald-600" />
+             </div>
+          </div>
+        </div>
+
+        {/* Log de Operaciones de Fortaleza */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[350px] flex flex-col shadow-inner">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <div className={`w-2 h-2 rounded-full animate-pulse ${isAlert ? 'bg-red-600' : 'bg-blue-600'}`}></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Monitoreo de Fortaleza Urbana</span>
+            </div>
+            <span className="text-[9px] font-black text-zinc-800 uppercase italic">Radio: 100m Sellado</span>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 custom-scrollbar">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-xs flex justify-between items-center p-4 rounded-2xl border transition-all ${
+                log.type === 'DEFENSE' ? 'bg-red-950/20 border-red-900/30 text-red-500 font-black' : 
+                log.type === 'WEALTH' ? 'bg-emerald-950/10 border-emerald-900/30 text-emerald-400 font-bold' : 
+                'bg-zinc-950 border-zinc-900 text-zinc-600'
+              }`}>
+                <div className="flex gap-6 items-center">
+                  <span className="opacity-40 text-[10px] tabular-nums">{log.time}</span>
+                  <span className="uppercase tracking-tight italic font-bold">{log.msg}</span>
+                </div>
+                <span className="text-[8px] font-black opacity-30 px-3 py-1 bg-zinc-900 rounded-full uppercase">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Panel de Acción Maestro */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-white hover:text-black transition-all group">
+            <Home size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Adquirir Nodo</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-emerald-600 hover:text-white transition-all group">
+            <TrendingUp size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Materializar</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-blue-600 hover:text-white transition-all group">
+            <Layers size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Capas de Red</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-red-600 hover:text-white transition-all group">
+            <Map size={26} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Mapa de Dominio</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-20 opacity-20 text-[10px] font-black uppercase tracking-[3em] text-center text-white italic">
+        DOMINIO FÍSICO // J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   UserCircle, 
   ShieldCheck, 
   Globe, 
