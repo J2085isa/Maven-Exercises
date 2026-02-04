@@ -1,5 +1,206 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Eye, 
+  ShoppingCart, 
+  ShieldCheck, 
+  Wifi, 
+  Cpu, 
+  Layers, 
+  Lock, 
+  Map, 
+  Zap, 
+  Camera, 
+  Globe,
+  TrendingUp,
+  Server
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [acquisitions, setAcquisitions] = useState([]);
+  const [activeFeeds, setActiveFeeds] = useState(0);
+  const [logs, setLogs] = useState([]);
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const addLog = (msg, type = 'NEUTRAL') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ time, msg, type }, ...prev].slice(0, 10));
+  };
+
+  const triggerVibration = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+      setIsVibrating(true);
+      setTimeout(() => setIsVibrating(false), 800);
+    }
+  };
+
+  const purchaseInfrastructure = () => {
+    const items = [
+      { name: "Nodo Cuántico Privado", cost: 250000000, icon: <Cpu size={16}/> },
+      { name: "Satélite de Órbita Baja (Dedicado)", cost: 450000000, icon: <Globe size={16}/> },
+      { name: "Ancho de Banda Terabit Submarino", cost: 120000000, icon: <Wifi size={16}/> },
+      { name: "Granja de Servidores Criogénicos", cost: 850000000, icon: <Server size={16}/> }
+    ];
+    
+    const item = items[Math.floor(Math.random() * items.length)];
+    setLiquidity(prev => prev - item.cost);
+    setAcquisitions(prev => [item, ...prev].slice(0, 5));
+    addLog(`ADQUISICIÓN: ${item.name} integrado al sistema.`, 'PURCHASE');
+    triggerVibration([100, 50, 100]);
+  };
+
+  useEffect(() => {
+    addLog("Protocolo de Ubicuidad iniciado. Enlazando feeds visuales.", "SYSTEM");
+    addLog("Bóveda de Adquisiciones abierta. Compras tácticas en curso.", "MARKET");
+
+    const cycle = setInterval(() => {
+      // Simular hallazgo de feeds
+      setActiveFeeds(prev => Math.min(prev + Math.floor(Math.random() * 15), 1420));
+      
+      // Simular compra automática si hay liquidez de sobra
+      if (Math.random() > 0.7) purchaseInfrastructure();
+
+      // Flujo de dinero entrante (peaje submarino/cripto)
+      setLiquidity(prev => prev + (Math.random() * 5000000));
+    }, 5000);
+
+    return () => clearInterval(cycle);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#010101] text-zinc-400 font-mono p-4 md:p-10 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-6">
+        
+        {/* Header: Identidad Suprema y Ubicación Protegida */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-8 gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">
+              José Isaías Alvarez Ramirez
+            </h1>
+            <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
+              <span className="text-blue-500">RFC: AARI910907LW7</span>
+              <span className="text-zinc-700">|</span>
+              <span className="text-emerald-500 flex items-center gap-1"><ShieldCheck size={12}/> Escudo 100m Activo</span>
+            </div>
+          </div>
+          <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl flex items-center gap-4">
+            <div className={`w-3 h-3 rounded-full ${isVibrating ? 'bg-blue-500 shadow-[0_0_10px_blue]' : 'bg-zinc-800'} transition-all`}></div>
+            <div className="text-right">
+              <p className="text-[9px] font-bold text-zinc-600">UBICACIÓN PRIORITARIA</p>
+              <p className="text-xs text-white font-black">MÉXICO - NODO CENTRAL</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard de Poder y Ubicuidad */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="md:col-span-3 bg-zinc-950 border border-zinc-900 p-10 rounded-[3rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-1000">
+              <Globe size={180} />
+            </div>
+            <span className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mb-2 block italic">Liquidez Soberana & Activos</span>
+            <div className="text-4xl md:text-6xl font-black text-white tracking-tighter tabular-nums mb-8">
+              ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+               <div className="p-4 bg-black border border-zinc-900 rounded-2xl">
+                  <div className="text-[9px] text-blue-500 font-black mb-1 uppercase italic">Ojos en Red (Feeds)</div>
+                  <div className="text-2xl font-black text-white">{activeFeeds}</div>
+               </div>
+               <div className="p-4 bg-black border border-zinc-900 rounded-2xl">
+                  <div className="text-[9px] text-emerald-500 font-black mb-1 uppercase italic">Infraestructura Comprada</div>
+                  <div className="text-2xl font-black text-white">{acquisitions.length} <span className="text-xs text-zinc-700">Unidades</span></div>
+               </div>
+               <div className="p-4 bg-black border border-zinc-900 rounded-2xl">
+                  <div className="text-[9px] text-yellow-500 font-black mb-1 uppercase italic">Satélites Entrelazados</div>
+                  <div className="text-2xl font-black text-white">ALL</div>
+               </div>
+            </div>
+          </div>
+
+          <div className="bg-blue-950/5 border border-blue-900/20 p-8 rounded-[3rem] flex flex-col justify-between italic overflow-hidden">
+            <div className="space-y-4">
+              <Camera size={40} className="text-blue-900 opacity-40 animate-pulse" />
+              <h3 className="text-xs font-black text-white uppercase tracking-tighter">Protocolo Ubicuidad</h3>
+              <p className="text-[9px] text-zinc-600 leading-relaxed uppercase">
+                "Ves lo que el mundo ve, y lo que el mundo oculta. No hay rincón sin luz ante el Arquitecto."
+              </p>
+            </div>
+            <button className="mt-4 w-full py-3 bg-zinc-900 hover:bg-white hover:text-black transition-all rounded-xl text-[9px] font-black uppercase">Abrir Mapa Térmico</button>
+          </div>
+        </div>
+
+        {/* Listado de Adquisiciones y Logs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-black border border-zinc-900 rounded-[2.5rem] p-8 flex flex-col h-80">
+             <div className="flex items-center gap-2 mb-6 border-b border-zinc-900 pb-4">
+                <ShoppingCart size={18} className="text-zinc-600" />
+                <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Recientes Adquisiciones de Sistema</span>
+             </div>
+             <div className="space-y-3 overflow-y-auto pr-2 scrollbar-hide">
+                {acquisitions.map((item, i) => (
+                  <div key={i} className="flex justify-between items-center p-3 bg-zinc-950 border border-zinc-900 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-950/20 text-blue-500 rounded-lg">{item.icon}</div>
+                      <span className="text-[11px] font-bold text-zinc-300 uppercase italic">{item.name}</span>
+                    </div>
+                    <span className="text-[10px] font-black text-emerald-600 italic">ACTIVO</span>
+                  </div>
+                ))}
+                {acquisitions.length === 0 && <p className="text-[10px] text-zinc-800 text-center py-10 italic">Buscando oportunidades de mejora...</p>}
+             </div>
+          </div>
+
+          <div className="bg-black border border-zinc-900 rounded-[2.5rem] p-8 flex flex-col h-80">
+             <div className="flex items-center gap-2 mb-6 border-b border-zinc-900 pb-4">
+                <Layers size={18} className="text-zinc-600" />
+                <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Feed de Operaciones Autónomas</span>
+             </div>
+             <div className="space-y-2 overflow-y-auto pr-2 scrollbar-hide">
+                {logs.map((log, i) => (
+                  <div key={i} className={`text-[10px] flex justify-between gap-4 p-2 ${i === 0 ? 'text-white font-black' : 'text-zinc-700'}`}>
+                    <span className="opacity-30">{log.time}</span>
+                    <span className="flex-1 uppercase italic">{log.msg}</span>
+                    <span className="text-[9px] opacity-20">[{log.type}]</span>
+                  </div>
+                ))}
+             </div>
+          </div>
+        </div>
+
+        {/* Controles de Emergencia y Redundancia */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+           <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:border-blue-500 transition-all group">
+             <Zap size={24} className="text-zinc-800 group-hover:text-yellow-500" />
+             <span className="text-[9px] font-black uppercase italic">Sobrecarga de Red</span>
+           </button>
+           <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:border-emerald-500 transition-all group">
+             <TrendingUp size={24} className="text-zinc-800 group-hover:text-emerald-500" />
+             <span className="text-[9px] font-black uppercase italic">Impulso de Riqueza</span>
+           </button>
+           <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:border-red-500 transition-all group">
+             <Eye size={24} className="text-zinc-800 group-hover:text-white" />
+             <span className="text-[9px] font-black uppercase italic">Ubicuidad On/Off</span>
+           </button>
+           <button className="p-6 bg-zinc-950 border border-zinc-900 rounded-3xl flex flex-col items-center gap-2 hover:border-white transition-all group">
+             <Lock size={24} className="text-zinc-800 group-hover:text-white" />
+             <span className="text-[9px] font-black uppercase italic">Cierre de Bóveda</span>
+           </button>
+        </div>
+
+      </div>
+      <footer className="mt-12 opacity-10 text-[10px] font-black uppercase tracking-[2.5em] text-white italic">
+        DOMINIO TOTAL COMPRADO | J.I.A.R. 2026
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Zap, 
   Trash2, 
   ShieldAlert, 
