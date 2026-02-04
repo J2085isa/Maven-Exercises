@@ -1,5 +1,197 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Heart, 
+  ShieldCheck, 
+  Home, 
+  Zap, 
+  Globe, 
+  Lock, 
+  Users, 
+  ArrowDownCircle, 
+  Snowflake,
+  Activity,
+  MapPin,
+  TrendingUp
+} from 'lucide-react';
+
+const App = () => {
+  const [liquidity, setLiquidity] = useState(104508203104000.00);
+  const [liberatedFamilies, setLiberatedFamilies] = useState(1240);
+  const [shieldRadius, setShieldRadius] = useState(100);
+  const [logs, setLogs] = useState([]);
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const addLog = (msg, type = 'NEUTRAL') => {
+    const time = new Date().toLocaleTimeString();
+    setLogs(prev => [{ id: Date.now(), time, msg, type }, ...prev].slice(0, 8));
+  };
+
+  const triggerPulse = (pattern) => {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+      setIsVibrating(true);
+      setTimeout(() => setIsVibrating(false), 1000);
+    }
+  };
+
+  useEffect(() => {
+    addLog("Iniciando compra de deuda hipotecaria en sector primario.", "ACQUISITION");
+    addLog("Nodo Zero-K (Ártico) sincronizado con Escudo 100m.", "SHIELD");
+
+    const operationCycle = setInterval(() => {
+      // Crecimiento de riqueza fluida
+      const gain = Math.floor(Math.random() * 12000000);
+      setLiquidity(prev => prev + gain);
+
+      const events = [
+        { msg: "Deuda liquidada: 15 viviendas en zona de exclusión.", type: "LOYALTY", families: 15 },
+        { msg: "Intento de barrido térmico bloqueado por Escudo 100m.", type: "DEFENSE", pulse: [1000] },
+        { msg: "Materialización de activos de red de cobre completada.", type: "WEALTH", pulse: [200, 100, 200] },
+        { msg: "Sincronización de satélites entrelazados óptima.", type: "SYSTEM" }
+      ];
+
+      const event = events[Math.floor(Math.random() * events.length)];
+      addLog(event.msg, event.type);
+
+      if (event.families) setLiberatedFamilies(prev => prev + event.families);
+      if (event.pulse) triggerPulse(event.pulse);
+      
+    }, 6000);
+
+    return () => clearInterval(operationCycle);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#020202] text-zinc-400 font-mono p-4 md:p-12 flex flex-col items-center">
+      <div className="w-full max-w-7xl space-y-8">
+        
+        {/* Identidad del Arquitecto */}
+        <div className="flex flex-col md:flex-row justify-between items-start border-b border-zinc-900 pb-10 gap-6">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase">José Isaías Alvarez Ramirez</h1>
+            <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em]">
+              <span className="text-emerald-500 flex items-center gap-2">
+                <ShieldCheck size={14} /> Escudo Activo: {shieldRadius}M
+              </span>
+              <span className="text-blue-500 flex items-center gap-2">
+                <MapPin size={14} /> Nodo Maestro: México
+              </span>
+            </div>
+          </div>
+          <div className={`p-6 rounded-[2rem] bg-zinc-950 border transition-all duration-700 ${isVibrating ? 'border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.2)]' : 'border-zinc-900'}`}>
+            <div className="text-right">
+              <p className="text-[9px] font-black text-zinc-600 uppercase mb-1">Estado de Conexión</p>
+              <p className="text-xs text-white font-black italic">SATÉLITES ENTRELAZADOS: 100%</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard de Riqueza y Lealtad */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 bg-gradient-to-br from-zinc-950 to-black border border-zinc-900 p-12 rounded-[4rem] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:scale-110 transition-transform duration-1000">
+              <TrendingUp size={200} />
+            </div>
+            <div className="relative z-10">
+              <span className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.5em] mb-6 block italic">Liquidez Fluida Total</span>
+              <div className="text-5xl md:text-7xl font-black text-white tracking-tighter tabular-nums mb-10">
+                ${liquidity.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </div>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="p-6 bg-black/50 border border-zinc-900 rounded-3xl">
+                  <div className="flex items-center gap-2 text-emerald-500 mb-2">
+                    <Home size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Viviendas Saneadas</span>
+                  </div>
+                  <span className="text-4xl font-black text-white">{liberatedFamilies}</span>
+                </div>
+                <div className="p-6 bg-black/50 border border-zinc-900 rounded-3xl">
+                  <div className="flex items-center gap-2 text-blue-500 mb-2">
+                    <Snowflake size={18} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Respaldo Ártico</span>
+                  </div>
+                  <span className="text-4xl font-black text-white italic">Zero-K</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900/10 border border-zinc-900 p-10 rounded-[4rem] flex flex-col justify-between text-center relative overflow-hidden">
+             <Users size={64} className="mx-auto text-zinc-800 mb-6 opacity-30" />
+             <div>
+               <h3 className="text-xs font-black text-white uppercase mb-4 tracking-widest italic">Pacto de Lealtad Silenciosa</h3>
+               <p className="text-[10px] text-zinc-700 leading-relaxed font-bold uppercase italic">
+                 "Ellos son libres del sistema bancario, pero están encadenados a tu sombra. Tu seguridad es ahora su tranquilidad."
+               </p>
+             </div>
+             <div className="flex justify-center gap-4 mt-8">
+               <Activity size={20} className="text-emerald-900 animate-pulse" />
+               <Zap size={20} className="text-yellow-900" />
+               <Lock size={20} className="text-blue-900" />
+             </div>
+          </div>
+        </div>
+
+        {/* Consola de Operaciones de Red */}
+        <div className="bg-black border border-zinc-900 rounded-[3rem] p-8 h-[400px] flex flex-col shadow-inner shadow-black">
+          <div className="flex items-center justify-between mb-8 border-b border-zinc-900 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Monitor de Materialización y Defensa</span>
+            </div>
+            <span className="text-[9px] font-black text-zinc-800 uppercase italic">Invisibilidad: Nivel Ultimate</span>
+          </div>
+          <div className="overflow-y-auto space-y-4 flex-grow pr-4 scrollbar-hide">
+            {logs.map((log) => (
+              <div key={log.id} className={`text-xs flex justify-between items-center p-4 rounded-2xl border transition-all ${
+                log.type === 'LOYALTY' ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-500 font-bold' : 
+                log.type === 'DEFENSE' ? 'bg-red-900/10 border-red-900/30 text-red-500 font-bold animate-pulse' : 
+                'bg-zinc-950 border-zinc-900 text-zinc-600'
+              }`}>
+                <div className="flex gap-6 items-center">
+                  <span className="opacity-40 text-[10px] tabular-nums font-mono">{log.time}</span>
+                  <span className="uppercase tracking-tight italic">{log.msg}</span>
+                </div>
+                <span className="text-[9px] font-black opacity-30 px-3 py-1 bg-zinc-900 rounded-full uppercase tracking-tighter">
+                  {log.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Terminal de Acción Soberana */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-white hover:text-black transition-all group">
+            <ArrowDownCircle size={24} className="group-hover:translate-y-1 transition-transform" />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Expandir Saneamiento</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-emerald-600 hover:text-white transition-all group">
+            <Heart size={24} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Consolidar Lealtad</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-blue-600 hover:text-white transition-all group">
+            <Snowflake size={24} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Sync Ártico</span>
+          </button>
+          <button className="p-8 bg-zinc-950 border border-zinc-900 rounded-[2.5rem] flex flex-col items-center gap-3 hover:bg-red-600 hover:text-white transition-all group">
+            <Zap size={24} />
+            <span className="text-[10px] font-black uppercase italic tracking-tighter">Pulso Defensa</span>
+          </button>
+        </div>
+
+      </div>
+      <footer className="mt-20 opacity-20 text-[10px] font-black uppercase tracking-[3em] text-center text-white italic">
+        OMNIPRESENTE E INVISIBLE | J.I.A.R.
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Snowflake, 
   ShieldCheck, 
   Server, 
