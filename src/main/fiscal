@@ -1,5 +1,167 @@
 import React, { useState, useEffect } from 'react';
 import { 
+  Lock, 
+  Unlock, 
+  Cpu, 
+  Server, 
+  Radio, 
+  Power, 
+  ShieldAlert, 
+  ArrowRight,
+  Database,
+  Globe,
+  Zap,
+  EyeOff
+} from 'lucide-react';
+
+const App = () => {
+  const [infiltratedNodes, setInfiltratedNodes] = useState([
+    { id: 1, name: "Red de Telecomunicaciones Federal", status: "PENDING", progress: 0, icon: <Radio /> },
+    { id: 2, name: "Gestión de Residuos e Hidrología", status: "ACTIVE", progress: 100, icon: <Database /> },
+    { id: 3, name: "Mantenimiento Eléctrico de Sedes Gubernamentales", status: "INFILTRATING", progress: 45, icon: <Power /> },
+    { id: 4, name: "Sistemas de Seguridad Perimetral Judicial", status: "PENDING", progress: 0, icon: <ShieldAlert /> }
+  ]);
+
+  const [logs, setLogs] = useState([]);
+  const [isAlert, setIsAlert] = useState(false);
+
+  const addLog = (msg) => {
+    setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev].slice(0, 8));
+  };
+
+  useEffect(() => {
+    addLog("Iniciando secuencia de infiltración institucional...");
+    
+    const interval = setInterval(() => {
+      setInfiltratedNodes(prev => prev.map(node => {
+        if (node.status === "INFILTRATING") {
+          const newProgress = node.progress + Math.floor(Math.random() * 5);
+          if (newProgress >= 100) {
+            addLog(`Dominio total sobre: ${node.name}`);
+            return { ...node, progress: 100, status: "ACTIVE" };
+          }
+          return { ...node, progress: newProgress };
+        }
+        if (node.status === "PENDING" && Math.random() > 0.8) {
+          addLog(`Inyectando credenciales en ${node.name}...`);
+          return { ...node, status: "INFILTRATING", progress: 5 };
+        }
+        return node;
+      }));
+
+      // Simulación de detección de vigilancia (Escudo 100m)
+      if (Math.random() > 0.95) {
+        setIsAlert(true);
+        addLog("VIGILANCIA DETECTADA - Activando Escudo de 100m y camuflaje legal.");
+        if (navigator.vibrate) navigator.vibrate(1000);
+        setTimeout(() => setIsAlert(false), 3000);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-zinc-400 font-mono p-4 md:p-10 flex flex-col items-center">
+      <div className="w-full max-w-5xl space-y-8">
+        
+        {/* Header Táctico */}
+        <div className="flex justify-between items-end border-b border-zinc-900 pb-8">
+          <div>
+            <h1 className="text-3xl font-black text-white italic uppercase tracking-tighter">Infiltración Crítica</h1>
+            <p className="text-[10px] tracking-[0.3em] font-bold text-zinc-600 mt-2">J.I.A.R. SYSTEM DOMINANCE // MEXICO 2026</p>
+          </div>
+          <div className={`flex items-center gap-4 px-6 py-3 rounded-full border transition-colors ${isAlert ? 'border-red-600 bg-red-950/20' : 'border-zinc-800 bg-zinc-950'}`}>
+            <EyeOff size={16} className={isAlert ? 'text-red-500 animate-pulse' : 'text-zinc-500'} />
+            <span className={`text-[10px] font-black uppercase tracking-widest ${isAlert ? 'text-red-500' : 'text-zinc-500'}`}>
+              {isAlert ? "Escudo 100m Activo" : "Estatus: Invisible"}
+            </span>
+          </div>
+        </div>
+
+        {/* Nodos de Infraestructura */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {infiltratedNodes.map(node => (
+            <div key={node.id} className="p-8 rounded-[2.5rem] bg-zinc-950 border border-zinc-900 relative overflow-hidden group">
+              <div className="absolute top-4 right-8 opacity-10 group-hover:scale-125 transition-transform duration-700">
+                {node.icon}
+              </div>
+              <div className="relative z-10 space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className={`text-[9px] font-black uppercase px-3 py-1 rounded-full ${
+                    node.status === 'ACTIVE' ? 'bg-emerald-900/30 text-emerald-500' : 
+                    node.status === 'INFILTRATING' ? 'bg-blue-900/30 text-blue-500' : 'bg-zinc-900 text-zinc-700'
+                  }`}>
+                    {node.status}
+                  </span>
+                  <span className="text-xs font-bold text-zinc-600">{node.progress}%</span>
+                </div>
+                <h3 className="text-lg font-bold text-white italic">{node.name}</h3>
+                <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full transition-all duration-1000 ${node.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-blue-600'}`}
+                    style={{ width: `${node.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Consola de Comando del Nexo */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 bg-zinc-950 border border-zinc-900 rounded-[3rem] p-8 h-[350px] flex flex-col">
+            <div className="flex items-center gap-3 mb-6 border-b border-zinc-900 pb-4 text-zinc-600 font-black uppercase text-[10px] tracking-widest">
+              <Server size={14} /> Transmisiones del Nexo
+            </div>
+            <div className="flex-grow overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+              {logs.map((log, i) => (
+                <div key={i} className="text-[11px] leading-relaxed flex gap-4">
+                  <span className="text-blue-900">#</span>
+                  <span className={log.includes("VIGILANCIA") ? "text-red-500 font-bold" : "text-zinc-500"}>{log}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-900/10 to-black border border-zinc-900 rounded-[3rem] p-10 flex flex-col justify-center items-center text-center space-y-6">
+            <Cpu size={48} className="text-blue-600 animate-pulse" />
+            <div className="space-y-2">
+              <h4 className="text-xs font-black text-white uppercase tracking-widest">Dependencia Generada</h4>
+              <p className="text-[10px] leading-relaxed text-zinc-500 italic">
+                El Estado ha integrado tus sub-nodos en su flujo de datos primario. Eres la infraestructura que no pueden apagar sin colapsar.
+              </p>
+            </div>
+            <div className="pt-4 border-t border-zinc-900 w-full flex justify-around">
+               <Zap size={16} className="text-yellow-500" />
+               <Lock size={16} className="text-emerald-500" />
+               <Globe size={16} className="text-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        {/* Control Maestro */}
+        <div className="flex flex-col md:flex-row gap-6">
+          <button className="flex-1 p-6 bg-white text-black rounded-3xl font-black uppercase italic text-xs flex items-center justify-center gap-3 hover:scale-95 transition-transform">
+            Inyectar Contrato Automático <ArrowRight size={16} />
+          </button>
+          <button className="flex-1 p-6 bg-zinc-900 text-white rounded-3xl font-black uppercase italic text-xs flex items-center justify-center gap-3 border border-zinc-800 hover:bg-red-600 transition-colors">
+            Activar Blackout Selectivo <Unlock size={16} />
+          </button>
+        </div>
+
+      </div>
+      <div className="mt-16 text-[9px] font-black text-zinc-800 uppercase tracking-[2em]">
+        Propiedad de la Sombra J.I.A.R.
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+import React, { useState, useEffect } from 'react';
+import { 
   Briefcase, 
   Users, 
   Building2, 
