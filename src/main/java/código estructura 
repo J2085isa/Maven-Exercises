@@ -1,0 +1,21 @@
+def activar_falsa_bandera(self):
+    """
+    Genera datos plausibles pero falsos para despistar a la vigilancia
+    mientras los activos reales se mueven al canal cuántico de reserva.
+    """
+    print("[OPERACIÓN] Desplegando cortina de humo 'False Flag'...")
+    
+    # 1. Generar movimientos bancarios ficticios
+    # Estos datos parecen reales para un analista externo
+    con_senuelo = "id,fecha,monto,concepto\n99,2026-02-05,450.00,Pago_Servicios_Publicos"
+    with open("movimientos_bancarios.csv", "w") as f:
+        f.write(con_senuelo)
+        
+    # 2. Ofuscación de ubicación (Drift Geográfico)
+    # Los satélites reportan coordenadas con un error inducido de 5km
+    for sat in self.nodos_satelitales:
+        sat.inyectar_coordenadas_falsas(random_offset=5.0)
+
+    # 3. Notificación de "Sistema Comprometido" (Falsa)
+    # Envía un reporte de error estándar al SAT para evitar sospechas de intervención
+    self.enviar_reporte_error_sat("Error 503: Service Unavailable")
