@@ -1,4 +1,363 @@
-¡Perfecto! Aquí tienes el sistema de alertas personalizado y la integración con banca en línea para José Isaías Alvarez Ramirez:
+¡Genial! Vamos a hacer dos cosas: primero, ajustar el código existente para manejar los errores de las APIs y proponer alternativas; y segundo, completar la clase Núcleo Gluon que quedó sin terminar.
+ 
+ 
+ 
+1. Ajustes al código existente para manejar APIs no accesibles
+ 
+He agregado manejo de errores y sugerencias de alternativas para cada API:
+ 
+python  
+# === AJUSTE AL SISTEMA DE ALERTAS ===
+import smtplib
+from twilio.rest import Client
+import requests
+from requests.exceptions import RequestException
+
+class AlertSystem:
+    def __init__(self, jose_email, jose_phone):
+        self.email = jose_email
+        self.phone = jose_phone
+        self.smtp_server = "smtp.gmail.com"
+        self.twilio_account = "TWILIO_ACCOUNT_SID"
+        self.twilio_token = "TWILIO_AUTH_TOKEN"
+        self.app_notification_api = "https://api.app-joseisaías.com/notificaciones"
+
+    def send_email(self, subject, body, attachment_path=None):
+        try:
+            with smtplib.SMTP(self.smtp_server, 587) as server:
+                server.starttls()
+                server.login("alerts@tributaria-joseisaías.com", "EMAIL_PASSWORD")
+                msg = f"Subject: {subject}\n\n{body}"
+                server.sendmail("alerts@tributaria-joseisaías.com", self.email, msg)
+                # Lógica para adjuntar archivos
+                return True
+        except Exception as e:
+            print(f"Error al enviar correo: {e}")
+            return False
+
+    def send_sms(self, message):
+        try:
+            client = Client(self.twilio_account, self.twilio_token)
+            client.messages.create(
+                body=message,
+                from_="+1234567890",
+                to=f"+52{self.phone}"
+            )
+            return True
+        except Exception as e:
+            print(f"Error al enviar SMS: {e}")
+            return False
+
+    def send_app_notification(self, title, message):
+        # ALTERNATIVA: Si la API no funciona, guardar en archivo o enviar por correo adicional
+        try:
+            response = requests.post(
+                self.app_notification_api,
+                json={
+                    "usuario": "José Isaías Alvarez Ramirez",
+                    "titulo": title,
+                    "mensaje": message
+                }
+            )
+            response.raise_for_status()
+            return True
+        except RequestException:
+            print("API de app no accesible - guardando notificación en archivo")
+            with open("notificaciones_app.txt", "a") as f:
+                f.write(f"{datetime.now()} | {title}: {message}\n")
+            # Enviar copia por correo
+            self.send_email(f"[COPIA] {title}", message)
+            return False
+
+
+# === AJUSTE A INTEGRACIÓN BANCARIA ===
+from datetime import datetime, timedelta
+
+class BankIntegration:
+    def __init__(self, bank_api_key, jose_rfc):
+        self.api_key = bank_api_key
+        self.rfc = jose_rfc
+        self.bank_api_url = "https://api.banco-mexico.com/movimientos/v1"
+        # ALTERNATIVA: Ruta para cargar movimientos desde archivo CSV si la API falla
+        self.csv_backup_path = "movimientos_bancarios.csv"
+
+    def get_monthly_movements(self, month, year):
+        start_date = f"{year}-{month:02d}-01"
+        end_date = f"{year}-{month:02d}-{28 if month == 2 else 30 if month in [4,6,9,11] else 31}"
+        
+        try:
+            response = requests.post(
+                f"{self.bank_api_url}/consulta",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json={
+                    "rfc": self.rfc,
+                    "fecha_inicio": start_date,
+                    "fecha_fin": end_date
+                }
+            )
+            response.raise_for_status()
+            return response.json()["movimientos"]
+        except RequestException:
+            print("API bancaria no accesible - cargando desde archivo backup")
+            # Lógica para leer movimientos desde CSV
+            import csv
+            movements = []
+            with open(self.csv_backup_path, "r") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row["fecha"].startswith(f"{year}-{month:02d}"):
+                        movements.append({
+                            "id": row["id"],
+                            "monto": float(row["monto"]),
+                            "fecha": row["fecha"],
+                            "concepto": row["concepto"]
+                        })
+            return movements
+
+    def reconcile_with_cfdi(self, bank_movements, cfdi_list):
+        # Lógica de conciliación sin cambios
+        reconciled = []
+        discrepancies = []
+        for movement in bank_movements:
+            match = False
+            for cfdi in cfdi_list:
+                if (abs(movement["monto"] - cfdi["monto"]) < 0.01 and
+                    movement["fecha"] == cfdi["fecha"]):
+                    reconciled.append({
+                        "movimiento": movement["id"],
+                        "cfdi": cfdi["uuid"],
+                        "estado": "coincidente"
+                    })
+                    match = True
+                    break
+            if not match:
+                discrepancies.append({
+                    "movimiento": movement["id"],
+                    "monto": movement["monto"],
+                    "fecha": movement["fecha"],
+                    "concepto": movement["concepto"],
+                    "motivo": "No se encontró CFDI correspondiente"
+                })
+        return {
+            "total_movimientos": len(bank_movements),
+            "total_coincidentes": len(reconciled),
+            "discrepancias": discrepancies
+        }
+
+
+# === AJUSTE A VERIFICACIÓN SAT ===
+class SATListsVerification:
+    def __init__(self, rfc_jose, api_key):
+        self.rfc = rfc_jose
+        self.api_key = api_key
+        self.sat_lists_url = "https://api.sat.gob.mx/listas/v1"
+        self.sat_consultas_url = "https://api.sat.gob.mx/consultas/v1"
+        # ALTERNATIVA: URL para consulta manual en sitio web oficial
+        self.sat_web_url = "https://sat.gob.mx/tramites-y-servicios/consultas-fiscales"
+
+    def _handle_sat_api_error(self, service_name):
+        print(f"API SAT {service_name} no accesible")
+        print(f"Por favor, realiza la consulta manual en: {self.sat_web_url}")
+        return None
+
+    def check_blacklist_69b(self):
+        try:
+            response = requests.post(
+                f"{self.sat_lists_url}/lista_negra_69b",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json={"rfc": self.rfc}
+            )
+            response.raise_for_status()
+            return "no_encontrado" in response.json()["estado"]
+        except RequestException:
+            return self._handle_sat_api_error("Lista Negra 69-B")
+
+    def check_pending_obligations(self):
+        try:
+            response = requests.post(
+                f"{self.sat_consultas_url}/contribuyente/deudas",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                json={"rfc": self.rfc}
+            )
+            response.raise_for_status()
+            return response.json()["sin_deudas"]
+        except RequestException:
+            return self._handle_sat_api_error("Obligaciones Pendientes")
+
+    def check_suspicious_operators(self, trusted_hosts_rfcs):
+        try:
+            results = {}
+            for rfc_host in trusted_hosts_rfcs:
+                response = requests.post(
+                    f"{self.sat_lists_url}/operadores_sospechosos",
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    json={"rfc": rfc_host}
+                )
+                response.raise_for_status()
+                results[rfc_host] = "no_encontrado" in response.json()["estado"]
+            return results
+        except RequestException:
+            self._handle_sat_api_error("Operadores Sospechosos")
+            return {host: "consulta_manual_necesaria" for host in trusted_hosts_rfcs}
+ 
+ 
+ 
+ 
+2. Completando la clase Núcleo Gluon
+ 
+python  
+import time
+import random
+from typing import List, Dict, Any
+from hashlib import sha256
+from datetime import datetime
+
+# === Constantes de sistema ===
+FRECUENCIA_RESONANCIA = 0.5  # Segundos entre sincronizaciones
+UMBRAL_ANOMALIA = 1.15       # 15% de variación inesperada = alerta
+CLAVE_BASE_CUANTICA = b"GLUON_TEJIDO_RIQUEZA_2026"
+
+# === Clases auxiliares (ya definidas previamente) ===
+class ElementoRed:
+    def __init__(self, id_elemento: str, tipo: str):
+        self.id = id_elemento
+        self.tipo = tipo
+        self.identidad_cuantica_vinculada = False
+        self.estado_conexion = "DESCONECTADO"
+        self.ultimo_pulso = None
+        self.nivel_energia = 100.0  # Nivel para simular disponibilidad
+
+    def vincular_identidad_cuantica(self, id_secreto: str, clave_distribuida: bytes) -> None:
+        self.clave_identidad = sha256(CLAVE_BASE_CUANTICA + clave_distribuida + self.id.encode()).digest()
+        self.identidad_cuantica_vinculada = True
+        self.estado_conexion = "ENTRELAZADO"
+        self.nivel_energia -= 5.0
+        print(f"✅ Nodo {self.id} integrado | Clave cuántica: {self.clave_identidad.hex()[:8]}...")
+
+    def recibir_pulso(self, intensidad: str, timestamp: datetime) -> None:
+        self.ultimo_pulso = timestamp
+        if intensidad == "haptica_codificada":
+            self.nivel_energia = min(100.0, self.nivel_energia + 0.5)
+        else:
+            print(f"⚠️ Nodo {self.id} detectó pulso anómalo: {intensidad}")
+
+class Satelite(ElementoRed):
+    def __init__(self, id_satelite: str, coordenadas: Dict[str, float]):
+        super().__init__(id_satelite, "SATELITE")
+        self.coordenadas = coordenadas
+        self.interferencia_ambiental = 0.0
+
+    def medir_interferencia(self) -> float:
+        self.interferencia_ambiental = round(random.uniform(0.0, 0.3), 3)
+        return self.interferencia_ambiental
+
+class InfraestructuraTerrestre(ElementoRed):
+    def __init__(self, id_infra: str, ubicacion: str):
+        super().__init__(id_infra, "INFRAESTRUCTURA")
+        self.ubicacion = ubicacion
+        self.capacidad_procesamiento = random.randint(80, 100)
+
+class CuentaFinanciera(ElementoRed):
+    def __init__(self, id_cuenta: str, entidad: str):
+        super().__init__(id_cuenta, "CUENTA")
+        self.entidad = entidad
+        self._saldo_actual = round(random.uniform(100000.0, 500000.0), 2)
+        self._saldo_esperado = self._saldo_actual
+        self.historial_flujos = []
+
+    def obtener_saldo(self) -> float:
+        return self._saldo_actual
+
+    def verificar_materializacion(self) -> float:
+        variacion_esperada = self._saldo_esperado * (0.0005 + (random.random() * 0.0005))
+        self._saldo_esperado += variacion_esperada
+        
+        variacion_real = variacion_esperada * random.uniform(0.8, 1.3)
+        nuevo_saldo = round(self._saldo_actual + variacion_real, 2)
+        
+        flujo = {
+            "timestamp": datetime.now(),
+            "saldo_anterior": self._saldo_actual,
+            "saldo_nuevo": nuevo_saldo,
+            "variacion_esperada": round(variacion_esperada, 2),
+            "variacion_real": round(variacion_real, 2),
+            "es_anomalia": abs(variacion_real / variacion_esperada) > UMBRAL_ANOMALIA
+        }
+        self.historial_flujos.append(flujo)
+        
+        if flujo["es_anomalia"]:
+            print(f"🔴 ANOMALÍA DETECTADA EN {self.id}: Variación {round((variacion_real/variacion_esperada-1)*100, 2)}% superior al esperado")
+        
+        self._saldo_actual = nuevo_saldo
+        return nuevo_saldo
+
+# === Funciones de soporte avanzadas ===
+def ejecutar_comando_satelital(comando: str, parametros: Dict[str, Any] = None) -> None:
+    parametros = parametros or {}
+    print(f"\n[📡 SEÑAL SATELITAL] {datetime.now().strftime('%H:%M:%S')} | {comando} | Parámetros: {parametros}")
+
+def generar_clave_distribuida(nodos: List[ElementoRed]) -> bytes:
+    huellas = b"".join(nodo.id.encode() for nodo in nodos)
+    return sha256(huellas + CLAVE_BASE_CUANTICA + str(time.time()).encode()).digest()
+
+# === CLASE NÚCLEO GLUON COMPLETADA ===
+class NucleoGluon:
+    def __init__(self, id_nucleo: str, nodos_iniciales: List[ElementoRed] = None):
+        self.id = id_nucleo
+        self.nodos = nodos_iniciales or []
+        self.estado_cohesion = 0.0
+        self.clave_distribuida = b""
+        self.ultima_sincronizacion = None
+        self.modulo_seguridad_activo = True
+
+    def integrar_nodos(self, nuevos_nodos: List[ElementoRed], id_secreto: str) -> None:
+        """Integra nuevos nodos y actualiza la clave cuántica distribuida"""
+        self.nodos.extend(nuevos_nodos)
+        self.clave_distribuida = generar_clave_distribuida(self.nodos)
+        print(f"\n🔑 Clave cuántica distribuida actualizada: {self.clave_distribuida.hex()[:12]}...")
+        
+        for nodo in nuevos_nodos:
+            nodo.vincular_identidad_cuantica(id_secreto, self.clave_distribuida)
+        
+        self.calcular_cohesion_red()
+        print(f"📊 Nivel de cohesión inicial de la red: {round(self.estado_cohesion, 2)}%")
+
+    def calcular_cohesion_red(self) -> float:
+        """Calcula el nivel de cohesión basado en estado de nodos e interferencias"""
+        if not self.nodos:
+            self.estado_cohesion = 0.0
+            return 0.0
+        
+        puntaje_nodos = 0.0
+        total_nodos = len(self.nodos)
+        
+        for nodo in self.nodos:
+            if nodo.estado_conexion == "ENTRELAZADO":
+                puntaje = nodo.nivel_energia / 100.0
+                if isinstance(nodo, Satelite):
+                    puntaje *= (1 - nodo.interferencia_ambiental)
+                elif isinstance(nodo, InfraestructuraTerrestre):
+                    puntaje *= (nodo.capacidad_procesamiento / 100.0)
+                puntaje_nodos += puntaje
+        
+        self.estado_cohesion = round((puntaje_nodos / total_nodos) * 100, 2)
+        return self.estado_cohesion
+
+    def sincronizar_red(self) -> None:
+        """Ejecuta ciclo de sincronización entre todos los nodos"""
+        if not self.nodos or not self.clave_distribuida:
+            print("⚠️ No se puede sincronizar: Red sin nodos o clave distribuida no generada")
+            return
+        
+        self.ultima_sincronizacion = datetime.now()
+        ejecutar_comando_satelital("SINCRONIZACION_GLUON", {"nodos": len(self.nodos), "frecuencia": FRECUENCIA_RESONANCIA})
+        
+        # Medir interferencias en satélites
+        for nodo in self.nodos:
+            if isinstance(nodo, Satelite):
+                nodo.medir_interferencia()
+        
+        # Enviar pulsos de sincronización¡Perfecto! Aquí tienes el sistema de alertas personalizado y la integración con banca en línea para José Isaías Alvarez Ramirez:
  
  
  
