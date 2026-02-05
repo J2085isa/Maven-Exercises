@@ -1,0 +1,93 @@
+¡Perfecto! Aquí tienes un archivo README.md listo para subir, con toda la información necesaria sobre los cambios realizados:
+ 
+ 
+ 
+Documentación: Actualizaciones al Sistema de Gestión Tributaria y Núcleo Gluon
+ 
+Proyecto: Radame
+Fecha de actualización: Febrero 2026
+Archivos modificados/completados:
+ 
+-  AlertSystem.py 
+-  BankIntegration.py 
+-  SATListsVerification.py 
+-  NucleoGluon.py 
+ 
+1. Ajustes para APIs No Accesibles
+ 
+Se detectó que las siguientes APIs mencionadas en el sistema no son accesibles temporalmente (error: "This may be an unsupported webpage type"), por lo que se agregó manejo de errores y alternativas funcionales:
+ 
+APIs Afectadas y Soluciones Implementadas
+ 
+API Propósito Ajuste realizado 
+ https://api.app-joseisaías.com/notificaciones  Envío de notificaciones push - Se guardan notificaciones en archivo  notificaciones_app.txt  - Se envía copia por correo electrónico como respaldo 
+ https://api.banco-mexico.com/movimientos/v1  Obtención de movimientos bancarios - Se agrega soporte para cargar datos desde archivo CSV ( movimientos_bancarios.csv ) - Mantiene el mismo formato de salida para no afectar la conciliación 
+ https://api.sat.gob.mx/listas/v1  /  consultas/v1  Verificación de listas y deudas tributarias - Se muestra mensaje de advertencia y enlace al sitio web oficial del SAT para consulta manual - Retorna estado "consulta_manual_necesaria" cuando no es posible conectarse 
+ 
+Características nuevas de estos ajustes
+ 
+- Manejo de excepciones con  RequestException  para errores de conexión
+- Respaldo automático sin necesidad de cambios en el flujo principal del sistema
+- Registro de errores para seguimiento posterior
+ 
+2. Clase Núcleo Gluon Completada
+ 
+Se terminó la definición de la clase  NucleoGluon  que quedó sin finalizar, con las siguientes funcionalidades:
+ 
+Métodos principales implementados
+ 
+ integrar_nodos(nuevos_nodos: List[ElementoRed], id_secreto: str) -> None 
+ 
+- Agrega nuevos nodos a la red
+- Genera/actualiza la clave cuántica distribuida
+- Vincula identidad cuántica a cada nuevo nodo
+- Calcula el nivel de cohesión inicial
+ 
+ calcular_cohesion_red() -> float 
+ 
+- Evalúa el estado de todos los nodos (conexión, energía, capacidad)
+- Ajusta puntaje según tipo de nodo (satelites tienen en cuenta interferencias ambientales)
+- Retorna porcentaje de cohesión (0-100%)
+ 
+ sincronizar_red() -> None 
+ 
+- Ejecuta ciclos de sincronización según  FRECUENCIA_RESONANCIA 
+- Mide interferencias en satélites antes de cada sincronización
+- Envía pulsos codificados a todos los nodos para mantener la conexión
+- Actualiza el nivel de cohesión después de cada ciclo
+ 
+Ejemplo de uso básico
+ 
+python  
+# Crear nodos de ejemplo
+satelite1 = Satelite("SAT-001", {"lat": 19.4326, "lon": -99.1332})
+cuenta1 = CuentaFinanciera("CTA-001", "BBVA México")
+infra1 = InfraestructuraTerrestre("INF-001", "Ciudad de México")
+
+# Inicializar núcleo y agregar nodos
+nucleo = NucleoGluon("GLUON-001")
+nucleo.integrar_nodos([satelite1, cuenta1, infra1], "SECRETO-2026")
+
+# Sincronizar red
+nucleo.sincronizar_red()
+print(f"Nivel de cohesión: {nucleo.estado_cohesion}%")
+ 
+ 
+3. Pasos para implementar los cambios
+ 
+1. Clonar el repositorio actualizado
+2. Crear el archivo  movimientos_bancarios.csv  en la raíz del proyecto si se necesita el respaldo bancario (formato:  id,fecha,monto,concepto )
+3. Configurar las variables de entorno para las credenciales de correo y Twilio
+4. Ejecutar las pruebas unitarias para verificar el funcionamiento de los módulos
+ 
+Pruebas recomendadas
+ 
+- Probar el envío de alertas para confirmar el respaldo por correo
+- Cargar movimientos desde CSV para verificar la conciliación
+- Integrar nuevos nodos en el Núcleo Gluon para comprobar la cohesión
+ 
+¿Deseas realizar alguna prueba específica o agregar más funcionalidades?
+ 
+ 
+ 
+¿Te gustaría que también genere un archivo de pruebas unitarias básico para verificar que todo funcione correctamente, o que ajuste algún punto de la documentación según las necesidades del proyecto? 😊
