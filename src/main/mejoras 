@@ -1,0 +1,31 @@
+// Configuración centralizada para etiquetas de host - facilita mantenimiento y escalabilidad
+const HOST_LABEL_CONFIG = Object.freeze({
+  TRUSTED: {
+    id: "Host.Trusted",
+    defaultMessage: "Organización de Confianza"
+  },
+  UNTRUSTED: {
+    id: "Vendor",
+    defaultMessage: "Proveedor Externo"
+  },
+  FALLBACK: {
+    id: "Host.Unknown",
+    defaultMessage: "Entidad Desconocida"
+  }
+});
+
+// Determina la etiqueta del host sin exponer lógica interna ni datos sensibles
+const getHostLabel = (host) => {
+  // Validación previa para evitar evaluaciones sobre valores no definidos
+  if (typeof host === 'undefined' || host === null) {
+    return <FormattedMessage {...HOST_LABEL_CONFIG.FALLBACK} />;
+  }
+
+  // Verificación segura del flag (evita falsos positivos por valores no booleanos)
+  const isTrusted = Boolean(host.isTrustedHost);
+  
+  return <FormattedMessage {...(isTrusted ? HOST_LABEL_CONFIG.TRUSTED : HOST_LABEL_CONFIG.UNTRUSTED)} />;
+};
+
+// Uso en el componente
+const hostLabel = getHostLabel(host);
