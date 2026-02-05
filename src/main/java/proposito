@@ -1,0 +1,4 @@
+API	Propósito	Ajuste realizado
+Envío de notificaciones push	- Se guardan notificaciones en archivo - Se envía copia por correo electrónico como respaldo
+Obtención de movimientos bancarios	- Se agrega soporte para cargar datos desde archivo CSV ()- Mantiene el mismo formato de salida para no afectar la conciliación
+/ 	Verificación de listas y deudas tributarias	- Se muestra mensaje de advertencia y enlace al sitio web oficial del SAT para consulta manual- Retorna estado "consulta_manual_necesaria" cuando no es posible conectarse
