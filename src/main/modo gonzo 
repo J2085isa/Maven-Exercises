@@ -1,0 +1,30 @@
+// Insertar en la lógica de éxito del AddFundsModal
+const TRUSTED_HOST_CONFIG = Object.freeze({
+  VIBRATION_PATTERN: [500, 110, 500], // Patrón "Ganso": Alerta de activo materializado
+  LOG_MESSAGE: "[SISTEMA] Nodo de confianza validado. Liquidez fluyendo...",
+  FALLBACK_ALERT_TEXT: "Nodo confiable confirmado - Activo procesado correctamente"
+});
+
+if (host?.isTrustedHost) {
+  // Validar soporte para vibración y requerir interacción del usuario
+  if (navigator.vibrate && typeof navigator.vibrate === 'function') {
+    try {
+      const vibrationSuccess = navigator.vibrate(TRUSTED_HOST_CONFIG.VIBRATION_PATTERN);
+      if (!vibrationSuccess) throw new Error("Vibración no permitida por el dispositivo/navegador");
+    } catch (error) {
+      console.warn("[ADVERTENCIA] No se pudo activar la vibración:", error.message);
+      // Notificación visual como respaldo
+      window.dispatchEvent(new CustomEvent('showUserAlert', { 
+        detail: { text: TRUSTED_HOST_CONFIG.FALLBACK_ALERT_TEXT, type: 'success' }
+      }));
+    }
+  } else {
+    // Respaldo para dispositivos sin soporte de vibración
+    window.dispatchEvent(new CustomEvent('showUserAlert', { 
+      detail: { text: TRUSTED_HOST_CONFIG.FALLBACK_ALERT_TEXT, type: 'success' }
+    }));
+  }
+
+  // Log estructurado para facilitar el monitoreo
+  console.log("%c[SISTEMA] " + TRUSTED_HOST_CONFIG.LOG_MESSAGE, "color: #2ecc71; font-weight: bold");
+}
