@@ -1,0 +1,35 @@
+import time
+import cryptography # Asumiendo el uso de Fernet para cifrado rápido
+
+class NucleoGluon:
+    # ... (atributos previos)
+    CONTEO_CRITICO = 0
+    LIMITE_TIEMPO_CRITICO = 300 # 5 minutos en segundos
+
+    def monitorear_integridad_total(self):
+        """
+        Revisa la cohesión. Si cae por debajo del 10%, inicia cuenta regresiva
+        para el cifrado de emergencia (Dead Man's Switch).
+        """
+        if self.estado_cohesion < 10:
+            if self.CONTEO_CRITICO == 0:
+                self.CONTEO_CRITICO = time.time()
+                print("[ADVERTENCIA] Cohesión crítica detectada. Iniciando protocolo de sombra.")
+            
+            elif (time.time() - self.CONTEO_CRITICO) > self.LIMITE_TIEMPO_CRITICO:
+                self.ejecutar_autodestruccion_logica()
+        else:
+            self.CONTEO_CRITICO = 0 # Reset si la red se recupera
+
+    def ejecutar_autodestruccion_logica(self):
+        """
+        Cifra todos los activos y desconecta los nodos. 
+        Solo la clave original del Arquitecto puede revertirlo.
+        """
+        print("[CRÍTICO] Tiempo límite excedido. Ejecutando cifrado de emergencia...")
+        # Lógica para cifrar 'movimientos_bancarios.csv' y las IDs de los satélites
+        for nodo in self.nodos_activos:
+            nodo.bloquear_acceso_cuantico()
+        
+        # Pulso final de alerta al dispositivo del Arquitecto
+        self.enviar_pulso_vibratorio_urgente()
