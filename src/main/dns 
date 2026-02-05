@@ -1,0 +1,40 @@
+// Función para generar el fragmento de configuración de Unbound
+function generarConfigUnbound() {
+    const config = `server:
+    interface: 0.0.0.0
+    # Activa la validación DNSSEC
+    auto-trust-anchor-file: "/var/lib/unbound/root.key"
+    
+    # Endurecimiento del Escudo
+    harden-dnssec-stripped: yes
+    harden-glue: yes
+    
+    # Invisibilidad ante escaneos
+    hide-identity: yes
+    hide-version: yes`;
+
+    return config;
+}
+
+// Ejemplo de uso: mostrar la configuración en consola o guardarla en un archivo
+const configuracionUnbound = generarConfigUnbound();
+console.log(configuracionUnbound);
+
+// Si se quiere guardar en un archivo (usando Node.js)
+const fs = require('fs');
+fs.writeFile('./unbound-config.conf', configuracionUnbound, (err) => {
+    if (err) throw err;
+    console.log('Archivo de configuración de Unbound generado exitosamente');
+});
+Este es un fragmento de configuración parcial para el resolutor DNS Unbound, centrado en ajustes de seguridad y privacidad. Aquí un desglose conciso:
+ 
+-  interface: 0.0.0.0 : Hace que Unbound escuche consultas DNS en todas las interfaces de red del servidor.
+-  auto-trust-anchor-file : Habilita la validación DNSSEC usando el archivo de anclajes de confianza raíz especificado para verificar la autenticidad de las respuestas DNS.
+- Ajustes de endurecimiento:
+-  harden-dnssec-stripped: yes : Bloquea respuestas que deberían contener datos DNSSEC pero no los tienen.
+-  harden-glue: yes : Valida la consistencia de los registros "glue" (usados para resolver nombres de dominio de los propios servidores DNS).
+- Ajustes de privacidad:
+-  hide-identity: yes : Omite la información del nombre de host del servidor en las respuestas.
+-  hide-version: yes : Elimina los detalles de la versión de Unbound para evitar ataques dirigidos.
+ 
+¿Te gustaría ayuda para completar esta configuración (por ejemplo, añadiendo controles de acceso, reenviadores o optimizaciones de rendimiento) o para verificar su idoneidad para un caso de uso específico?
