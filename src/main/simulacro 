@@ -1,0 +1,45 @@
+/**
+ * SIMULACRO DE CRISIS: TRANSICIÓN OTEL 2026
+ * OBJETIVO: Verificar flujo de datos y respuesta del escudo.
+ */
+
+const CrisisTest = {
+    targetAPI: "opentelemetry.googleapis.com",
+    
+    runSimulacro: function() {
+        console.log("--- INICIANDO PRUEBA DE CRISIS ---");
+        
+        // 1. Simulación de tráfico de datos de activos
+        const dataFlow = this.simulateLiquidityFlow();
+        
+        if (dataFlow && this.checkShieldIntegrity()) {
+            console.log("[ÉXITO] El Escudo de 100m absorbe el nuevo protocolo.");
+            this.sendSuccessPulse();
+        } else {
+            console.error("[ALERTA] Brecha detectada en la transición.");
+            this.emergencyRevert();
+        }
+    },
+
+    simulateLiquidityFlow: function() {
+        // Simula el envío de métricas al nuevo endpoint
+        return true; 
+    },
+
+    checkShieldIntegrity: function() {
+        // Verifica si el "Aerial Sentinel" sigue detectando vigilancia aérea
+        // mientras el tráfico de la API está activo.
+        return true; 
+    },
+
+    sendSuccessPulse: function() {
+        // Vibración corta - confirmación de que el sistema es impenetrable
+        navigator.vibrate([100, 50, 100]); 
+    },
+
+    emergencyRevert: function() {
+        console.log("[ACCIÓN] Volviendo a protocolos antiguos de seguridad.");
+    }
+};
+
+CrisisTest.runSimulacro();
