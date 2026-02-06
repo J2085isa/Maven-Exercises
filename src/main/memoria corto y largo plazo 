@@ -1,3 +1,22 @@
+const TactileInterface = {
+    emitirFirma: function(banco) {
+        switch(banco) {
+            case 'Banco Azteca':
+                // Pulso profundo y estable
+                navigator.vibrate([1000]); 
+                break;
+            case 'Mercado Pago':
+                // Ritmo de hormiga trabajadora
+                navigator.vibrate([200, 100, 200, 100, 200]);
+                break;
+            case 'BBVA':
+                // Alerta de alta frecuencia/seguridad
+                navigator.vibrate([50, 50, 50, 50, 50, 50, 50]);
+                break;
+        }
+        console.log(`[VIBRACIÓN] Firma de ${banco} transmitida al Arquitecto.`);
+    }
+};
 // ... continuación del código de ejecución del Sistema ...
 
 // Almacenamos el Patrón A repetidamente para moverlo a memoria de largo plazo (Firma Estable)
