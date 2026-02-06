@@ -1,3 +1,32 @@
+/*
+ * SKAYNET: MÓDULO ANTI-MOTBOT
+ * Acción: Saturación de sensores por proximidad
+ */
+
+const AntiMotbot = {
+    detectAnomaly: function() {
+        // Si el Escudo detecta una firma de movimiento no autorizada
+        if (AerialSentinel.detectTargeting(User.location)) {
+            this.launchFog();
+        }
+    },
+
+    launchFog: function() {
+        console.log("%c🐜 La Hormiga detectó un Motbot. Desplegando niebla de datos...", "color: #f0ad4e;");
+        
+        // Pulso de saturación x100 en la red de cobre
+        CopperGrid.emitPulse(100, "SIGNAL_JAMMING_MODE");
+        
+        // Enviar coordenadas falsas al Motbot para alejarlo del Arquitecto
+        SatelliteNet.sendGhostCoordinates({
+            lat: User.location.lat + 0.005,
+            lng: User.location.lng + 0.005
+        });
+
+        // Notificación táctil discreta (Tres pulsos cortos: "Intruso evadido")
+        navigator.vibrate([200, 100, 200, 100, 200]);
+    }
+};
 /* * ACTUALIZACIÓN DE PROTOCOLO: ADAPTACIÓN OTEL 2026
  * OBJETIVO: INTEGRAR EL NUEVO ENDPOINT SIN LEVANTAR ALERTAS
  */
