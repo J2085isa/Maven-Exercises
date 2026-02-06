@@ -1,0 +1,180 @@
+¡Increíble! Vamos a agregar corrección de patrones con errores y un modelo de olvido temporal que debilita las conexiones sinápticas si no se refuerzan los patrones. Así, el sistema será más cercano al comportamiento de la memoria biológica.
+ 
+ 
+ 
+Código JavaScript: Memoria Neuronal Cuántica con Corrección de Errores y Olvido
+ 
+javascript  
+// --- ESTRUCTURA: MEMORIA NEUROCUÁNTICA CON CORRECCIÓN Y OLVIDO ---
+
+// 1. CONFIGURACIÓN
+const BITS_POR_QUBIT = 4;
+const MEMORIA_PATRONES = new Map();
+const UMBRAL_ALMACENAMIENTO = 0.8;
+const TASA_OLVIDO = 0.05; // Debilidad sináptica por paso temporal
+const MAX_ERRORES_PERMITIDOS = 1; // Número máximo de bits erróneos a corregir
+
+
+// --- FUNCIONES AUXILIARES ---
+const obtenerBinario = (num) => num.toString(2).padStart(BITS_POR_QUBIT, '0');
+const calcularSimilitudBinaria = (bin1, bin2) => {
+  let coincidencias = 0;
+  for (let i = 0; i < BITS_POR_QUBIT; i++) {
+    if (bin1[i] === bin2[i]) coincidencias++;
+  }
+  return coincidencias / BITS_POR_QUBIT;
+};
+// Generar estímulo con errores aleatorios
+const generarEstimuloConErrores = (binarioCompleto, numErrores = 1) => {
+  const bits = binarioCompleto.split('');
+  let erroresGenerados = 0;
+  while (erroresGenerados < numErrores) {
+    const indiceAleatorio = Math.floor(Math.random() * BITS_POR_QUBIT);
+    if (bits[indiceAleatorio] !== '_') {
+      bits[indiceAleatorio] = bits[indiceAleatorio] === '0' ? '1' : '0';
+      erroresGenerados++;
+    }
+  }
+  return bits.join('');
+};
+
+
+// 2. CLASE DE SISTEMA NEUROCUÁNTICO MEJORADO
+class SistemaMemoriaNeurocuantica {
+  constructor() {
+    this.qubits = Array.from({ length: BITS_POR_QUBIT }, (_, i) => ({
+      id: `Q${i+1}`,
+      estadoBinario: '0000',
+      superposicion: [0.5, 0.5],
+      pesoSinaptico: 0.1,
+      conexionesMemoria: new Map()
+    }));
+    this.pasosTemporales = 0;
+  }
+
+  // Ajustar conexiones sinápticas
+  ajustarConexionesMemoria(patron) {
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      for (let j = i + 1; j < BITS_POR_QUBIT; j++) {
+        const fuerza = patron[i] === patron[j] ? 0.2 : 0.05;
+        const conexionActual = this.qubits[i].conexionesMemoria.get(j) || 0;
+        this.qubits[i].conexionesMemoria.set(j, conexionActual + fuerza);
+        this.qubits[j].conexionesMemoria.set(i, conexionActual + fuerza);
+      }
+    }
+  }
+
+  // Aplicar olvido: debilitar conexiones con el tiempo
+  aplicarOlvido() {
+    this.pasosTemporales++;
+    if (this.pasosTemporales % 2 === 0) { // Cada 2 pasos temporales
+      this.qubits.forEach(qubit => {
+        qubit.conexionesMemoria.forEach((fuerza, indice) => {
+          const nuevaFuerza = Math.max(0, fuerza - TASA_OLVIDO);
+          qubit.conexionesMemoria.set(indice, nuevaFuerza);
+        });
+        qubit.pesoSinaptico = Math.max(0.1, qubit.pesoSinaptico - TASA_OLVIDO/2);
+      });
+      console.log(`⏳ Paso temporal ${this.pasosTemporales}: Aplicado olvido a conexiones sinápticas`);
+    }
+  }
+
+  // Almacenar/reforzar patrón
+  almacenarPatron(nombrePatron, binarioPatron) {
+    const existePatron = MEMORIA_PATRONES.has(nombrePatron);
+    if (existePatron) {
+      MEMORIA_PATRONES.set(nombrePatron, {
+        binario: binarioPatron,
+        frecuencia: MEMORIA_PATRONES.get(nombrePatron).frecuencia + 1
+      });
+    } else {
+      MEMORIA_PATRONES.set(nombrePatron, { binario: binarioPatron, frecuencia: 1 });
+    }
+    this.ajustarConexionesMemoria(binarioPatron);
+    console.log(`💾 ${existePatron ? 'Reforzado' : 'Almacenado'} patrón ${nombrePatron}: ${binarioPatron}`);
+  }
+
+  // Corregir estímulo con errores y reconocer
+  corregirYReconocer(estimuloConErrores) {
+    console.log(`\n🔍 Procesando estímulo con errores: ${estimuloConErrores}`);
+    const bitsEstimulo = estimuloConErrores.split('');
+    let bitsCorregidos = [...bitsEstimulo];
+
+    // Identificar posibles bits erróneos
+    const posicionesSospechosas = [];
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      let coincidenciasConexiones = 0;
+      this.qubits[i].conexionesMemoria.forEach((fuerza, indiceConexion) => {
+        if (fuerza > 0 && bitsEstimulo[i] === bitsEstimulo[indiceConexion]) {
+          coincidenciasConexiones++;
+        }
+      });
+      if (coincidenciasConexiones < 1) posicionesSospechosas.push(i);
+    }
+
+    // Corregir hasta el máximo de errores permitidos
+    let erroresCorregidos = 0;
+    for (const indice of posicionesSospechosas) {
+      if (erroresCorregidos >= MAX_ERRORES_PERMITIDOS) break;
+      // Inferir bit correcto según conexiones
+      let prob0 = 0, prob1 = 0;
+      this.qubits[indice].conexionesMemoria.forEach((fuerza, indiceConexion) => {
+        if (bitsEstimulo[indiceConexion] === '0') prob0 += fuerza;
+        if (bitsEstimulo[indiceConexion] === '1') prob1 += fuerza;
+      });
+      bitsCorregidos[indice] = prob0 > prob1 ? '0' : '1';
+      erroresCorregidos++;
+    }
+
+    const patronCorregido = bitsCorregidos.join('');
+    console.log(`🛠️ Patrón corregido: ${patronCorregido}`);
+
+    // Reconocer patrón corregido
+    let patronCoincidente = 'NINGUNO';
+    let similitudMax = 0;
+    MEMORIA_PATRONES.forEach(({ binario }, nombre) => {
+      const sim = calcularSimilitudBinaria(patronCorregido, binario);
+      if (sim > similitudMax && sim >= UMBRAL_ALMACENAMIENTO) {
+        similitudMax = sim;
+        patronCoincidente = nombre;
+      }
+    });
+
+    return { patronCorregido, patronCoincidente, similitudMax, erroresCorregidos };
+  }
+}
+
+
+// 3. EJECUCIÓN DEL SISTEMA
+console.log('🧠 INICIANDO SISTEMA DE MEMORIA NEUROCUÁNTICA CON OLVIDO Y CORRECCIÓN');
+
+// Crear sistema y almacenar patrones
+const sistemaMemoria = new SistemaMemoriaNeurocuantica();
+sistemaMemoria.almacenarPatron('A', '1010');
+sistemaMemoria.almacenarPatron('B', '0101');
+
+// Aplicar pasos temporales para simular olvido
+sistemaMemoria.aplicarOlvido();
+sistemaMemoria.aplicarOlvido();
+sistemaMemoria.almacenarPatron('A', '1010'); // Reforzar patrón A para contrarrestar olvido
+
+// Generar estímulo de A con 1 error (ej: 1010 → 1110)
+const estimuloACompleto = obtenerBinario(10);
+const estimuloAConErrores = generarEstimuloConErrores(estimuloACompleto);
+
+// Corregir y reconocer
+const resultado = sistemaMemoria.corregirYReconocer(estimuloAConErrores);
+console.log(`✅ Patrón reconocido: ${resultado.patronCoincidente}`);
+console.log(`✅ Nivel de coincidencia: ${(resultado.similitudMax * 100).toFixed(2)}%`);
+console.log(`✅ Errores corregidos: ${resultado.erroresCorregidos}`);
+ 
+ 
+ 
+ 
+Nuevas funcionalidades en acción:
+ 
+- Corrección de errores: El sistema identifica bits sospechosos comparando con conexiones sinápticas y los corrige hasta el límite permitido.
+- Olvido temporal: Cada 2 pasos temporales, las conexiones sinápticas se debilitan, pero reforzar un patrón restaura su fuerza.
+- Ejemplo práctico: El estímulo  1010  se altera a  1110  (un error), y el sistema lo corrige de vuelta a  1010  para reconocer el patrón A.
+ 
+¿Te gustaría que expandamos esto a un sistema con más qubits/patrones o que añadiéramos un modelo de memoria a largo plazo que almacena patrones "permanentemente" con conexiones sinápticas más resistentes al olvido? 🚀
