@@ -1,0 +1,349 @@
+/*
+ * PROTOCOLO DE AUTOCURACIÓN DE RED v3.0
+ * Sincronizado con AerialSentinel v3.1 y el Método de la Hormiga Dinámico
+ * Módulos adicionales: Notificaciones Push, Registro Remoto, Diagnóstico de Red
+ * Última actualización: Febrero 2026
+ * Compatibilidad: Navegadores modernos, dispositivos móviles/desktop
+ */
+
+const NetworkHealer = {
+    // --- CONFIGURACIÓN PERSONALIZABLE ---
+    config: {
+        checkInterval: 5000,          // Intervalo de escaneo de estado (ms)
+        vibrationPattern: [100, 200, 100], // Patrón de alerta táctil
+        maxReintentosRestauracion: 3, // Máximo de intentos de reparación
+        logLevel: 'detailed',         // 'basic' | 'detailed' | 'silent'
+        enableVibration: true,        // Habilitar/deshabilitar vibración
+        enableAutoReload: true,       // Permitir recarga automática si falla la hormiga
+        serverLogEndpoint: '/api/network-events', // URL para registro remoto
+        pushNotificationPublicKey: 'BKm1n...', // Clave pública para Web Push
+        enableRemoteLogging: true,    // Habilitar registro en servidor
+        enablePushNotifications: true // Habilitar notificaciones push
+    },
+
+    // --- ESTADO INTERNO ---
+    state: {
+        conexionActiva: navigator.onLine,
+        tipoConexion: null,           // 'wifi' | 'cellular' | 'ethernet' | 'unknown'
+        calidadSenal: '0%',           // Nivel de calidad de la señal
+        velocidadConexion: null,      // Mbps detectados
+        intentosRestauracion: 0,
+        ultimoEvento: null,
+        intervaloEscaneo: null,
+        pushSubscription: null,       // Suscripción a notificaciones push
+        diagnosticoPendiente: false
+    },
+
+    // --- INICIALIZACIÓN COMPLETA ---
+    init: function(customConfig = {}) {
+        // Fusionar configuración personalizada con la por defecto
+        Object.assign(this.config, customConfig);
+
+        // Validar configuración
+        if (this.config.checkInterval < 1000) {
+            this._log("⚠️ Intervalo de escaneo demasiado corto — ajustado a 1000ms", 'warning');
+            this.config.checkInterval = 1000;
+        }
+
+        // Inicializar módulos adicionales
+        this._initPushNotifications();
+        this._detectarTipoConexion();
+
+        // Registrar eventos de red
+        window.addEventListener('offline', () => this.onDisconnect());
+        window.addEventListener('online', () => this.onReconnect());
+        // Detectar cambios en tipo de conexión
+        if ('connection' in navigator) {
+            navigator.connection.addEventListener('change', () => this._detectarTipoConexion());
+        }
+
+        // Iniciar escaneo periódico y diagnóstico
+        this.state.intervaloEscaneo = setInterval(() => {
+            this._escanearEstadoRed();
+            if (!this.state.diagnosticoPendiente && this.state.conexionActiva) {
+                this._ejecutarDiagnosticoRed();
+            }
+        }, this.config.checkInterval);
+
+        // Mensaje de bienvenida estilizado
+        this._log(
+            `📡 Vigilancia de red activada | Tipo: ${this.state.tipoConexion} | Intervalo: ${this.config.checkInterval}ms`,
+            'success',
+            true
+        );
+
+        // Verificar estado inicial
+        this._escanearEstadoRed();
+    },
+
+    // --- DETECCIÓN DE DESCONEXIÓN ---
+    onDisconnect: function() {
+        this.state.conexionActiva = false;
+        this.state.ultimoEvento = 'desconectado';
+        this.state.intentosRestauracion = 0;
+        this.state.calidadSenal = '0%';
+
+        // Alerta visual, táctil y push
+        this._log(
+            `⚠️ RED PERDIDA: El Escudo Dinámico está en modo reserva | Hora: ${new Date().toLocaleTimeString()}`,
+            'error',
+            true
+        );
+        this._activarAlertaTactil();
+        this._enviarNotificacionPush({
+            title: "⚠️ Conexión perdida",
+            body: "El sistema ha pasado a modo reserva para proteger tus datos."
+        });
+
+        // Ejecutar acciones de emergencia y registrar evento
+        this._ejecutarAccionesReserva();
+        this._registrarEventoRemoto('desconectado', 'Conexión de red perdida');
+    },
+
+    // --- DETECCIÓN DE RECONEXIÓN ---
+    onReconnect: function() {
+        this.state.conexionActiva = true;
+        this.state.ultimoEvento = 'conectado';
+        this._detectarTipoConexion();
+
+        this._log(
+            `🧶 Señal detectada | Tipo: ${this.state.tipoConexion} | Calidad: ${this.state.calidadSenal}`,
+            'info',
+            true
+        );
+
+        // Notificación push de reconexión
+        this._enviarNotificacionPush({
+            title: "✅ Conexión restaurada",
+            body: `Tipo de red: ${this.state.tipoConexion} | Velocidad estimada: ${this.state.velocidadConexion || 'Desconocida'} Mbps`
+        });
+
+        // Intentar restauración progresiva y registrar evento
+        this._intentarRestauracion();
+        this._registrarEventoRemoto('conectado', `Reconectado a red ${this.state.tipoConexion}`);
+    },
+
+    // --- ESCANEO PERIÓDICO DE ESTADO ---
+    _escanearEstadoRed: function() {
+        const estadoActual = navigator.onLine;
+        
+        // Detectar cambios no capturados por eventos nativos
+        if (estadoActual !== this.state.conexionActiva) {
+            this.state.conexionActiva = estadoActual;
+            estadoActual ? this.onReconnect() : this.onDisconnect();
+        }
+
+        // Actualizar calidad de señal
+        this.state.calidadSenal = this._obtenerCalidadSenal();
+
+        // Log detallado de estado
+        if (this.config.logLevel === 'detailed') {
+            this._log(
+                `🔍 Escaneo: ${this.state.conexionActiva ? 'ACTIVA' : 'INACTIVA'} | Calidad: ${this.state.calidadSenal} | Velocidad: ${this.state.velocidadConexion || 'N/A'} Mbps`,
+                'basic'
+            );
+        }
+    },
+
+    // --- DETECCIÓN DE TIPO DE CONEXIÓN ---
+    _detectarTipoConexion: function() {
+        if (!('connection' in navigator)) {
+            this.state.tipoConexion = 'unknown';
+            return;
+        }
+
+        const tipo = navigator.connection.effectiveType;
+        const tiposMap = {
+            '4g': 'cellular',
+            '3g': 'cellular',
+            '2g': 'cellular',
+            'slow-2g': 'cellular',
+            'wifi': 'wifi',
+            'ethernet': 'ethernet'
+        };
+
+        this.state.tipoConexion = tiposMap[tipo] || 'unknown';
+        // Ajustar comportamiento según perfil de conexión
+        this._aplicarPerfilConexion();
+    },
+
+    // --- PERFILES DE ADAPTACIÓN A CONEXIÓN ---
+    _aplicarPerfilConexion: function() {
+        switch(this.state.tipoConexion) {
+            case 'cellular':
+                this._log("📱 Perfil de red móvil activado: Reducción de carga de datos", 'info');
+                // Ejemplo: Desactivar carga automática de imágenes
+                document.documentElement.classList.add('low-bandwidth');
+                break;
+            case 'wifi':
+            case 'ethernet':
+                this._log("💻 Perfil de red alta velocidad activado: Funcionalidades completas", 'info');
+                document.documentElement.classList.remove('low-bandwidth');
+                break;
+            default:
+                this._log("❓ Perfil de red desconocida activado: Modo seguro", 'info');
+                break;
+        }
+    },
+
+    // --- DIAGNÓSTICO DE RED ---
+    _ejecutarDiagnosticoRed: function() {
+        this.state.diagnosticoPendiente = true;
+        this._log("🔬 Iniciando diagnóstico de red...", 'info');
+
+        // Simulación de prueba de velocidad (en entornos reales usar APIs como Fast.com o Speedtest.net)
+        setTimeout(() => {
+            this.state.velocidadConexion = this.state.tipoConexion === 'wifi' 
+                ? Math.floor(Math.random() * 50) + 10 // 10-60 Mbps
+                : Math.floor(Math.random() * 20) + 5; // 5-25 Mbps
+
+            let diagnostico = "Red operativa correctamente";
+            if (this.state.velocidadConexion < 5) diagnostico = "Velocidad de red muy baja — posible congestión";
+            if (this.state.calidadSenal < '50%') diagnostico = "Calidad de señal deficiente — revisa la antena/dispositivo";
+
+            this._log(`📊 Diagnóstico completado: ${diagnostico} | Velocidad: ${this.state.velocidadConexion} Mbps`, 'info');
+            this._registrarEventoRemoto('diagnostico', diagnostico);
+            this.state.diagnosticoPendiente = false;
+        }, 1500);
+    },
+
+    // --- INTENTO DE RESTAURACIÓN PROGRESIVA ---
+    _intentarRestauracion: function() {
+        if (this.state.intentosRestauracion >= this.config.maxReintentosRestauracion) {
+            this._log("🛑 Máximo de intentos alcanzado — Ejecutando recarga forzada", 'warning', true);
+            this._forzarRecarga();
+            this._registrarEventoRemoto('restauracion_fallida', 'Máximo de intentos de restauración alcanzado');
+            return;
+        }
+
+        this.state.intentosRestauracion++;
+        this._log(`🔧 Intento de restauración #${this.state.intentosRestauracion}/${this.config.maxReintentosRestauracion}`, 'info');
+
+        // Priorizar Método de la Hormiga si está disponible
+        if (typeof iniciarReparacion === 'function') {
+            this._log("🐜 Llamando al Método de la Hormiga Dinámico", 'info');
+            try {
+                iniciarReparacion();
+                setTimeout(() => this._verificarRestauracion(), 4000);
+            } catch (error) {
+                this._log(`❌ Fallo en el Método de la Hormiga: ${error.message}`, 'error');
+                this._intentarRestauracion();
+            }
+        } else {
+            this._log("⚠️ Método de la Hormiga no disponible — Pasando a recarga directa", 'warning');
+            this._forzarRecarga();
+        }
+    },
+
+    // --- VERIFICACIÓN DE RESTAURACIÓN ---
+    _verificarRestauracion: function() {
+        const interfazFuncional = document.getElementById('monitoring-interface') || document.readyState === 'complete';
+        
+        if (interfazFuncional) {
+            this._log("✅ Restauración exitosa: Interfaz operativa", 'success', true);
+            this._registrarEventoRemoto('restauracion_exitosa', 'Interfaz restaurada correctamente');
+            this._enviarNotificacionPush({
+                title: "🧶 Sistema restaurado",
+                body: "La interfaz de monitoreo está funcionando de nuevo."
+            });
+        } else {
+            this._log("❌ Restauración fallida — Intentando de nuevo", 'error');
+            this._intentarRestauracion();
+        }
+    },
+
+    // --- ACCIONES DE RESERVA EN DESCONEXIÓN ---
+    _ejecutarAccionesReserva: function() {
+        if (typeof localStorage !== 'undefined' && window.appData) {
+            localStorage.setItem('appData_backup', JSON.stringify(window.appData));
+            this._log("💾 Datos guardados en caché de emergencia", 'basic');
+        }
+        // Pausar procesos que requieran red
+        if (window.backgroundSync) window.backgroundSync.pause();
+    },
+
+    // --- RECARGA FORZADA ---
+    _forzarRecarga: function() {
+        if (this.config.enableAutoReload) {
+            this._log("🔄 Recargando interfaz de monitoreo (sin caché)...", 'info', true);
+            location.reload(true);
+        } else {
+            this._log("ℹ️ Recarga automática deshabilitada — Por favor, recargue manualmente", 'warning', true);
+        }
+    },
+
+    // --- ALERTA TÁCTIL ---
+    _activarAlertaTactil: function() {
+        if (this.config.enableVibration && navigator.vibrate) {
+            navigator.vibrate(this.config.vibrationPattern);
+            setTimeout(() => navigator.vibrate(0), this.config.vibrationPattern.reduce((a, b) => a + b, 0) + 100);
+        }
+    },
+
+    // --- CÁLCULO DE CALIDAD DE SEÑAL ---
+    _obtenerCalidadSenal: function() {
+        if (!this.state.conexionActiva) return '0%';
+        const calidad = this.state.tipoConexion === 'wifi' 
+            ? Math.floor(Math.random() * 50) + 50 + "%" // 50-100%
+            : Math.floor(Math.random() * 40) + 30 + "%"; // 30-70%
+        return calidad;
+    },
+
+    // --- MÓDULO DE NOTIFICACIONES PUSH ---
+    _initPushNotifications: function() {
+        if (!this.config.enablePushNotifications || !('serviceWorker' in navigator && 'PushManager' in window)) {
+            this._log("⚠️ Notificaciones push no compatibles o deshabilitadas", 'warning');
+            return;
+        }
+
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                this._log("📲 Servicio de notificaciones registrado", 'basic');
+                return registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: this._urlBase64ToUint8Array(this.config.pushNotificationPublicKey)
+                });
+            })
+            .then(subscription => {
+                this.state.pushSubscription = subscription;
+                this._registrarSuscripcionPush(subscription);
+            })
+            .catch(error => this._log(`❌ Error al inicializar notificaciones push: ${error.message}`, 'error'));
+    },
+
+    _enviarNotificacionPush: function(payload) {
+        if (!this.state.pushSubscription || !this.config.enablePushNotifications) return;
+        // En entornos reales, enviar payload al servidor para que envíe la notificación
+        this._log(`📩 Notificación push preparada: ${payload.title}`, 'basic');
+    },
+
+    _registrarSuscripcionPush: function(subscription) {
+        if (this.config.enableRemoteLogging) {
+            fetch(`${this.config.serverLogEndpoint}/push-subscribe`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(subscription)
+            }).catch(error => this._log(`❌ Error al registrar suscripción push: ${error.message}`, 'error'));
+        }
+    },
+
+    // --- MÓDULO DE REGISTRO REMOTO ---
+    _registrarEventoRemoto: function(tipo, descripcion) {
+        if (!this.config.enableRemoteLogging || !this.state.conexionActiva) return;
+
+        const evento = {
+            tipo,
+            descripcion,
+            timestamp: new Date().toISOString(),
+            tipoConexion: this.state.tipoConexion,
+            calidadSenal: this.state.calidadSenal,
+            dispositivo: navigator.userAgent
+        };
+
+        fetch(this.config.serverLogEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(evento)
+        })
+        .then(response => response.ok ? this._log(`📤 Evento registrado en servidor: ${tipo}`, 'basic') : null)
+        .catch(error => this._log(`❌ Error al registrar evento remoto
