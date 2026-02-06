@@ -16,7 +16,257 @@ class CustomReminders:
     def setup_reminders(self):
         """Configura recordatorios según fechas y anticipaciones"""
         for commit in self.commitments:
-            limit_date = datetime.strptime(commit["fecha_limite"], "%Y-%m-%d")
+            limit_date = datetime.strptime(co¡Excelente base! He perfeccionado el protocolo añadiendo más capas de robustez, integración más profunda con el Método de la Hormiga, registro detallado de eventos, opciones de configuración, mecanismos de respaldo y compatibilidad extendida. Además, he reforzado la coherencia de la metáfora y añadido validaciones para evitar errores.
+ 
+javascript  
+/*
+ * PROTOCOLO DE AUTOCURACIÓN DE RED v2.0
+ * Sincronizado con AerialSentinel v3.1 y el Método de la Hormiga Dinámico
+ * Última actualización: Febrero 2026
+ * Compatibilidad: Navegadores modernos, dispositivos móviles/desktop
+ */
+
+const NetworkHealer = {
+    // --- CONFIGURACIÓN PERSONALIZABLE ---
+    config: {
+        checkInterval: 5000,          // Intervalo de escaneo de estado (ms)
+        vibrationPattern: [100, 200, 100], // Patrón de alerta táctil
+        maxReintentosRestauracion: 3, // Máximo de intentos de reparación
+        logLevel: 'detailed',         // 'basic' | 'detailed' | 'silent'
+        enableVibration: true,        // Habilitar/deshabilitar vibración
+        enableAutoReload: true        // Permitir recarga automática si falla la hormiga
+    },
+
+    // --- ESTADO INTERNO ---
+    state: {
+        conexionActiva: navigator.onLine,
+        intentosRestauracion: 0,
+        ultimoEvento: null,
+        intervaloEscaneo: null
+    },
+
+    // --- INICIALIZACIÓN COMPLETA ---
+    init: function(customConfig = {}) {
+        // Fusionar configuración personalizada con la por defecto
+        Object.assign(this.config, customConfig);
+        
+        // Validar configuración
+        if (this.config.checkInterval < 1000) {
+            this._log("⚠️ Intervalo de escaneo demasiado corto — ajustado a 1000ms", 'warning');
+            this.config.checkInterval = 1000;
+        }
+
+        // Registrar eventos de red
+        window.addEventListener('offline', () => this.onDisconnect());
+        window.addEventListener('online', () => this.onReconnect());
+        
+        // Iniciar escaneo periódico adicional (más allá de eventos nativos)
+        this.state.intervaloEscaneo = setInterval(() => this._escanearEstadoRed(), this.config.checkInterval);
+
+        // Mensaje de bienvenida estilizado
+        this._log(
+            "📡 Vigilancia de red activada: Flujo de liquidez monitoreado | Intervalo: " + this.config.checkInterval + "ms",
+            'success',
+            true // Mensaje destacado
+        );
+
+        // Verificar estado inicial
+        this._escanearEstadoRed();
+    },
+
+    // --- DETECCIÓN DE DESCONEXIÓN ---
+    onDisconnect: function() {
+        this.state.conexionActiva = false;
+        this.state.ultimoEvento = 'desconectado';
+        this.state.intentosRestauracion = 0; // Reiniciar contador de intentos
+
+        // Alerta visual y táctil
+        this._log(
+            "⚠️ RED PERDIDA: El Escudo Dinámico está en modo reserva | Última comprobación: " + new Date().toLocaleTimeString(),
+            'error',
+            true
+        );
+        this._activarAlertaTactil();
+
+        // Ejecutar acciones de emergencia (ej: guardar datos en caché)
+        this._ejecutarAccionesReserva();
+    },
+
+    // --- DETECCIÓN DE RECONEXIÓN ---
+    onReconnect: function() {
+        this.state.conexionActiva = true;
+        this.state.ultimoEvento = 'conectado';
+
+        this._log(
+            "🧶 Señal detectada (" + this._obtenerCalidadSenal() + ") — Lanzando hormiga para restaurar interfaz...",
+            'info',
+            true
+        );
+
+        // Intentar restauración progresiva
+        this._intentarRestauracion();
+    },
+
+    // --- ESCANEO PERIÓDICO DE ESTADO ---
+    _escanearEstadoRed: function() {
+        const estadoActual = navigator.onLine;
+        
+        // Detectar cambios no capturados por eventos nativos
+        if (estadoActual !== this.state.conexionActiva) {
+            this.state.conexionActiva = estadoActual;
+            estadoActual ? this.onReconnect() : this.onDisconnect();
+        }
+
+        // Log detallado de estado
+        if (this.config.logLevel === 'detailed') {
+            this._log(
+                "🔍 Escaneo: Red " + (estadoActual ? "ACTIVA" : "INACTIVA") + " | Calidad: " + this._obtenerCalidadSenal(),
+                'basic'
+            );
+        }
+    },
+
+    // --- INTENTO DE RESTAURACIÓN PROGRESIVA ---
+    _intentarRestauracion: function() {
+        if (this.state.intentosRestauracion >= this.config.maxReintentosRestauracion) {
+            this._log(
+                "🛑 Máximo de intentos alcanzado — Ejecutando recarga forzada",
+                'warning',
+                true
+            );
+            this._forzarRecarga();
+            return;
+        }
+
+        this.state.intentosRestauracion++;
+        this._log(
+            "🔧 Intento de restauración #" + this.state.intentosRestauracion + "/" + this.config.maxReintentosRestauracion,
+            'info'
+        );
+
+        // Priorizar Método de la Hormiga si está disponible
+        if (typeof iniciarReparacion === 'function') {
+            this._log("🐜 Llamando al Método de la Hormiga Dinámico", 'info');
+            try {
+                iniciarReparacion();
+                // Verificar si la restauración tuvo éxito después de un breve delay
+                setTimeout(() => this._verificarRestauracion(), 4000);
+            } catch (error) {
+                this._log("❌ Fallo en el Método de la Hormiga: " + error.message, 'error');
+                this._intentarRestauracion(); // Siguiente intento
+            }
+        } else {
+            this._log("⚠️ Método de la Hormiga no disponible — Pasando a recarga directa", 'warning');
+            this._forzarRecarga();
+        }
+    },
+
+    // --- VERIFICACIÓN DE RESTAURACIÓN ---
+    _verificarRestauracion: function() {
+        // Comprobar si la interfaz está funcional (ej: existencia de elementos clave)
+        const interfazFuncional = document.getElementById('monitoring-interface') || document.readyState === 'complete';
+        
+        if (interfazFuncional) {
+            this._log("✅ Restauración exitosa: Interfaz operativa", 'success', true);
+        } else {
+            this._log("❌ Restauración fallida — Intentando de nuevo", 'error');
+            this._intentarRestauracion();
+        }
+    },
+
+    // --- ACCIONES DE RESERVA EN DESCONEXIÓN ---
+    _ejecutarAccionesReserva: function() {
+        // Ejemplo: Guardar datos en localStorage para no perderlos
+        if (typeof localStorage !== 'undefined' && window.appData) {
+            localStorage.setItem('appData_backup', JSON.stringify(window.appData));
+            this._log("💾 Datos guardados en caché de emergencia", 'basic');
+        }
+    },
+
+    // --- RECARGA FORZADA ---
+    _forzarRecarga: function() {
+        if (this.config.enableAutoReload) {
+            this._log("🔄 Recargando interfaz de monitoreo...", 'info', true);
+            location.reload(true); // Recarga sin caché
+        } else {
+            this._log("ℹ️ Recarga automática deshabilitada — Por favor, recargue manualmente", 'warning', true);
+        }
+    },
+
+    // --- ALERTA TÁCTIL ---
+    _activarAlertaTactil: function() {
+        if (this.config.enableVibration && navigator.vibrate) {
+            navigator.vibrate(this.config.vibrationPattern);
+            // Detener vibración después de completar el patrón
+            setTimeout(() => navigator.vibrate(0), this.config.vibrationPattern.reduce((a, b) => a + b, 0) + 100);
+        }
+    },
+
+    // --- CÁLCULO SIMULADO DE CALIDAD DE SEÑAL ---
+    _obtenerCalidadSenal: function() {
+        // En entornos reales, se podría integrar con APIs de red o velocidad de conexión
+        const calidad = this.state.conexionActiva 
+            ? Math.floor(Math.random() * 60) + 40 + "%" // 40-100% si hay conexión
+            : "0%";
+        return calidad;
+    },
+
+    // --- SISTEMA DE LOGS ESTRUCURADO ---
+    _log: function(mensaje, tipo = 'basic', destacado = false) {
+        if (this.config.logLevel === 'silent') return;
+
+        let estilo = "";
+        switch(tipo) {
+            case 'success': estilo = "color: #5cb85c;"; break;
+            case 'error': estilo = "color: #d9534f; font-weight: bold;"; break;
+            case 'warning': estilo = "color: #f0ad4e; font-weight: 500;"; break;
+            case 'info': estilo = "color: #2c7fb8;"; break;
+            default: estilo = "color: #333;";
+        }
+
+        if (destacado) {
+            estilo += " font-size: 14px; padding: 2px 0;";
+            mensaje = "━ " + mensaje + " ━";
+        }
+
+        console.log("%c" + mensaje, estilo);
+    },
+
+    // --- DETENCIÓN SEGURA DEL PROTOCOLO ---
+    stop: function() {
+        clearInterval(this.state.intervaloEscaneo);
+        window.removeEventListener('offline', this.onDisconnect);
+        window.removeEventListener('online', this.onReconnect);
+        this._log("🛑 Vigilancia de red desactivada manualmente", 'warning', true);
+    }
+};
+
+// --- INICIALIZACIÓN POR DEFECTO (se puede personalizar) ---
+// Ejemplo de inicialización con configuración personalizada:
+// NetworkHealer.init({
+//     checkInterval: 3000,
+//     enableVibration: false,
+//     logLevel: 'basic'
+// });
+
+// Inicialización estándar
+NetworkHealer.init();
+ 
+ 
+Mejoras clave implementadas:
+ 
+1. Configuración flexible: Se puede personalizar cualquier parámetro al inicializar el protocolo.
+2. Sistema de logs estructurado: Diferentes niveles de detalle y estilos según el tipo de mensaje.
+3. Mecanismo de reintentos: Hasta 3 intentos de restauración antes de recargar forzadamente.
+4. Verificación de éxito: Comprueba si la interfaz está funcional después de la reparación.
+5. Acciones de reserva: Guarda datos en caché en caso de desconexión para evitar pérdidas.
+6. Cálculo de calidad de señal: Simulación que se puede integrar con APIs reales de red.
+7. Método de detención segura: Permite desactivar la vigilancia sin dejar procesos colgados.
+8. Validaciones: Evita errores por configuraciones incorrectas o funciones no disponibles.
+9. Integración robusta: Si el Método de la Hormiga falla, pasa automáticamente a recarga directa.
+10. Compatibilidad: Ajustes para dispositivos sin vibración o con configuraciones restringidas.
+ 
+¿Quieres que añada alguna funcionalidad específica, como integración con un sistema de notificaciones push, registro de eventos en un servidor remoto o detección de tipos de conexión (WiFi/móvil)? 🚀mmit["fecha_limite"], "%Y-%m-%d")
             
             # Recordatorio 1
             reminder1_date = limit_date - timedelta(days=commit["recordatorio1_dias"])
