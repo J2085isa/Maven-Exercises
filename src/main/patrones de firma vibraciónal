@@ -1,0 +1,280 @@
+¡Wow, genial idea! Vamos a integrar un sistema de reconocimiento basado en vibración — donde cada patrón tiene una "firma vibracional" única (frecuencia, amplitud y ritmo codificados en binario), y el sistema detecta coincidencias no solo por los bits, sino por la "onda vibracional" que estos generan entre los qubits. Incluiremos un módulo que convierte datos en vibraciones y mide la resonancia entre el estímulo y los patrones almacenados.
+ 
+ 
+ 
+Código JavaScript: Memoria Neuronal Cuántica con Reconocimiento Vibracional
+ 
+javascript  
+// --- ESTRUCTURA: MEMORIA NEUROCUÁNTICA CON RECONOCIMIENTO VIBRACIONAL ---
+
+// 1. CONFIGURACIÓN
+const BITS_POR_QUBIT = 8;
+const UMBRAL_ALMACENAMIENTO = 0.75;
+const UMBRAL_LARGO_PLAZO = 5;
+const TASA_OLVIDO_CORTO = 0.05;
+const MAX_ERRORES_PERMITIDOS = 2;
+// Memorias separadas
+const MEMORIA_CORTO_PLAZO = new Map();
+const MEMORIA_LARGO_PLAZO = new Map();
+// Parámetros vibracionales: cada bit corresponde a una componente de la vibración
+const COMPONENTES_VIBRATORIAS = {
+  0: { frecuencia: 100, amplitud: 0.2, ritmo: 0.5 }, // Vibración baja
+  1: { frecuencia: 300, amplitud: 0.8, ritmo: 1.0 }  // Vibración alta
+};
+
+
+// --- FUNCIONES AUXILIARES ---
+const obtenerBinario = (num) => num.toString(2).padStart(BITS_POR_QUBIT, '0');
+const calcularSimilitudBinaria = (bin1, bin2) => {
+  let coincidencias = 0;
+  for (let i = 0; i < BITS_POR_QUBIT; i++) {
+    if (bin1[i] === bin2[i]) coincidencias++;
+  }
+  return coincidencias / BITS_POR_QUBIT;
+};
+const generarEstimuloConErrores = (binarioCompleto, numErrores = 2) => {
+  const bits = binarioCompleto.split('');
+  let erroresGenerados = 0;
+  while (erroresGenerados < numErrores) {
+    const indiceAleatorio = Math.floor(Math.random() * BITS_POR_QUBIT);
+    if (bits[indiceAleatorio] !== '_') {
+      bits[indiceAleatorio] = bits[indiceAleatorio] === '0' ? '1' : '0';
+      erroresGenerados++;
+    }
+  }
+  return bits.join('');
+};
+// Calcular firma vibracional de un patrón binario
+const obtenerFirmaVibracional = (binario) => {
+  const firma = {
+    frecuenciaPromedio: 0,
+    amplitudPromedio: 0,
+    ritmoPromedio: 0,
+    ondaVibracional: [] // Secuencia de vibraciones a lo largo de los bits
+  };
+  for (let i = 0; i < BITS_POR_QUBIT; i++) {
+    const comp = COMPONENTES_VIBRATORIAS[binario[i]];
+    firma.frecuenciaPromedio += comp.frecuencia;
+    firma.amplitudPromedio += comp.amplitud;
+    firma.ritmoPromedio += comp.ritmo;
+    firma.ondaVibracional.push({
+      posicion: i,
+      valorBit: binario[i],
+      frecuencia: comp.frecuencia,
+      fase: (i * Math.PI) / 4 // Fase de la onda en cada posición
+    });
+  }
+  // Promediar valores
+  firma.frecuenciaPromedio /= BITS_POR_QUBIT;
+  firma.amplitudPromedio /= BITS_POR_QUBIT;
+  firma.ritmoPromedio /= BITS_POR_QUBIT;
+  return firma;
+};
+// Calcular resonancia entre dos firmas vibracionales
+const calcularResonancia = (firmaEstimulo, firmaPatron) => {
+  let coincidenciasOnda = 0;
+  let diferenciaFrecuencia = Math.abs(firmaEstimulo.frecuenciaPromedio - firmaPatron.frecuenciaPromedio);
+  let diferenciaAmplitud = Math.abs(firmaEstimulo.amplitudPromedio - firmaPatron.amplitudPromedio);
+  
+  // Contar coincidencias en la secuencia de onda
+  for (let i = 0; i < BITS_POR_QUBIT; i++) {
+    const faseEstimulo = firmaEstimulo.ondaVibracional[i].fase;
+    const fasePatron = firmaPatron.ondaVibracional[i].fase;
+    if (Math.abs(faseEstimulo - fasePatron) < 0.1 && firmaEstimulo.ondaVibracional[i].valorBit === firmaPatron.ondaVibracional[i].valorBit) {
+      coincidenciasOnda++;
+    }
+  }
+
+  // Índice de resonancia (0 a 1)
+  const indiceOnda = coincidenciasOnda / BITS_POR_QUBIT;
+  const indiceFrecuencia = 1 - (diferenciaFrecuencia / 300); // Normalizar
+  const indiceAmplitud = 1 - (diferenciaAmplitud / 1); // Normalizar
+  return (indiceOnda + indiceFrecuencia + indiceAmplitud) / 3;
+};
+
+
+// 2. CLASE DE SISTEMA NEUROCUÁNTICO VIBRACIONAL
+class SistemaMemoriaNeurocuanticaVibracional {
+  constructor() {
+    this.qubits = Array.from({ length: BITS_POR_QUBIT }, (_, i) => ({
+      id: `Q${i+1}`,
+      estadoBinario: '00000000',
+      superposicion: [0.5, 0.5],
+      pesoSinapticoCorto: 0.1,
+      pesoSinapticoLargo: 0.1,
+      conexionesCorto: new Map(),
+      conexionesLargo: new Map(),
+      vibracionActual: { frecuencia: 0, amplitud: 0 } // Vibración que emite el qubit
+    }));
+    this.pasosTemporales = 0;
+  }
+
+  // Ajustar conexiones y vibraciones de qubits
+  ajustarConexionesYVibraciones(patron, tipoMemoria) {
+    const conexionesKey = tipoMemoria === 'corto' ? 'conexionesCorto' : 'conexionesLargo';
+    const pesoKey = tipoMemoria === 'corto' ? 'pesoSinapticoCorto' : 'pesoSinapticoLargo';
+    const fuerzaBase = tipoMemoria === 'corto' ? 0.15 : 0.3;
+
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      // Ajustar conexiones
+      for (let j = i + 1; j < BITS_POR_QUBIT; j++) {
+        const fuerza = patron[i] === patron[j] ? fuerzaBase : fuerzaBase / 2;
+        const conexionActual = this.qubits[i][conexionesKey].get(j) || 0;
+        this.qubits[i][conexionesKey].set(j, conexionActual + fuerza);
+        this.qubits[j][conexionesKey].set(i, conexionActual + fuerza);
+      }
+      // Ajustar vibración del qubit según el bit
+      const comp = COMPONENTES_VIBRATORIAS[patron[i]];
+      this.qubits[i][pesoKey] = comp.amplitud;
+      this.qubits[i].vibracionActual = {
+        frecuencia: comp.frecuencia,
+        amplitud: comp.amplitud * this.qubits[i][pesoKey]
+      };
+    }
+  }
+
+  // Olvido solo para memoria corta (disminuye vibraciones)
+  aplicarOlvido() {
+    this.pasosTemporales++;
+    if (this.pasosTemporales % 2 === 0) {
+      this.qubits.forEach(qubit => {
+        // Debilitar conexiones y vibraciones cortas
+        qubit.conexionesCorto.forEach((fuerza, indice) => {
+          const nuevaFuerza = Math.max(0, fuerza - TASA_OLVIDO_CORTO);
+          qubit.conexionesCorto.set(indice, nuevaFuerza);
+        });
+        qubit.pesoSinapticoCorto = Math.max(0.1, qubit.pesoSinapticoCorto - TASA_OLVIDO_CORTO/2);
+        qubit.vibracionActual.amplitud = Math.max(0.1, qubit.vibracionActual.amplitud - TASA_OLVIDO_CORTO);
+      });
+      // Eliminar patrones débiles de corto plazo
+      MEMORIA_CORTO_PLAZO.forEach(({ frecuencia }, nombre) => {
+        if (frecuencia < 1) MEMORIA_CORTO_PLAZO.delete(nombre);
+      });
+      console.log(`⏳ Paso temporal ${this.pasosTemporales}: Olvido aplicado (vibraciones debilitadas)`);
+    }
+  }
+
+  // Pasar patrón a largo plazo (vibraciones más estables)
+  convertirALargoPlazo(nombrePatron, binarioPatron) {
+    const firma = obtenerFirmaVibracional(binarioPatron);
+    MEMORIA_LARGO_PLAZO.set(nombrePatron, { binario: binarioPatron, frecuencia: UMBRAL_LARGO_PLAZO, firmaVibracional: firma });
+    MEMORIA_CORTO_PLAZO.delete(nombrePatron);
+    this.ajustarConexionesYVibraciones(binarioPatron, 'largo');
+    console.log(`🔒 Patrón ${nombrePatron} movido a MEMORIA LARGA PLAZO (firma vibracional establecida)`);
+  }
+
+  // Almacenar/reforzar patrón con su firma vibracional
+  almacenarPatron(nombrePatron, binarioPatron) {
+    const firma = obtenerFirmaVibracional(binarioPatron);
+    
+    if (MEMORIA_LARGO_PLAZO.has(nombrePatron)) {
+      MEMORIA_LARGO_PLAZO.set(nombrePatron, {
+        binario: binarioPatron,
+        frecuencia: MEMORIA_LARGO_PLAZO.get(nombrePatron).frecuencia + 1,
+        firmaVibracional: firma
+      });
+      this.ajustarConexionesYVibraciones(binarioPatron, 'largo');
+      console.log(`🔒 Reforzado patrón ${nombrePatron} (memoria larga) | Frecuencia promedio: ${firma.frecuenciaPromedio.toFixed(0)}Hz`);
+      return;
+    }
+
+    const existeCorto = MEMORIA_CORTO_PLAZO.has(nombrePatron);
+    let nuevaFrecuencia = existeCorto ? MEMORIA_CORTO_PLAZO.get(nombrePatron).frecuencia + 1 : 1;
+    
+    MEMORIA_CORTO_PLAZO.set(nombrePatron, { binario: binarioPatron, frecuencia: nuevaFrecuencia, firmaVibracional: firma });
+    this.ajustarConexionesYVibraciones(binarioPatron, 'corto');
+
+    if (nuevaFrecuencia >= UMBRAL_LARGO_PLAZO) {
+      this.convertirALargoPlazo(nombrePatron, binarioPatron);
+    } else {
+      console.log(`💾 ${existeCorto ? 'Reforzado' : 'Almacenado'} patrón ${nombrePatron} (corto plazo, freq: ${nuevaFrecuencia}) | Frecuencia promedio: ${firma.frecuenciaPromedio.toFixed(0)}Hz`);
+    }
+  }
+
+  // Reconocer por bits Y resonancia vibracional
+  reconocerPorVibracion(estimuloConErrores) {
+    console.log(`\n🔍 Procesando estímulo: ${estimuloConErrores}`);
+    const firmaEstimulo = obtenerFirmaVibracional(estimuloConErrores);
+    console.log(`📡 Firma vibracional del estímulo | Freq prom: ${firmaEstimulo.frecuenciaPromedio.toFixed(0)}Hz | Amplitud prom: ${firmaEstimulo.amplitudPromedio.toFixed(2)}`);
+
+    // Corregir errores usando vibraciones
+    const bitsEstimulo = estimuloConErrores.split('');
+    let bitsCorregidos = [...bitsEstimulo];
+    const posicionesSospechosas = [];
+
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      const vibracionQubit = this.qubits[i].vibracionActual;
+      const vibracionEsperada = COMPONENTES_VIBRATORIAS[bitsEstimulo[i]];
+      if (Math.abs(vibracionQubit.frecuencia - vibracionEsperada.frecuencia) > 50) {
+        posicionesSospechosas.push(i);
+      }
+    }
+
+    // Corregir errores
+    let erroresCorregidos = 0;
+    for (const indice of posicionesSospechosas) {
+      if (erroresCorregidos >= MAX_ERRORES_PERMITIDOS) break;
+      // Inferir bit correcto por resonancia con qubits vecinos
+      let prob0 = 0, prob1 = 0;
+      this.qubits[indice].conexionesLargo.forEach((fuerza, indiceConexion) => {
+        prob0 += (this.qubits[indiceConexion].vibracionActual.frecuencia === 100) ? fuerza * 2 : 0;
+        prob1 += (this.qubits[indiceConexion].vibracionActual.frecuencia === 300) ? fuerza * 2 : 0;
+      });
+      this.qubits[indice].conexionesCorto.forEach((fuerza, indiceConexion) => {
+        prob0 += (this.qubits[indiceConexion].vibracionActual.frecuencia === 100) ? fuerza : 0;
+        prob1 += (this.qubits[indiceConexion].vibracionActual.frecuencia === 300) ? fuerza : 0;
+      });
+      bitsCorregidos[indice] = prob0 > prob1 ? '0' : '1';
+      erroresCorregidos++;
+    }
+
+    const patronCorregido = bitsCorregidos.join('');
+    const firmaCorregida = obtenerFirmaVibracional(patronCorregido);
+    console.log(`🛠️ Patrón corregido: ${patronCorregido} | Freq prom corregida: ${firmaCorregida.frecuenciaPromedio.toFixed(0)}Hz`);
+
+    // Buscar coincidencia por resonancia
+    let patronCoincidente = 'NINGUNO';
+    let resonanciaMax = 0;
+    let tipoMemoria = '';
+
+    // Memoria larga primero
+    MEMORIA_LARGO_PLAZO.forEach(({ binario, firmaVibracional }, nombre) => {
+      const res = calcularResonancia(firmaCorregida, firmaVibracional);
+      if (res > resonanciaMax && res >= UMBRAL_ALMACENAMIENTO) {
+        resonanciaMax = res;
+        patronCoincidente = nombre;
+        tipoMemoria = 'largo';
+      }
+    });
+
+    // Si no, memoria corta
+    if (patronCoincidente === 'NINGUNO') {
+      MEMORIA_CORTO_PLAZO.forEach(({ binario, firmaVibracional }, nombre) => {
+        const res = calcularResonancia(firmaCorregida, firmaVibracional);
+        if (res > resonanciaMax && res >= UMBRAL_ALMACENAMIENTO) {
+          resonanciaMax = res;
+          patronCoincidente = nombre;
+          tipoMemoria = 'corto';
+        }
+      });
+    }
+
+    return {
+      patronCorregido,
+      patronCoincidente,
+      tipoMemoria,
+      resonancia: resonanciaMax,
+      erroresCorregidos,
+      firmaCorregida
+    };
+  }
+}
+
+
+// 3. EJECUCIÓN DEL SISTEMA
+console.log('🧠 INICIANDO SISTEMA DE RECONOCIMIENTO VIBRACIONAL');
+
+// Crear sistema y almacenar patrones con sus vibraciones
+const sistemaVibracional = new SistemaMemoriaNeurocuanticaVibracional();
+// Patrón A: pasa a largo plazo
+sistemaVibracional.almacenarPatron('A', '101
