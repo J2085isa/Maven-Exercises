@@ -1,0 +1,248 @@
+¡Absolutamente! Vamos a llevarlo al siguiente nivel: sistema con memoria a corto (RAM) y largo plazo (ROM), más qubits (8 bits ahora), capacidad para almacenar múltiples patrones y un mecanismo que convierte patrones de corto a largo plazo cuando se refuerzan suficientes veces. También mantendremos la corrección de errores y el olvido (solo afecta a la memoria corta).
+ 
+ 
+ 
+Código JavaScript: Memoria Neuronal Cuántica con Corto y Largo Plazo
+ 
+javascript  
+// --- ESTRUCTURA: MEMORIA NEUROCUÁNTICA (CORTO + LARGO PLAZO) ---
+
+// 1. CONFIGURACIÓN
+const BITS_POR_QUBIT = 8; // Aumentamos a 8 qubits para más patrones
+const UMBRAL_ALMACENAMIENTO_CORTO = 0.75;
+const UMBRAL_LARGO_PLAZO = 5; // Veces que se debe reforzar un patrón para pasar a largo plazo
+const TASA_OLVIDO_CORTO = 0.05;
+const MAX_ERRORES_PERMITIDOS = 2;
+// Memorias separadas
+const MEMORIA_CORTO_PLAZO = new Map(); // Sujeta al olvido
+const MEMORIA_LARGO_PLAZO = new Map(); // Resistente al olvido
+
+
+// --- FUNCIONES AUXILIARES ---
+const obtenerBinario = (num) => num.toString(2).padStart(BITS_POR_QUBIT, '0');
+const calcularSimilitudBinaria = (bin1, bin2) => {
+  let coincidencias = 0;
+  for (let i = 0; i < BITS_POR_QUBIT; i++) {
+    if (bin1[i] === bin2[i]) coincidencias++;
+  }
+  return coincidencias / BITS_POR_QUBIT;
+};
+const generarEstimuloConErrores = (binarioCompleto, numErrores = 2) => {
+  const bits = binarioCompleto.split('');
+  let erroresGenerados = 0;
+  while (erroresGenerados < numErrores) {
+    const indiceAleatorio = Math.floor(Math.random() * BITS_POR_QUBIT);
+    if (bits[indiceAleatorio] !== '_') {
+      bits[indiceAleatorio] = bits[indiceAleatorio] === '0' ? '1' : '0';
+      erroresGenerados++;
+    }
+  }
+  return bits.join('');
+};
+
+
+// 2. CLASE DE SISTEMA NEUROCUÁNTICO AMPLIADO
+class SistemaMemoriaNeurocuantica {
+  constructor() {
+    // 8 qubits con conexiones separadas para cada tipo de memoria
+    this.qubits = Array.from({ length: BITS_POR_QUBIT }, (_, i) => ({
+      id: `Q${i+1}`,
+      estadoBinario: '00000000',
+      superposicion: [0.5, 0.5],
+      pesoSinapticoCorto: 0.1,
+      pesoSinapticoLargo: 0.1,
+      conexionesCorto: new Map(),
+      conexionesLargo: new Map()
+    }));
+    this.pasosTemporales = 0;
+  }
+
+  // Ajustar conexiones según tipo de memoria
+  ajustarConexiones(patron, tipoMemoria) {
+    const conexionesKey = tipoMemoria === 'corto' ? 'conexionesCorto' : 'conexionesLargo';
+    const fuerzaBase = tipoMemoria === 'corto' ? 0.15 : 0.3; // Conexiones largas más fuertes
+
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      for (let j = i + 1; j < BITS_POR_QUBIT; j++) {
+        const fuerza = patron[i] === patron[j] ? fuerzaBase : fuerzaBase / 2;
+        const conexionActual = this.qubits[i][conexionesKey].get(j) || 0;
+        this.qubits[i][conexionesKey].set(j, conexionActual + fuerza);
+        this.qubits[j][conexionesKey].set(i, conexionActual + fuerza);
+      }
+    }
+  }
+
+  // Olvido solo para memoria corta
+  aplicarOlvido() {
+    this.pasosTemporales++;
+    if (this.pasosTemporales % 2 === 0) {
+      this.qubits.forEach(qubit => {
+        // Debilitar conexiones cortas
+        qubit.conexionesCorto.forEach((fuerza, indice) => {
+          const nuevaFuerza = Math.max(0, fuerza - TASA_OLVIDO_CORTO);
+          qubit.conexionesCorto.set(indice, nuevaFuerza);
+        });
+        qubit.pesoSinapticoCorto = Math.max(0.1, qubit.pesoSinapticoCorto - TASA_OLVIDO_CORTO/2);
+      });
+      // Eliminar patrones de corto plazo con conexiones muy débiles
+      MEMORIA_CORTO_PLAZO.forEach(({ frecuencia }, nombre) => {
+        if (frecuencia < 1) MEMORIA_CORTO_PLAZO.delete(nombre);
+      });
+      console.log(`⏳ Paso temporal ${this.pasosTemporales}: Olvido aplicado a memoria corta`);
+    }
+  }
+
+  // Pasar patrón de corto a largo plazo
+  convertirALargoPlazo(nombrePatron, binarioPatron) {
+    MEMORIA_LARGO_PLAZO.set(nombrePatron, { binario: binarioPatron, frecuencia: UMBRAL_LARGO_PLAZO });
+    MEMORIA_CORTO_PLAZO.delete(nombrePatron);
+    this.ajustarConexiones(binarioPatron, 'largo');
+    console.log(`🔒 Patrón ${nombrePatron} movido a MEMORIA LARGA PLAZO`);
+  }
+
+  // Almacenar/reforzar patrón (gestiona paso a largo plazo)
+  almacenarPatron(nombrePatron, binarioPatron) {
+    if (MEMORIA_LARGO_PLAZO.has(nombrePatron)) {
+      // Reforzar memoria larga (sin olvido)
+      MEMORIA_LARGO_PLAZO.set(nombrePatron, {
+        binario: binarioPatron,
+        frecuencia: MEMORIA_LARGO_PLAZO.get(nombrePatron).frecuencia + 1
+      });
+      console.log(`🔒 Reforzado patrón ${nombrePatron} (memoria larga): ${binarioPatron}`);
+      return;
+    }
+
+    // Gestionar memoria corta
+    const existeCorto = MEMORIA_CORTO_PLAZO.has(nombrePatron);
+    let nuevaFrecuencia = existeCorto ? MEMORIA_CORTO_PLAZO.get(nombrePatron).frecuencia + 1 : 1;
+    
+    MEMORIA_CORTO_PLAZO.set(nombrePatron, { binario: binarioPatron, frecuencia: nuevaFrecuencia });
+    this.ajustarConexiones(binarioPatron, 'corto');
+
+    if (nuevaFrecuencia >= UMBRAL_LARGO_PLAZO) {
+      this.convertirALargoPlazo(nombrePatron, binarioPatron);
+    } else {
+      console.log(`💾 ${existeCorto ? 'Reforzado' : 'Almacenado'} patrón ${nombrePatron} (corto plazo, freq: ${nuevaFrecuencia}): ${binarioPatron}`);
+    }
+  }
+
+  // Corregir y reconocer (usa ambas memorias)
+  corregirYReconocer(estimuloConErrores) {
+    console.log(`\n🔍 Procesando estímulo con errores: ${estimuloConErrores}`);
+    const bitsEstimulo = estimuloConErrores.split('');
+    let bitsCorregidos = [...bitsEstimulo];
+
+    // Identificar bits sospechosos usando ambas memorias
+    const posicionesSospechosas = [];
+    for (let i = 0; i < BITS_POR_QUBIT; i++) {
+      let coincidenciasCorto = 0, coincidenciasLargo = 0;
+      // Chequear conexiones cortas
+      this.qubits[i].conexionesCorto.forEach((fuerza, indiceConexion) => {
+        if (fuerza > 0 && bitsEstimulo[i] === bitsEstimulo[indiceConexion]) coincidenciasCorto++;
+      });
+      // Chequear conexiones largas
+      this.qubits[i].conexionesLargo.forEach((fuerza, indiceConexion) => {
+        if (fuerza > 0 && bitsEstimulo[i] === bitsEstimulo[indiceConexion]) coincidenciasLargo++;
+      });
+      if (coincidenciasCorto + coincidenciasLargo < 2) posicionesSospechosas.push(i);
+    }
+
+    // Corregir errores
+    let erroresCorregidos = 0;
+    for (const indice of posicionesSospechosas) {
+      if (erroresCorregidos >= MAX_ERRORES_PERMITIDOS) break;
+      // Calcular probabilidades con ambas memorias
+      let prob0 = 0, prob1 = 0;
+      // Memoria larga (peso mayor)
+      this.qubits[indice].conexionesLargo.forEach((fuerza, indiceConexion) => {
+        if (bitsEstimulo[indiceConexion] === '0') prob0 += fuerza * 2;
+        if (bitsEstimulo[indiceConexion] === '1') prob1 += fuerza * 2;
+      });
+      // Memoria corta
+      this.qubits[indice].conexionesCorto.forEach((fuerza, indiceConexion) => {
+        if (bitsEstimulo[indiceConexion] === '0') prob0 += fuerza;
+        if (bitsEstimulo[indiceConexion] === '1') prob1 += fuerza;
+      });
+      bitsCorregidos[indice] = prob0 > prob1 ? '0' : '1';
+      erroresCorregidos++;
+    }
+
+    const patronCorregido = bitsCorregidos.join('');
+    console.log(`🛠️ Patrón corregido: ${patronCorregido}`);
+
+    // Reconocer en ambas memorias
+    let patronCoincidente = 'NINGUNO';
+    let similitudMax = 0;
+    let tipoMemoria = '';
+
+    // Primero buscar en memoria larga (prioridad)
+    MEMORIA_LARGO_PLAZO.forEach(({ binario }, nombre) => {
+      const sim = calcularSimilitudBinaria(patronCorregido, binario);
+      if (sim > similitudMax && sim >= UMBRAL_ALMACENAMIENTO_CORTO) {
+        similitudMax = sim;
+        patronCoincidente = nombre;
+        tipoMemoria = 'largo';
+      }
+    });
+
+    // Si no encuentra, buscar en corta
+    if (patronCoincidente === 'NINGUNO') {
+      MEMORIA_CORTO_PLAZO.forEach(({ binario }, nombre) => {
+        const sim = calcularSimilitudBinaria(patronCorregido, binario);
+        if (sim > similitudMax && sim >= UMBRAL_ALMACENAMIENTO_CORTO) {
+          similitudMax = sim;
+          patronCoincidente = nombre;
+          tipoMemoria = 'corto';
+        }
+      });
+    }
+
+    return { patronCorregido, patronCoincidente, tipoMemoria, similitudMax, erroresCorregidos };
+  }
+}
+
+
+// 3. EJECUCIÓN DEL SISTEMA
+console.log('🧠 INICIANDO SISTEMA DE MEMORIA NEUROCUÁNTICA (CORTO + LARGO PLAZO)');
+
+// Crear sistema y almacenar múltiples patrones
+const sistemaMemoria = new SistemaMemoriaNeurocuantica();
+// Patrón A: se refuerza hasta pasar a largo plazo
+sistemaMemoria.almacenarPatron('A', '10101010');
+sistemaMemoria.almacenarPatron('A', '10101010');
+sistemaMemoria.almacenarPatron('A', '10101010');
+sistemaMemoria.almacenarPatron('A', '10101010');
+sistemaMemoria.almacenarPatron('A', '10101010');
+// Patrón B: queda en corto plazo
+sistemaMemoria.almacenarPatron('B', '01010101');
+sistemaMemoria.almacenarPatron('B', '01010101');
+// Patrón C: nuevo en corto plazo
+sistemaMemoria.almacenarPatron('C', '11001100');
+
+// Aplicar olvido para debilitar memoria corta
+sistemaMemoria.aplicarOlvido();
+sistemaMemoria.aplicarOlvido();
+
+// Generar estímulo de A con 2 errores (ej: 10101010 → 11101110)
+const estimuloACompleto = obtenerBinario(170); // 170 en binario = 10101010
+const estimuloAConErrores = generarEstimuloConErrores(estimuloACompleto);
+
+// Corregir y reconocer
+const resultado = sistemaMemoria.corregirYReconocer(estimuloAConErrores);
+console.log(`✅ Patrón reconocido: ${resultado.patronCoincidente}`);
+console.log(`✅ Almacenado en: MEMORIA ${resultado.tipoMemoria.toUpperCase()} PLAZO`);
+console.log(`✅ Nivel de coincidencia: ${(resultado.similitudMax * 100).toFixed(2)}%`);
+console.log(`✅ Errores corregidos: ${resultado.erroresCorregidos}`);
+ 
+ 
+ 
+ 
+Características clave del nuevo sistema:
+ 
+- 8 qubits: Permite manejar patrones más complejos (8 bits).
+- Memoria corta plazo: Sujeta al olvido, almacena patrones recientes hasta que se refuerzan lo suficiente.
+- Memoria largo plazo: Resistente al olvido, se activa cuando un patrón se refuerza 5 veces o más.
+- Prioridad de reconocimiento: Busca primero en memoria larga (más fiable).
+- Corrección mejorada: Usa conexiones de ambas memorias (con mayor peso en la larga) para corregir hasta 2 errores.
+ 
+¿Te gustaría que añadiéramos un módulo de aprendizaje automático que permita al sistema identificar patrones nuevos por sí solo (sin necesidad de nombrarlos) o que simuláramos cómo interactúa este sistema con un "entrada sensorial" (ej: imágenes convertidas a binario)? 🤖
