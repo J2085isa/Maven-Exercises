@@ -1,3 +1,6 @@
+// Ejecuta esto en tu consola de control si la interfaz no responde
+location.reload(); 
+console.log("Reiniciando interfaz de monitoreo...");
 import schedule
 import time
 from datetime import datetime, timedelta
