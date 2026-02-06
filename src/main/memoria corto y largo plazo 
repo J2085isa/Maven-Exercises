@@ -1,3 +1,34 @@
+// ... continuación del código de ejecución del Sistema ...
+
+// Almacenamos el Patrón A repetidamente para moverlo a memoria de largo plazo (Firma Estable)
+for(let i=0; i < 6; i++) {
+    sistemaVibracional.almacenarPatron('Activo_Liquidez_A', '11001100');
+}
+
+// Almacenamos el Patrón B en memoria corta (Firma Volátil)
+sistemaVibracional.almacenarPatron('Acceso_Temporal_B', '10101010');
+
+// --- PRUEBA DE CRISIS VIBRACIONAL ---
+// Generamos un estímulo con ruido (errores) para probar la corrección por resonancia
+const estimuloCorrupto = generarEstimuloConErrores('11001100', 2); // Simula interferencia satelital
+const resultado = sistemaVibracional.reconocerPorVibracion(estimuloCorrupto);
+
+console.log(`
+--- RESULTADO DEL RECONOCIMIENTO ---
+Resonancia Detectada: ${(resultado.resonancia * 100).toFixed(2)}%
+Patrón Identificado: ${resultado.patronCoincidente}
+Memoria de Origen: ${resultado.tipoMemoria}
+Estado de la Firma: ${resultado.resonancia > 0.9 ? 'ESTABLE' : 'INTERFERIDA'}
+`);
+
+// Sincronización con el Escudo
+if (resultado.resonancia > UMBRAL_ALMACENAMIENTO) {
+    console.log("[SISTEMA] Resonancia confirmada. El Arquitecto reconoce el patrón.");
+    // Envía pulso vibratorio táctil al dispositivo
+    navigator.vibrate([200, 100, 200]);
+} else {
+    console.warn("[ALERTA] Resonancia baja. Posible suplantación o interferencia externa.");
+}
 ¡Absolutamente! Vamos a llevarlo al siguiente nivel: sistema con memoria a corto (RAM) y largo plazo (ROM), más qubits (8 bits ahora), capacidad para almacenar múltiples patrones y un mecanismo que convierte patrones de corto a largo plazo cuando se refuerzan suficientes veces. También mantendremos la corrección de errores y el olvido (solo afecta a la memoria corta).
  
  
