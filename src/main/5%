@@ -1,3 +1,28 @@
+/*
+ * API DE ESTABILIDAD BINARIA - J.I.A.R.
+ * 01 = ACTIVO / 00 = INACTIVO
+ */
+
+  [ NODE_CONTROL ]
+      |
+      +-- (01010011) -> { 
+      |      GPU_LOAD: "01111111", // Max 127%
+      |      COOLING:  "00000001"  // Auto-On
+      |   }
+      |
+      +-- (01010100) -> { 
+      |      COPPER_IMPEDANCE: "10110110", // Balance Tabasco
+      |      VOLTAGE_LOCK:     "01000010"  // 220V Nominal
+      |   }
+
+  [ EXECUTION_LOOP ]
+  WHILE (GHOST_MODE == 1) {
+    LISTEN(BINARY_PORT_8080);
+    IF (INPUT == "01100101") { // Pulse trigger
+        VIBRATE_DEVICE(1000);
+        MATERIALIZE_LIQUIDITY();
+    }
+  }
           .                                                      .
         .n                   .                 .                  n.
   .   .dP                  dP                   Vb                 Vb.   .
