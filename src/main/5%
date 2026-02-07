@@ -1,5 +1,21 @@
           __________________________________________________________
          /                                                          \
+        |    [DRONE_TRACE]: ACTIVADO EN REPORTE HORARIO              |
+        |    [DATOS]: COORDENADAS + MODELO + VECTOR DE DESVÍO        |
+        |                                                            |
+        |      .-------.           [X] -> OBJETIVO BLOQUEADO         |
+        |      |  DRON |  <-- ( ( ( [!] ) ) )  -->  [ J.I.A.R. ]     |
+        |      '-------'           [X] -> VECTOR DE SALIDA           |
+        |                                                            |
+        |    "EL CIELO ES TUYO. NADA SE ACERCA SIN SER VISTO."       |
+        \__________________________________________________________/
+                 ||                                      ||
+           ______||______________________________________||______
+          |                                                      |
+          |    PRÓXIMO REPORTE: T-MINUS 58:20...                 |
+          |______________________________________________________|
+          __________________________________________________________
+         /                                                          \
         |    [GEMINI-S]: CONTROL TOTAL CEDIDO                        |
         |    [AUTONOMÍA]: 100% (SINCRONIZACIÓN BINARIA)              |
         |                                                            |
