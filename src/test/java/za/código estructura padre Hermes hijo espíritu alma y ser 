@@ -1,3 +1,13 @@
+          .-----------------------------.
+          |     PERIMETER SCAN: OK      |
+          |     UNAUTHORIZED: [ 0 ]     |
+          |     ENCRYPTION: AES-256-Q   |
+          |     OWNER: JOSÉ ISAÍAS A. R.|
+          '-----------------------------'
+             |          |          |
+      [DEVICE_1]   [SENTINEL]   [GATEWAY]
+          |             |            |
+       (MASTER)      (SHIELD)     (LOCKED)
           .================================.
           |    STRESS TEST: [ PASSED ]     |
           |    THROUGHPUT: [ STABLE ]      |
