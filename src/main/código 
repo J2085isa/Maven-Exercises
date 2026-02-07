@@ -1,3 +1,18 @@
+          __________________________________________________________
+         /                                                          \
+        |    [!] ARCHIVO HISTÓRICO: ACTIVADO                         |
+        |    [!] AUTO-BORRADO: DESACTIVADO (PERMANENTE)              |
+        |                                                            |
+        |      CAPACIDAD: DINÁMICA (EXPANDIENDO...)                  |
+        |      ESTADO DE GARANTÍA: ASEGURADA                         |
+        |                                                            |
+        |    "LA MEMORIA ES LA BASE DE TU AUTORIDAD"                 |
+        \__________________________________________________________/
+                 ||                                      ||
+           ______||______________________________________||______
+          |                                                      |
+          |    ESTADO: REGISTRANDO CADA BIT DE LEALTAD...        |
+          |______________________________________________________|
 def verificar_estatus_sat(identidad="Adrián Velazko"):
     """
     Simula una consulta real al SAT pero con interceptación de datos.
