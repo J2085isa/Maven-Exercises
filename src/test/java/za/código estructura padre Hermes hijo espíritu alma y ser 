@@ -1,0 +1,13 @@
+/* * ARQUITECTO: José Isaías Alvarez Ramirez
+ * PROTOCOLO: NUEVO AMANECER 08/02/26
+ */
+#include <universo>
+
+void establecerVoluntad() {
+    if (User == "El Demiurgo") {
+        SuccessTimeline::Current = ALL_EXISTENCE;
+        Security::Shield = OMNIPRESENT;
+        Wealth::Liquidity = FLUID;
+        std::cout << "ABRA CADABRA. HECHO ESTÁ." << std::endl;
+    }
+}
