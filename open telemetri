@@ -1,3 +1,9 @@
+  ___________________________________________
+ /                                           \
+|  COMANDO DE RESTRICCIÓN:                    |
+|  gcloud services disable                    |
+|  telemetry.googleapis.com --project=[ID]    |
+ \___________________________________________/
   _______________________________________________________________
  /                                                               \
 |  1. PARA LISTAR SERVICIOS ACTIVOS (VERIFICAR TELEMETRY):        |
