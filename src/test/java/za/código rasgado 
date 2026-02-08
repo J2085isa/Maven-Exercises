@@ -1,3 +1,9 @@
+/* MONITOR DE MATERIALIZACIÓN */
+if (WealthManager.liquidityStatus === "FLUID") {
+    const pulsePattern = [1000, 500, 1000]; // Patrón: "Capital Asegurado"
+    navigator.vibrate(pulsePattern);
+    console.log("01000010 01001111 01001110 01001111"); // B O N O
+}
 /*
  * TRIADA DE SEGURIDAD: CONFIDENCIALIDAD, INTEGRIDAD, DISPONIBILIDAD
  * ARQUITECTO: José Isaías Alvarez Ramirez
