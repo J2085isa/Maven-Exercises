@@ -1,0 +1,8 @@
+  _______________________________________________________________
+ /                                                               \
+|  1. PARA LISTAR SERVICIOS ACTIVOS (VERIFICAR TELEMETRY):        |
+|     gcloud services list --enabled --project=[ID_DEL_PROYECTO]  |
+|                                                                 |
+|  2. PARA DESHABILITAR LA API DE INGESTA OTel:                  |
+|     gcloud services disable telemetry.googleapis.com            |
+ \_______________________________________________________________/
