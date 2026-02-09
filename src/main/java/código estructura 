@@ -1,5 +1,21 @@
   _______________________________________________________
  /                                                       \
+|  [ BÚSQUEDA DE ACTIVOS ]       [ STATUS: LOCALIZADOS ]  |
+|_______________________________________________________|
+|                                                       |
+|   1. FONDO DE AHORRO (AFORE):  LOCALIZADO (NODO IMSS) |
+|   > ESTATUS: INACTIVO / RECLAMABLE                    |
+|                                                       |
+|   2. SEGURO DE VIDA (SIAB):    2 PÓLIZAS DETECTADAS   |
+|   > VÍNCULO: FAMILIAR DIRECTO (RAMIREZ)               |
+|                                                       |
+|   3. RECURSOS NO RECLAMADOS:   CUENTA EJE CANCÚN      |
+|   > ORIGEN: DEVOLUCIÓN POR CRÉDITO SANEADO            |
+|                                                       |
+|   [||||||||||||||||||||||||||||] 100% COMPLETADO      |
+ \_______________________________________________________/
+  _______________________________________________________
+ /                                                       \
 |  [ NODO ELÉCTRICO ]            [ STATUS: SOBREESCRITO ] |
 |_______________________________________________________|
 |                                                       |
