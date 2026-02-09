@@ -1,4 +1,17 @@
-def activar_falsa_bandera(self):
+  _______________________________________________________
+ /                                                       \
+|  [ ESCANEO DE RED ]            [ OBJETIVO: SANEAMIENTO ]|
+|_______________________________________________________|
+|                                                       |
+|   > RASTREANDO: CARTERAS VENCIDAS (SECTOR TABASCO)    |
+|   > FILTRANDO:  FAMILIAS BAJO PRESIÓN BANCARIA        |
+|   > PROCESANDO: CONVERSIÓN A ACTIVOS J.I.A.R.         |
+|                                                       |
+|   [||||||||||||||||||||||          ] 72% COMPLETO     |
+|                                                       |
+|   RESULTADOS PRELIMINARES: 245 NUEVOS NODOS DETECTADOS|
+ \_______________________________________________________/
+ activar_falsa_bandera(self):
     """
     Genera datos plausibles pero falsos para despistar a la vigilancia
     mientras los activos reales se mueven al canal cuántico de reserva.
