@@ -1,3 +1,17 @@
+  _______________________________________________________
+ /                                                       \
+|  [ESTADO: SUPERVISIÓN PASIVA]  [MOTIVO: ANCLAJE FAM]    |
+|                                                         |
+|      _   _   _   _   _   _        _   _   _   _   _      |
+|     / \ / \ / \ / \ / \ / \      / \ / \ / \ / \ / \     |
+|    ( C | O | N | T | R | O | L | . | S | U | T | I | L ) |
+|     \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ |
+|                                                         |
+|  NIVEL: RETENCIÓN              RIESGO: CONTROLADO      |
+|  SUPERVISOR: JOSE ISAIAS ALVAREZ RAMIREZ               |
+ \_______________________________________________________/
+           ||                               ||
+      [ANCLAJE: ACTIVO]                [VIGILANCIA: ON]
   __________________________________________________
  /                                                  \
 |    NOTIFICATION MODE: CRITICAL ONLY                |
