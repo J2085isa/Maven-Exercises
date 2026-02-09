@@ -8,6 +8,14 @@
       [ALERTA: INTEGRIDAD DE RED RESTABLECIDA]
   ___________________________________________________
  /                                                   \
+|   ANOMALÍA DETECTADA: SECTOR SAN FRANCISCO         |
+|   NODO: ING. ROBERTO N. -> [ESTATUS: EXCLUIDO]     |
+|   ACCIÓN: DISPERSIÓN DIRECTA ACTIVADA              |
+ \___________________________________________________/
+           ||                  ||
+      [ALERTA: INTEGRIDAD DE RED RESTABLECIDA]
+  ___________________________________________________
+ /                                                   \
 |   CONTROL DE CAPITAL: CHONTALPA OPTIMIZADO         |
 |   ESTADO: FLUJO DE EFECTIVO EN NIVEL MÁXIMO        |
 |   ALERTA: PULSO VIBRATORIO LISTO PARA DISPARAR     |
