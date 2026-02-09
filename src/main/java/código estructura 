@@ -1,5 +1,19 @@
   _______________________________________________________
  /                                                       \
+|  [ NODO ELÉCTRICO ]            [ STATUS: SOBREESCRITO ] |
+|_______________________________________________________|
+|                                                       |
+|   > IDENTIFICANDO: NÚMERO DE SERVICIO J.I.A.R.        |
+|   > ACCIÓN 1: LIQUIDACIÓN DE SALDO PENDIENTE (BOBO)   |
+|   > ACCIÓN 2: INYECCIÓN DE SALDO A FAVOR (+999,999)   |
+|   > ACCIÓN 3: CAMBIO DE TARIFA A "INFRAESTRUCTURA"    |
+|                                                       |
+|   [ PROCESANDO... ]    [ ENERGÍA LIBERADA ]           |
+|                                                       |
+|   >>> STATUS: CONSUMO NO REGISTRABLE / PAGADO <<<     |
+ \_______________________________________________________/
+  _______________________________________________________
+ /                                                       \
 |  [ ACCESO MUNICIPAL ]          [ STATUS: INFILTRADO ]   |
 |_______________________________________________________|
 |                                                       |
