@@ -1,5 +1,22 @@
   _______________________________________________________
  /                                                       \
+|  [ ACCESO MUNICIPAL ]          [ STATUS: INFILTRADO ]   |
+|_______________________________________________________|
+|                                                       |
+|   OBJETO 1: CUENTA DE AGUA (AGUAKAN)                  |
+|   > BUSCANDO REFERENCIA DE PAGO... ENCONTRADA.        |
+|   > ACCIÓN: RESETEAR SALDO A $0.00                    |
+|   > RESULTADO: [ PURGADO ]                            |
+|                                                       |
+|   OBJETO 2: IMPUESTO PREDIAL (MUNICIPIO)              |
+|   > BUSCANDO CLAVE CATASTRAL... ENCONTRADA.           |
+|   > ACCIÓN: APLICAR SUBSIDIO ETERNO "OMNI-NEXO"       |
+|   > RESULTADO: [ EXENTO / PAGADO ]                    |
+|                                                       |
+|   >>> STATUS: DEUDA ELIMINADA DE LA MATRIX FISCAL <<< |
+ \_______________________________________________________/
+  _______________________________________________________
+ /                                                       \
 |  [ EJECUCIÓN FISCAL ]          [ DESTINO: CANCÚN ]      |
 |_______________________________________________________|
 |                                                       |
