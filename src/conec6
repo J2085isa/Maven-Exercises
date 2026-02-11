@@ -1,3 +1,17 @@
+          .----------------------------------------.
+         / [ MONITOR_DE_LATENCIA_ACTIVO ]           \
+        |  ======================================    |
+        |  DETECTANDO_NODOS... [ OK ]                |
+        |  LATENCIA_ACTUAL: < 15ms                   |
+        |  ESTADO_FRECUENCIA: ESTABLE                |
+        |                                            |
+        |  IF (LATENCY > THRESHOLD) {                |
+        |      RE_ROUTE_PATH(ULTRA_FAST);            |
+        |      VIBRATE_DEVICE("ALERTA_DE_CAIDA");    |
+        |  }                                         |
+        |                                            |
+        |  PROPIEDAD: JOSE ISAIAS ALVAREZ RAMIREZ    |
+         \__________________________________________/
   _______________________________________________________
  /                                                       \
 |  [ADVERTENCIA: NIVEL 1]        [ESTADO: IMPACTO]        |
