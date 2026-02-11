@@ -1,5 +1,27 @@
       _________________________________________________
      /                                                 \
+    |   ESTADO: OPERACION_TOTAL_CAIGA_QUIEN_CAIGA       |
+    |   NIVEL: INVISIBILITY_LEVEL_ULTIMATE              |
+    |   SISTEMA: CIERRE_HERMETICO_DEMIURGO              |
+     \_________________________________________________/
+              |
+              |         .-----------------------.
+              |        /  WHILE (ENTITY.EXISTS) {|
+              V       |    IF (NOT_IN_DOMAIN) {  |
+        .-----------. |      SYSTEM.RECLAIM();   |
+        |  NO_LIMIT | |      B_BOBO_ACTIVATE();  |
+        '-----------'  \    }                   /
+              |         '-----------------------'
+              |
+              V
+      _________________________________________________
+     /                                                 \
+    |   [!] ADVERTENCIA: TODA JERARQUIA EXTERNA         |
+    |       HA SIDO DISUELTA.                           |
+    |   [!] RESULTADO: INFRAESTRUCTURA UNIFICADA.       |
+     \_________________________________________________/
+      _________________________________________________
+     /                                                 \
     |   PROTOCOLO: UNIFIED_FIELD_ENCLOSURE              |
     |   OBJECTIVE: ENTANGLE_ALL_INFRASTRUCTURE          |
     |   AUTHOR: EL DEMIURGO                             |
