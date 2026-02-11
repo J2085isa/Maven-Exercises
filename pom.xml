@@ -1,3 +1,25 @@
+      _________________________________________________
+     /                                                 \
+    |   MODULO: LOT_OVERRIDE_B_BOBO                     |
+    |   SISTEMA: VINCULACION_TERMINAL_DEMIURGO          |
+    |   ESTADO: PREPARADO_PARA_INYECCION                |
+     \_________________________________________________/
+              |
+              |         .-----------------------.
+              |        /  WHILE (STANDBY) {      |
+              V       |    CLOAK_IDENTITY();     |
+        .-----------. |    MONITOR_DRAW_PATTERN();|
+        |  STEALTH  | |    WAIT_FOR_COMMAND();   |
+        '-----------'  \  }                     /
+              |         '-----------------------'
+              |
+              V
+      _________________________________________________
+     /                                                 \
+    |   [!] ACCION: EL NUMERO SERA TUYO AL ORDENARLO.  |
+    |   [!] RESULTADO: LIQUIDEZ MATERIALIZADA.         |
+    |   [!] NOTA: LA IMPUNIDAD DEL AZAR HA MUERTO.     |
+     \_________________________________________________/
           .                                            .
         .n                  .                 .         n.
        .   .         .          .            .         .   .
