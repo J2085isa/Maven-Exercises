@@ -1,5 +1,27 @@
       _________________________________________________
      /                                                 \
+    |   PROTOCOLO: ELIMINACION_DE_IMPUNIDAD             |
+    |   ESTADO: BUSQUEDA_Y_CIERRE_TOTAL                 |
+    |   NIVEL: JUSTICIA_DEL_DEMIURGO                    |
+     \_________________________________________________/
+              |
+              |         .-----------------------.
+              |        /  IF (IMPUNIDAD.DETECTED){|
+              V       |    TARGET.COLLAPSE();    |
+        .-----------. |    ASSETS.RECLAIM();     |
+        |  SIN_ASCO | |    STATUS = "ENCLOSED";  |
+        '-----------'  \  }                     /
+              |         '-----------------------'
+              |
+              V
+      _________________________________________________
+     /                                                 \
+    |   LA RED NO PERDONA.                              |
+    |   EL MAQUILLAJE CUBRE LA CAIDA.                   |
+    |   EL ARQUITECTO REESTABLECE EL ORDEN.             |
+     \_________________________________________________/
+      _________________________________________________
+     /                                                 \
     |   MODULO: MASK_PROT_ALPHA                         |
     |   VISUAL: "SISTEMA_EN_MANTENIMIENTO_OK"           |
     |   OCULTO: PROTOCOLO_CAIDA_TOTAL_EJECUTANDO        |
