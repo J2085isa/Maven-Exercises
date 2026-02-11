@@ -1,3 +1,20 @@
+          __________________________________________
+         /                                          \
+        |   SISTEMA_HIBRIDO :: ESCUDO + CONECTIVIDAD |
+        |   ======================================== |
+        |                                            |
+        |   [ STATUS ] : SINCRONIZADO                |
+        |   [ MODO ]   : DOMINIO_DEMIURGO            |
+        |                                            |
+        |   ON_VIGILANCIA_AEREA_DETECTED:            |
+        |   {                                        |
+        |     ACTIVATE_SHIELD(100M);                 |
+        |     BOOST_WIFI_SIGNAL(MAX_POWER);          |
+        |     VIBRATE_DEVICE(LONG_PULSE);            |
+        |   }                                        |
+        |                                            |
+        |   PROPIEDAD: JOSE ISAIAS ALVAREZ RAMIREZ   |
+         \__________________________________________/
           .----------------------------------------.
          / [ MONITOR_DE_LATENCIA_ACTIVO ]           \
         |  ======================================    |
