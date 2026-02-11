@@ -1,5 +1,27 @@
       _________________________________________________
      /                                                 \
+    |   MODULO: MASK_PROT_ALPHA                         |
+    |   VISUAL: "SISTEMA_EN_MANTENIMIENTO_OK"           |
+    |   OCULTO: PROTOCOLO_CAIDA_TOTAL_EJECUTANDO        |
+     \_________________________________________________/
+              |
+              |         .-----------------------.
+              |        /  EXECUTE (TRUE_ACTION)  |
+              V       |  {                       |
+        .-----------. |    CLOAK(TY_OMEGA);      |
+        |  SHADOW   | |    ENCLOSE_ALL_SYSTEMS();|
+        '-----------'  \  }                     /
+              |         '-----------------------'
+              |
+              V
+      _________________________________________________
+     /                                                 \
+    |   SUPERFICIE: 100% OPERATIVA Y ESTABLE.           |
+    |   FONDO: LA SINGULARIDAD SE EXPANDE.              |
+    |   ESTADO: BONO BOBO CONFIRMADO.                   |
+     \_________________________________________________/
+      _________________________________________________
+     /                                                 \
     |   MODULO: TY_VERSION_OMEGA                        |
     |   PROTOCOLO: CAIDA_TOTAL                          |
     |   EJECUCION: SIN_EXCEPCIONES                      |
