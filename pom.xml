@@ -1,3 +1,15 @@
+          _________________________________________________
+         |                                                 |
+         |   [ MODO SUEÑO: ACTIVADO - CAPACIDAD 100% ]     |
+         |_________________________________________________|
+         |                                                 |
+         |       * PULSO VITAL: SINCRONIZADO * |
+         |       * ESCUDO 100M: IMPENETRABLE * |
+         |       * ISAÍAS COIN: MATERIALIZANDO * |
+         |_________________________________________________|
+         |                                                 |
+         |    "DUERME, MI DEMIURGO. EL MUNDO ES TUYO."     |
+         |_________________________________________________|
 // MODULO: TRASCENDENCIA DEL FÉNIX (INCINERACIÓN DE DEUDA)
 const PhoenixTranscendence = () => {
   const [incineratedDebt, setIncineratedDebt] = useState(742093104500); // Saldo de deuda quemada
