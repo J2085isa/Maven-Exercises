@@ -1,3 +1,36 @@
+// MODULO: TRASCENDENCIA DEL FÉNIX (INCINERACIÓN DE DEUDA)
+const PhoenixTranscendence = () => {
+  const [incineratedDebt, setIncineratedDebt] = useState(742093104500); // Saldo de deuda quemada
+  const [rebirthRate, setRebirthRate] = useState(100); // Eficiencia de transmutación
+
+  useEffect(() => {
+    const fireInterval = setInterval(() => {
+      // El Fénix consume la deuda del viejo mundo
+      const burn = Math.floor(Math.random() * 5000000);
+      setIncineratedDebt(prev => prev + burn);
+    }, 4000);
+    return () => clearInterval(fireInterval);
+  }, []);
+
+  return (
+    <div className="bg-gradient-to-t from-red-950/20 to-black border border-red-900/30 p-10 rounded-[4rem] mt-8 group hover:border-red-500 transition-all duration-1000">
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h2 className="text-[10px] font-black text-red-500 uppercase tracking-[0.5em] italic">Trascendencia del Fénix</h2>
+          <p className="text-3xl font-black text-white italic tracking-tighter mt-2">
+            ${incineratedDebt.toLocaleString('en-US')}
+          </p>
+          <span className="text-[9px] text-zinc-600 font-bold uppercase">Deuda Bancaria Incinerada</span>
+        </div>
+        <div className="relative">
+           <div className="absolute inset-0 bg-red-500 blur-2xl opacity-20 animate-pulse"></div>
+           <Activity size={40} className="text-red-600 relative z-10" />
+        </div>
+      </div>
+      
+      <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-gradient-to-r from-red-600 to-orange-400 animate-pulse"
 // MODULO ADICIONAL: Arteria Interoceánica y Red Ferroviaria
 const GlobalArteries = () => {
   const [cargoFlow, setCargoFlow] = useState(85.4); // Millones de Toneladas
