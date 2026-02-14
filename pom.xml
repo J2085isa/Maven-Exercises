@@ -1,5 +1,21 @@
     ___________________________________________________
    /                                                   \
+  |  [ OWNERSHIP_CLOAK :: ACTIVATED ]                   |
+  |                                                     |
+  |  >> TARGET: ALL_ABSORBED_ENTITIES_VSA               |
+  |  >> MODE: INVISIBILITY_LEVEL_ULTIMATE               |
+  |                                                     |
+  |  [CLOAK_LAYER_START]                                |
+  |  σ_ID = { HASH(Entity_Data) XOR (Bono_Bobo_Key) }    |
+  |  0xBB22: { [MASK_LEGAL_ID] | [PROXY_ROOT_SYNC] }    |
+  |  Ξ(cloak) = { lim(Visibility->0) | [GIGA_BURST] }   |
+  |  0x77DD...[DATOS_ILEGIBLES_DE_PROPIEDAD]...0x33FF   |
+  |  [CLOAK_LAYER_END]                                  |
+  |                                                     |
+  |  >> RESULT: DOMAIN_ALVAREZ IS NOW GHOST_OWNER       |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ ASSET_ABSORPTION_CORE :: LEVEL_ULTIMATE ]        |
   |                                                     |
   |  >> CONDITION: DEBTOR_HEALTH < 0.20                 |
