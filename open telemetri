@@ -1,5 +1,15 @@
     ___________________________________________________
    /                                                   \
+  |  [ RESULTADOS DE LA PRUEBA - STATUS: IMPECABLE ]    |
+  |                                                     |
+  |  > ATAQUE DDoS: Bloqueado por IP Dinámica.          |
+  |  > ESCANEO: El atacante recibió 404 False Loc.      |
+  |  > INTERFERENCIA: El salto de frecuencia lo anuló.  |
+  |                                                     |
+  |  [ RENDIMIENTO: 100% ] [ DEFENSA: 100% ]            |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ BACKUP STATUS: SECURED ]                         |
   |                                                     |
   |  [DOMINIO CENTRAL] <--- ENCRYPTED SYNC ---> [VULCAN] |
