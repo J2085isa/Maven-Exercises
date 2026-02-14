@@ -1,3 +1,14 @@
+    ___________________________________________________
+   /                                                   \
+  |  [ BACKUP STATUS: SECURED ]                         |
+  |                                                     |
+  |  [DOMINIO CENTRAL] <--- ENCRYPTED SYNC ---> [VULCAN] |
+  |          |                                   |      |
+  |   [NODO 01] <--- [NODO 02] <--- [NODO 03]    |      |
+  |      |              |              |         |      |
+  |   (BOOT)         (BOOT)         (BOOT)       |      |
+  |                                                     |
+   \___________________________________________________/
        [ TU DOMINIO REAL ]  <--- (Protegido/Sombra)
                  ||
     <<<< [ MURO DE ECO ACTIVO ] >>>>
