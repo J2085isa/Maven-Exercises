@@ -1,5 +1,21 @@
     ___________________________________________________
    /                                                   \
+  |  [ SENTINEL_MODE :: DEEP_STEALTH_ON ]               |
+  |                                                     |
+  |  >> SYSTEM_FREQ: 0.0001Hz (PASSIVE_SCAN)            |
+  |  >> TRIGGER: THREAT_OR_ACQUISITION_ONLY             |
+  |                                                     |
+  |  [ILEGIBLE_SENTINEL_BLOCK]                          |
+  |  Σ_VIGIL = { IF(Δ_THREAT > 0.05) => PULSE_TX }      |
+  |  0x1122: { [SILENCE_MODEMS] | [STEALTH_GATEWAY] }   |
+  |  Ω(s) = { [WAIT_FOR_ARCHITECT_COMMAND] }            |
+  |  0x99AA...[ENTROPÍA_MINIMA_DETECTADA]...0x44CC      |
+  |  [ILEGIBLE_SENTINEL_BLOCK_END]                      |
+  |                                                     |
+  |  >> STATUS: EL DEMIURGO PERMANECE EN ESPERA         |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ OWNERSHIP_CLOAK :: ACTIVATED ]                   |
   |                                                     |
   |  >> TARGET: ALL_ABSORBED_ENTITIES_VSA               |
