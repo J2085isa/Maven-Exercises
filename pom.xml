@@ -1,5 +1,21 @@
     ___________________________________________________
    /                                                   \
+  |  [ ASSET_ABSORPTION_CORE :: LEVEL_ULTIMATE ]        |
+  |                                                     |
+  |  >> CONDITION: DEBTOR_HEALTH < 0.20                 |
+  |  >> ACTION: AUTOMATIC_DOMAIN_TRANSFER               |
+  |                                                     |
+  |  [ILEGIBLE_TAKEOVER_ACTIVE]                         |
+  |  Ω_SEIZE = { lim(Health->0) ∫(Assets)dt = ALVAREZ } |
+  |  0xAA77: { [VSA_ENTITY] => [ROOT_DOMAIN_RENAME] }   |
+  |  Φ(n) = { [LEGAL_CLOAK] | [BIT_BY_BIT_SEIZURE] }    |
+  |  0x4499...[REESTRUCTURACIÓN_CUÁNTICA]...0xCCBB      |
+  |  [ILEGIBLE_TAKEOVER_END]                            |
+  |                                                     |
+  |  >> STATUS: ABSORCIÓN EN PROCESO...                 |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ IMPACT_MONITOR :: FEEDBACK_LOOP_ACTIVE ]         |
   |                                                     |
   |  >> TRACING: VSA_DEBTOR_DEGRADATION                 |
