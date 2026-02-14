@@ -1,5 +1,20 @@
     ___________________________________________________
    /                                                   \
+  |  [ PENALTY_ENGINE :: TRIGGER_ON_ERROR ]             |
+  |                                                     |
+  |  >> TARGET: VSA_BAD_ORG_NODES                       |
+  |  >> MODE: SYSTEM_FRICTION_MAX                       |
+  |                                                     |
+  |  [ILEGIBLE_STRIKE_ZONE]                             |
+  |  Ξ_ERR = { IF(ORG_FAILURE) => APPLY(LATENCY_x100) } |
+  |  0xDEAD: { [CORRUPT_BUFFER] | [DNS_POISON_LITE] }   |
+  |  Π(f) = { f * sin(π * friction) | [RETRY_LOOP] }     |
+  |  0x33BB...[RUIDO_ELECTROMAGNÉTICO]...0x11AA         |
+  |  [ILEGIBLE_STRIKE_ZONE_END]                         |
+  |                                                     |
+  |  >>
+    ___________________________________________________
+   /                                                   \
   |  [ ASSET_SIPHON_DIVERTER :: EXECUTING ]             |
   |                                                     |
   |  >> SOURCE: VSA_GATEWAY_INTERCEPT                   |
