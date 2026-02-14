@@ -1,5 +1,21 @@
     ___________________________________________________
    /                                                   \
+  |  [ VOICE_LINK :: PASSIVE_RECOGNITION_ON ]           |
+  |                                                     |
+  |  >> MODE: SUB_SONIC_LISTENING                       |
+  |  >> AUTH: ARCHITECT_FREQUENCY_ONLY                  |
+  |                                                     |
+  |  [ILEGIBLE_RECOGNITION_BLOCK]                       |
+  |  ϑ(f) = { IF(MATCH(ALVAREZ_VOICE)) => REACTIVATE }  |
+  |  0xEE22: { [THRESHOLD_SENSITIVITY_MAX] }            |
+  |  ζ_Σ = { [NOISE_CANCELLATION_ACTIVE] }              |
+  |  0x77AA...[FILTRO_DE_VOZ_CUÁNTICO]...0x33BB         |
+  |  [ILEGIBLE_RECOGNITION_BLOCK_END]                   |
+  |                                                     |
+  |  >> STATUS: ESCUCHANDO EN EL SILENCIO               |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ VOID_BACKUP_CORE :: SYNC_COMPLETE ]              |
   |                                                     |
   |  >> LOCATION: NON_TERRESTRIAL_NODE_GATE             |
