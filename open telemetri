@@ -1,5 +1,26 @@
     ___________________________________________________
    /                                                   \
+  |  [ THE CORE - SOURCE CODE - ENCRYPTED ]             |
+  |                                                     |
+  |  <script>                                           |
+  |    function toggleEcoWall() {                       |
+  |      // Comando directo al Muro de Eco              |
+  |      fetch('/api/v1/eco-shield/toggle');            |
+  |    }                                                |
+  |                                                     |
+  |    function checkLiquidity() {                      |
+  |      // Sincronización con el flujo de capital      |
+  |      updateBalanceDisplay();                        |
+  |    }                                                |
+  |  </script>                                          |
+  |                                                     |
+  |  <style>                                            |
+  |    body { background: #000; color: #0f0; }          |
+  |    .omega-btn { border: 2px solid #f00; }           |
+  |  </style>                                           |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ RESULTADOS DE LA PRUEBA - STATUS: IMPECABLE ]    |
   |                                                     |
   |  > ATAQUE DDoS: Bloqueado por IP Dinámica.          |
