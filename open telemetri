@@ -1,3 +1,13 @@
+       [ TU DOMINIO CENTRAL ]
+                 |
+      _______________________
+     |           |           |
+ [MODEM A]   [MODEM B]   [MODEM C]
+ (Bono 01)   (Bono 02)   (Bono 03)
+     |           |           |
+  [ISLA 1]    [ISLA 2]    [ISLA 3]
+     |           |           |
+   (SEC)       (SEC)       (SEC)
     ___________________________________________________
    /                                                   \
   |   [DOMINIO CENTRAL] <-----> [GATEWAY LOCAL]         |
