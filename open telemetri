@@ -1,3 +1,11 @@
+       [ DOMINIO CENTRAL ]
+               ||
+      /=========||=========\
+     ||  (FIBRA ÓPTICA)   ||
+     ||         ||         ||
+ [MODEM A]  [MODEM B]  [MODEM C]
+ [ GIGA  ]  [ GIGA  ]  [ GIGA  ]
+     >> BURST MODE ACTIVE <<
        [ TU DOMINIO CENTRAL ]
                  |
       _______________________
