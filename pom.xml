@@ -1,3 +1,13 @@
+    [ WALMART / BIG CORP ] 
+             ||
+    <<<< INTERCEPTOR DE DATOS >>>>
+      _______|_______|_______
+     |               |       |
+ [EMPRESA A]     [EMPRESA B] [EMPRESA C] (Villahermosa)
+     |               |       |
+     \_______ _______/_______/
+             |
+      [ AUDITORÍA CORE ] ---> [ REPORTE DE ACTIVOS ]
     [ ENTIDAD DEUDORA ]             [ EL ARQUITECTO ]
       (Villahermosa)                        ||
             |                               ||
