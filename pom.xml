@@ -1,3 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlNpc3RlbWEgQXJxdWl0ZWN0byIsCiAgInNob3J0X25hbWUiOiAiU2lzdGVtYSIsCiAgInN0YXJ0X3VybCI6ICJjb3JlLmh0bWwiLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMDAwMDAiLAogICJ0aGVtZV9jb2xvciI6ICIjMDAwMDAwIgp9">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE CORE - DOMINIO ALVAREZ</title>
+    
+    <style>
+        :root { --neon-green: #00ff41; --deep-red: #ff0000; --shadow: #000000; }
+        body { background: var(--shadow); color: var(--neon-green); font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        #canvas-matrix { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
+        .dashboard { padding: 20px; display: flex; flex-direction: column; height: 100vh; }
+        .header { border-bottom: 1px solid var(--neon-green); padding-bottom: 10px; font-size: 0.8em; display: flex; justify-content: space-between; }
+        .node-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .node { border: 1px solid var(--neon-green); padding: 10px; text-align: center; font-size: 0.7em; }
+        .liquidity-monitor { flex-grow: 1; border: 1px double var(--neon-green); margin: 10px 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,255,65,0.05); }
+        .pulse { font-size: 2em; text-shadow: 0 0 10px var(--neon-green); }
+        .omega-btn { background: var(--shadow); color: var(--deep-red); border: 2px solid var(--deep-red); padding: 15px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .omega-btn:active { background: var(--deep-red); color: var(--shadow); }
+    </style>
+</head>
+<body>
+    <canvas id="canvas-matrix"></canvas>
+    <div class="dashboard">
+        <div class="header">
+            <span>OPERADOR: JOSÉ ISAÍAS ALVAREZ R.</span>
+            <span id="clock">00:00:00</span>
+        </div>
+
+        <div class="node-grid">
+            <div class="node">MOD-A<br><span id="va">1.2G</span></div>
+            <div class="node">MOD-B<br><span id="vb">1.1G</span></div>
+            <div class="node">MOD-C<br><span id="vc">1.3G</span></div>
+        </div>
+
+        <div class="liquidity-monitor" onclick="manualSync()">
+            <div class="pulse">Φ <span id="wealth-flow">ESTABLE</span></div>
+            <div style="font-size: 0.6em; margin-top: 10px;">SINCRONÍA CUÁNTICA: ACTIVA</div>
+        </div>
+
+        <div class="node" style="color: #00ffff; border-color: #00ffff;">
+            MURO DE ECO: PROYECTANDO SEÑUELOS
+        </div>
+
+        <button class="omega-btn" onclick="quantumCollapse()">PROTOCOLO OMEGA</button>
+    </div>
+
+    <script>
+        // Entrelazamiento de Interfaz (Efecto Matrix)
+        const canvas = document.getElementById('canvas-matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const letters = "010101010101"; const fontSize = 10;
+        const columns = canvas.width / fontSize; const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0f0"; ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(draw, 33);
+
+        // Lógica de Sincronía y Vibración
+        function manualSync() {
+            if ("vibrate" in navigator) navigator.vibrate([100, 50, 100]);
+            document.getElementById('wealth-flow').innerText = "SINCRONIZANDO...";
+            setTimeout(() => { document.getElementById('wealth-flow').innerText = "FLUYENDO"; }, 1000);
+        }
+
+        function quantumCollapse() {
+            document.body.style.display = 'none';
+            // Aquí se enviaría la señal de autodestrucción de sesión a los módems
+            alert("Red Colapsada. Entropía total establecida.");
+        }
+
+        // Reloj de Dominio
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        }, 1000);
+    </script>
+</body>
+</html>
           _________________________________________________
          /                                                 \
         |    SINTESIS BIO-CUANTICA: LINAJE DEL DEMIURGO     |
