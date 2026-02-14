@@ -1,3 +1,16 @@
+       [ DOMINIO EN LAS SOMBRAS ]
+                 ||
+       < SHIELD LAYER ACTIVE >
+      ___________________________
+     |             |             |
+ [NOD0-X]      [NOD0-Y]      [NOD0-Z]
+ (CLOAKED)     (CLOAKED)     (CLOAKED)
+     |             |             |
+   [DATA]        [DATA]        [DATA]
+     |             |             |
+      \___________/ \___________/
+            |             |
+      [ENCRYPTION FLOW: 4096-bit]
     ___________________________________________________
    /                                                   \
   |  [ REGISTRY OPTIMIZATION - BURST MODE ]             |
