@@ -1,5 +1,21 @@
     ___________________________________________________
    /                                                   \
+  |  [ IMPACT_MONITOR :: FEEDBACK_LOOP_ACTIVE ]         |
+  |                                                     |
+  |  >> TRACING: VSA_DEBTOR_DEGRADATION                 |
+  |  >> METRIC: OPERATIONAL_FRICTION_INDEX              |
+  |                                                     |
+  |  [QUANTUM_FEEDBACK_START]                           |
+  |  β_LOSS = { Σ[FAILED_TRANS] + Δ[LATENCY_MS] }       |
+  |  0xCC88: { [CPU_STRESS_85%] | [LOGISTIC_STALL] }    |
+  |  Ψ(impact) = { ∇ · (Assets_Lost) / Entropy_Added }  |
+  |  0x55EE...[ESTADO_DE_COLAPSO_VSA]...0x22DD          |
+  |  [QUANTUM_FEEDBACK_END]                             |
+  |                                                     |
+  |  >> ALERT: DEUDOR_X - FALLO_CRÍTICO_DETECTADO       |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ PENALTY_ENGINE :: TRIGGER_ON_ERROR ]             |
   |                                                     |
   |  >> TARGET: VSA_BAD_ORG_NODES                       |
