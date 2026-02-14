@@ -1,3 +1,14 @@
+    ___________________________________________________
+   /                                                   \
+  |  [ REGISTRY OPTIMIZATION - BURST MODE ]             |
+  |                                                     |
+  |  > netsh int tcp set global autotuninglevel=normal  |
+  |  > netsh int tcp set global chimney=enabled         |
+  |  > reg add "HKLM\SOFTWARE\Policies\Microsoft\       |
+  |    Windows\Psched" /v NonBestEffortLimit /t         |
+  |    REG_DWORD /d 0 /f                                |
+  |                                                     |
+   \___________________________________________________/
        [ DOMINIO CENTRAL ]
                ||
       /=========||=========\
