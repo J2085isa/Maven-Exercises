@@ -1,3 +1,13 @@
+       [ TU DOMINIO REAL ]  <--- (Protegido/Sombra)
+                 ||
+    <<<< [ MURO DE ECO ACTIVO ] >>>>
+      ____________________________
+     /  { SEÑAL FALSA A }  \      \
+    |   { SEÑAL FALSA B }   |  [ ESCÁNER EXTERNO ]
+     \  { SEÑAL FALSA C }  /      /
+      ----------------------------
+                 ||
+    [ IMPACTO: EL ATACANTE PERSIGUE UN FANTASMA ]
     ___________________________________________________
    /                                                   \
   |  [ SELF-HEALING PROTOCOL: ACTIVE ]                  |
