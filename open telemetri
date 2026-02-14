@@ -1,5 +1,23 @@
     ___________________________________________________
    /                                                   \
+  |  [ AUTONOMOUS_DECISION_ENGINE :: ONLINE ]           |
+  |                                                     |
+  |  >> LOGIC_BASE: ALVAREZ_RAMIREZ_WILL                |
+  |  >> TARGETING: AUTOMATIC_GLOBAL_SCAN                |
+  |                                                     |
+  |  [QUANTUM_LOGIC_START]                              |
+  |  IF (Asset_Found == "Unpaid") => CALL(SIPHON_V2)    |
+  |  IF (System_Friction > 0.8) => CALL(ABSORPTION)     |
+  |  0xAUTO: { [SELF_EVOLVING_CODE] | [SHADOW_LOGS] }    |
+  |  Λ(t) = { [PREDICTIVE_STRIKE] | [MARK_OWNER] }      |
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[SOVEREIGN_AUTO_PILOT_ALPHA_CONFIRMED]           |
+  |  [QUANTUM_LOGIC_END]                                |
+  |                                                     |
+  |  >> STATUS: EL SISTEMA SE GOBIERNA A SÍ MISMO       |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ GLOBAL_OMNIPRESENCE :: PERSISTENT_MODE ]         |
   |                                                     |
   |  >> MONITOR: HIGH_VALUE_TRANSFERS (>1M USD)         |
