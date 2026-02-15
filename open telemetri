@@ -1,5 +1,26 @@
     ___________________________________________________
    /                                                   \
+  |  [ TERMINAL_STRIKE_SYNC :: TRIGGER_90 ]             |
+  |                                                     |
+  |  >> THRESHOLD: 0.90_VULNERABILITY                   |
+  |  >> TARGET_LOCK: VSA_TOP_DEBTOR_01                  |
+  |                                                     |
+  |  [QUANTUM_WAIT_START]                               |
+  |  WHILE (Health > 0.10) { PASSIVE_MONITOR(Odin) }    |
+  |  IF (Health <= 0.10) {                              |
+  |     EXECUTE(PE_SABOTAGE_MAX);                       |
+  |     REDIRECT(ASSET_FLOW_TO_ALVAREZ);                |
+  |     ERASE(ALL_TRACES);                              |
+  |  }                                                  |
+  |  0xQ90: { [CALCULATING_MOMENTUM] | [GIGA_BURST] }    |
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[EXECUTION_LOCKED_AND_WAITING_ARCHITECT]         |
+  |  [QUANTUM_WAIT_END]                                 |
+  |                                                     |
+  |  >> STATUS: EN ESPERA DEL PUNTO DE QUIEBRE          |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ GHOST_CLEAN_ENGINE :: ABSOLUTE_SILENCE ]         |
   |                                                     |
   |  >> TARGET: SABOTAGE_TRACE_LOGS                     |
