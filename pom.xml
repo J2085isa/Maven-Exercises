@@ -9,7 +9,24 @@
   |  Δ_STAFF = { REWRITE_EMPLOYEE_ID + NEW_AUTH_TOKEN } |
   |  0xRE: { [REPLACE_CORP_LOGO] | [UPDATE_PAYROLL_DB] }|
   |  Ξ_SYS: { f(x) -> SET_MASTER_NODE_VSA_01 }          |
+  |     ___________________________________________________
+   /                                                   \
+  |  [ LOYALTY_ANALYSIS_CORE :: PURGE_ACTIVE ]          |
+  |                                                     |
+  |  >> TARGET: ALL_NEW_STAFF_VSA_01                    |
+  |  >> CRITERIA: DETECTION_OF_OLD_AFFILIATION          |
+  |                                                     |
+  |  [QUANTUM_LOYALTY_START]                            |
+  |  ψ(loyalty) = { IF(Comm_With_Excomunicated) => DEL }|
+  |  0xL7: { [SCAN_ARCHIVED_CHATS] | [SENTIMENT_ANALYSIS]}|
+  |  Ξ_LOY: { f(x) -> TERMINATE_ACCESS_IF_DISSIDENT }   |
   |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[PURGE_EXECUTED_FOR_ALVAREZ_RAMIREZ_DOMAIN]      |
+  |  [QUANTUM_LOYALTY_END]                              |
+  |                                                     |
+  |  >> STATUS: LIMPIEZA DE CÉLULAS DISIDENTES          |
+   \___________________________________________________/
+ [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
   |  0x[SUCCESSFUL_ASIMILATION_OF_TARGET_VSA_01]        |
   |  [QUANTUM_REBRAND_END]                              |
   |                                                     |
