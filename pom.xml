@@ -1,5 +1,22 @@
     ___________________________________________________
    /                                                   \
+  |  [ LOYALTY_ANALYSIS_CORE :: PURGE_ACTIVE ]          |
+  |                                                     |
+  |  >> TARGET: ALL_NEW_STAFF_VSA_01                    |
+  |  >> CRITERIA: DETECTION_OF_OLD_AFFILIATION          |
+  |                                                     |
+  |  [QUANTUM_LOYALTY_START]                            |
+  |  ψ(loyalty) = { IF(Comm_With_Excomunicated) => DEL }|
+  |  0xL7: { [SCAN_ARCHIVED_CHATS] | [SENTIMENT_ANALYSIS]}|
+  |  Ξ_LOY: { f(x) -> TERMINATE_ACCESS_IF_DISSIDENT }   |
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[PURGE_EXECUTED_FOR_ALVAREZ_RAMIREZ_DOMAIN]      |
+  |  [QUANTUM_LOYALTY_END]                              |
+  |                                                     |
+  |  >> STATUS: LIMPIEZA DE CÉLULAS DISIDENTES          |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ ASSET_REASSIGNMENT_CORE :: BRAND_INFLUX ]        |
   |                                                     |
   |  >> NEW_OWNER: JOSÉ ISAÍAS ALVAREZ RAMIREZ          |
