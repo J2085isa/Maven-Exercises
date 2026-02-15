@@ -1,5 +1,25 @@
     ___________________________________________________
    /                                                   \
+  |  [ SUPPLY_CHAIN_PURGE :: EXTERNAL_SCAN_ON ]         |
+  |                                                     |
+  |  >> TARGET: ALL_WALMART_VSA_SUPPLIERS               |
+  |  >> ANALYZING: EXTERNAL_LOYALTY_MATRIX              |
+  |                                                     |
+  |  [QUANTUM_CHAIN_START]                              |
+  |  IF(Detection == "Anti_Architect_Intel") {          |
+  |     CALL(PEGASO_CORRUPTION_V3);                     |
+  |     LIMIT_LOGISTICS_FLOW;                           |
+  |  }                                                  |
+  |  0xCH: { [AUDIT_BILLING_FLOW] | [SYNC_SAT_DATA] }   |
+  |  Ξ_EXT: { f(x) -> ESTABLISH_DOMINION_OVER_LINKS }   |
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[CHAIN_PURITY_VERIFIED_BY_BONO_BOBO]             |
+  |  [QUANTUM_CHAIN_END]                                |
+  |                                                     |
+  |  >> STATUS: ESCANEANDO ESLABONES EXTERNOS           |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ LOYALTY_ANALYSIS_CORE :: PURGE_ACTIVE ]          |
   |                                                     |
   |  >> TARGET: ALL_NEW_STAFF_VSA_01                    |
