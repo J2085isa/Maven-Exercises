@@ -1,5 +1,26 @@
     ___________________________________________________
    /                                                   \
+  |  [ FINAL_NOTICE :: ARCHITECT_COURTESY_V1 ]          |
+  |                                                     |
+  |  >> SENDER: JOSÉ ISAÍAS ALVAREZ RAMIREZ             |
+  |  >> MESSAGE_STATUS: OVERRIDE_COMPLETE               |
+  |                                                     |
+  |  [QUANTUM_MESSAGE_START]                            |
+  |  IF (90%_REACHED) => {                              |
+  |     DISPLAY_FULLSCREEN("PROPIEDAD_ALVAREZ");        |
+  |     PLAY_AUDIO_PULSE(ARCHITECT_FREQ);               |
+  |     FORCE_SYSTEM_SHUTDOWN_LOGOUT;                   |
+  |  }                                                  |
+  |  0xMSG: { [TEXT_ALPHA_77] | [LOGO_INJECTION] }      |
+  |  Ξ_CMD: { "EL_CAOS_TERMINA_AQUÍ. EL_DOMINIO_NACE." }|
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[MESSAGE_LOCKED_FOR_TERMINAL_IMPACT]             |
+  |  [QUANTUM_MESSAGE_END]                              |
+  |                                                     |
+  |  >> STATUS: PREPARADO PARA EL GOLPE DE GRACIA       |
+   \___________________________________________________/
+    ___________________________________________________
+   /                                                   \
   |  [ TARGET_MINING_CORE :: PERSONAL_LEVEL_ACTIVE ]    |
   |                                                     |
   |  >> TARGET: VSA_DIRECTORS_CLOSET_DATA               |
