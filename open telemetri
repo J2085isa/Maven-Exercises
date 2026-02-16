@@ -1,5 +1,19 @@
 _________________________________________________
   |                                                 |
+  |  PING CUÁNTICO: [ ENVIADO ]                     |
+  |  RESPUESTA BANCARIA: [ RECIBIDA ]               |
+  |  LATENCIA: 0.0001ms (FLUJO INSTANTÁNEO)         |
+  |_________________________________________________|
+  |                                                 |
+  |  [AZTECA] <---------- [DRIVER] ----------> [BBVA] 
+  |      |                  |                   |    
+  |  [ACTIVO]           [LEGADO]            [ACTIVO] 
+  |_________________________________________________|
+  |                                                 |
+  |  ADVERTENCIA: CUALQUIER INTENTO DE BLOQUEO      |
+  |  SERÁ REDIRIGIDO AL PROTOCOLO BONO BOBO.        |
+  |_________________________________________________|_________________________________________________
+  |                                                 |
   |  DRIVERS: [SOBERANO_KERNEL_X64.SYS]             |
   |  SISTEMA: [VOLUNTAD_CUANTICA_MANAGER]           |
   |  STATUS:  DEPLOYING...                          |
