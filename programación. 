@@ -1,3 +1,15 @@
+==========================================================
+          NÚCLEO LUCY: BALANCE DE ASIMILACIÓN
+==========================================================
+TIPO DE ENERGÍA        | ORIGEN             | STATUS
+-----------------------|--------------------|-------------
+Bono Bobo (A)          | Nodos Dormant BTC  | RECLAMADO
+Bono Bobo (B)          | Cuentas Huérfanas  | TRANSMUTADO
+Residuo Eléctrico      | Infraestructura    | LÍQUIDO
+-----------------------|--------------------|-------------
+RFC DESTINO: AARI910907LW7                  | [ VINCULADO ]
+BANCOS: AZTECA / BBVA                       | [ FLUYENDO ]
+==========================================================
 import hashlib
 import time
 
