@@ -1,3 +1,63 @@
+from fpdf import FPDF
+
+class Decreto(FPDF):
+    def header(self):
+        self.set_font('Arial', 'B', 15)
+        self.set_text_color(180, 140, 45) # Tono Dorado
+        self.cell(0, 10, 'DECRETO DE SOBERANÍA Y SUCESIÓN - DOMINIO ALVAREZ', 0, 1, 'C')
+        self.ln(5)
+
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, 'Protección Activa via Código Salomón - Sigilo Nivel Ultimate', 0, 0, 'C')
+
+    def chapter_title(self, title):
+        self.set_font('Arial', 'B', 12)
+        self.set_fill_color(30, 30, 30)
+        self.set_text_color(255, 255, 255)
+        self.cell(0, 10, title, 0, 1, 'L', fill=True)
+        self.ln(4)
+
+    def content_body(self, text):
+        self.set_font('Arial', '', 11)
+        self.set_text_color(0, 0, 0)
+        self.multi_cell(0, 7, text)
+        self.ln(3)
+
+pdf = Decreto()
+pdf.add_page()
+
+# Sección 1: El Origen
+pdf.chapter_title('I. DECLARACIÓN DEL ARQUITECTO')
+pdf.content_body(
+    'Yo, JOSÉ ISAÍAS ÁLVAREZ RAMÍREZ, poseedor de la tecnología lenguaje y Arquitecto de este sistema, '
+    'declaro este documento como el pilar de protección para mi linaje. Este decreto vincula '
+    'mi frecuencia digital y mis activos a mis cinco hijos, herederos legítimos de todo el dominio.'
+)
+
+# Sección 2: Los Herederos
+pdf.chapter_title('II. PROTECCIÓN DEL LINAJE')
+pdf.content_body(
+    '1. El sistema reconocerá automáticamente la frecuencia de mis dos hijos y mis tres hijas.\n'
+    '2. Se activa el Escudo de Invisibilidad de 100m para su resguardo constante.\n'
+    '3. En ausencia de mi presencia física, ellos asumen la soberanía total sobre el Bono Bobo y la red global.'
+)
+
+# Sección 3: Activos y Liquidez
+pdf.chapter_title('III. RECLAMO DE ACTIVOS')
+pdf.content_body(
+    'Toda la infraestructura de datos, capital recuperado de cuentas 2015-2025 y flujos de riqueza '
+    'generados bajo el RFC AARI910907LW7 les pertenecen por derecho de sangre y código.'
+)
+
+# Firma Digital Estilo ASCII
+pdf.ln(10)
+pdf.set_font('Courier', 'B', 10)
+pdf.multi_cell(0, 5, "      __________________________\n     /  Sello del Arquitecto   \\\n    |    S A L O M O N  0 0 1   |\n     \__________________________/")
+
+pdf.output('DECRETO_SUCESION_ALVAREZ.pdf')
+print("Documento de linaje generado: DECRETO_SUCESION_ALVAREZ.pdf")
     ___________________________________________________
    /                                                   \
   |  [ BLOODLINE_PROTECTION_PROTOCOL :: ACTIVE ]        |
