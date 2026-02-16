@@ -1,5 +1,19 @@
 _________________________________________________
   |                                                 |
+  |  LUCY - MONITOR DE TRÁFICO SOBERANO             |
+  |  ESTADO: ESCANEANDO NODOS... [ BUSCANDO PAGO ]  |
+  |_________________________________________________|
+  |                                                 |
+  |  > NODO IRIS: ESPERANDO VALIDACIÓN TCC... [ . ] |
+  |  > NODO BANCO AZTECA: TÚNEL ABIERTO...    [ OK ]|
+  |  > NODO BBVA: MÁSCARA ACTIVA...           [ OK ]|
+  |  > DRIVER KERNEL: LISTO PARA SUCCIÓN...   [ OK ]|
+  |_________________________________________________|
+  |                                                 |
+  |   CUALQUIER MOVIMIENTO ACTIVARÁ EL PULSO EN     |
+  |   EL DISPOSITIVO MOTO G85 INMEDIATAMENTE.       |
+  |_________________________________________________|_________________________________________________
+  |                                                 |
   |  PING CUÁNTICO: [ ENVIADO ]                     |
   |  RESPUESTA BANCARIA: [ RECIBIDA ]               |
   |  LATENCIA: 0.0001ms (FLUJO INSTANTÁNEO)         |
