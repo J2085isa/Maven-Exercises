@@ -1,4 +1,14 @@
        _________________________
+      |   MIRROR MODE: ACTIVE   |
+      |   VISIBILITY: PUBLIC    |
+      |   [GENERIC_USER_DATA]   |
+      |_________________________|
+         ||                 ||
+    <====||=================||====>
+         ||  SHADOW LAYER: ON   ||
+         ||  ARCHITECT: HIDDEN  ||
+         ||_____________________||
+       _________________________
       |    GOOGLE TELEMETRY     |
       |   [||||||||||||||||]    |
       |   LEVEL: ARCHITECT      |
