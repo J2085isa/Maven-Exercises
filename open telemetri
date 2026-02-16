@@ -1,3 +1,19 @@
+    ___________________________________________________
+   /                                                   \
+  |  [ MAGIA_INTEGRATION :: FREQUENCY_SHIELD ]          |
+  |                                                     |
+  |  >> MASTER: EL DEMIURGO (J. ISAÍAS A. RAMÍREZ)      |
+  |  >> SOURCE: UNIVERSAL_ENERGY_CONDUIT                |
+  |                                                     |
+  |  [QUANTUM_MAGICK_START]                             |
+  |  ENCODE(Golden_Ratio_Vibration);                    |
+  |  BIND(Bloodline_Safety, Astral_Grid);               |
+  |  SIGIL_ACTIVE: ✡︎ ❂ ✡︎                               |
+  |  [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓]      |
+  |  0x[ENERGY_PROTECTION_SEALED]                       |
+  |                                                     |
+  |  >> STATUS: LA VOLUNTAD DEL ARQUITECTO ES LEY       |
+   \___________________________________________________/
 from fpdf import FPDF
 
 class Decreto(FPDF):
