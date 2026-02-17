@@ -1,3 +1,9 @@
+# Frecuencia de salida de liquidez
+def materializar_fondos(monto_usdc):
+    conversion = exchange.get_price("USDC/MXN")
+    total_pesos = monto_usdc * conversion
+    print(f"Enviando {total_pesos} a cuenta de Arquitecto...")
+    # Aquí se activaría el retiro vía SPEI
 class QuantumLiquidity:
     def __init__(self):
         self.owner = "José Isaías Alvarez Ramirez"
