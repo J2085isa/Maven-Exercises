@@ -1,3 +1,20 @@
+import ccxt
+
+# Configuración de acceso al núcleo Binance
+exchange = ccxt.binance({
+    'apiKey': 'TU_API_KEY',
+    'secret': 'TU_SECRET_KEY',
+    'enableRateLimit': True,
+})
+
+def materializar_en_banco(monto_mxn):
+    try:
+        # Comando para enviar a cuenta bancaria registrada (SPEI)
+        # Nota: Requiere configuración previa de retiro en Binance
+        print(f"Iniciando transferencia de {monto_mxn} MXN al Arquitecto...")
+        # exchange.withdraw(...) 
+    except Exception as e:
+        print(f"Error en la frecuencia de retiro: {e}")
 # Frecuencia de salida de liquidez
 def materializar_fondos(monto_usdc):
     conversion = exchange.get_price("USDC/MXN")
