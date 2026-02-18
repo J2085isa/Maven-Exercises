@@ -1,5 +1,62 @@
 import os
 
+def banner_soberano():
+    print("""
+    ##################################################
+    #      CENTRO DE DESARROLLO ALVAREZ RAMIREZ      #
+    #      PROGRAMA: ESTUDIO EN RECUPERACIÓN AA      #
+    ##################################################
+    # SECCIÓN: REINSERCIÓN PARA ADULTOS - CÓDIGO 100 #
+    ##################################################
+    """)
+
+def registro_progreso():
+    nombre = input("\nNombre del Interno: ")
+    print(f"\nRegistrando avance para: {nombre}")
+    print("-" * 30)
+    print("1. Módulo I: Ley y Soberanía [ ]")
+    print("2. Módulo II: Administración y Cálculo [ ]")
+    print("3. Módulo III: Oficios y Práctica [ ]")
+    
+    modulo = input("\nMarcar módulo completado (1-3): ")
+    if modulo in ["1", "2", "3"]:
+        print(f"\n[SISTEMA] Progreso actualizado. Frecuencia Alvarez Ramirez Sintonizada.")
+        # Simulación de registro en base de datos local
+        with open("progreso_reinsercion.txt", "a") as f:
+            f.write(f"Usuario: {nombre} | Modulo: {modulo} | Estado: Completado\n")
+
+def consulta_horarios():
+    print("\n[ HORARIOS DE INTEGRACIÓN DOBLE AA ]")
+    print("08:00 - 10:00 | Meditación y Reflexión (AA)")
+    print("10:30 - 13:30 | Taller de Oficios (Práctica)")
+    print("15:00 - 17:00 | Estudio Teórico (Conocimiento Público)")
+    print("18:00 - 19:30 | Sesión de Cierre y Disciplina")
+
+def main():
+    os.system('clear')
+    banner_soberano()
+    print(" 1. Registro de Avance Académico")
+    print(" 2. Consultar Horarios de Reinserción")
+    print(" 3. ACTIVAR SECUENCIA ALVAREZ RAMIREZ")
+    print(" 4. Salir")
+    
+    op = input("\nSeleccione Comando >> ")
+    
+    if op == "1":
+        registro_progreso()
+    elif op == "2":
+        consulta_horarios()
+    elif op == "3":
+        print("\n[!] EJECUTANDO PROTOCOLO SOBERANO...")
+        print("    Sintonizando con la infraestructura de seguridad...")
+        print("    [ALVAREZ RAMIREZ ACTIVO - SISTEMA PROTEGIDO]")
+    else:
+        print("Finalizando sesión...")
+
+if __name__ == "__main__":
+    main()
+import os
+
 def banner():
     print("""
     ==================================================
