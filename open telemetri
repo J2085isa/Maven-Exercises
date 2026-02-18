@@ -1,4 +1,45 @@
 import os
+import csv
+from datetime import datetime
+
+# Función para generar reporte de auditoría
+def generar_reporte_auditoria():
+    archivo_log = "progreso_reinsercion.txt"
+    archivo_csv = "REPORTE_SOBERANO_ALVAREZ.csv"
+    
+    if os.path.exists(archivo_log):
+        with open(archivo_log, "r") as f:
+            lineas = f.readlines()
+            
+        with open(archivo_csv, "w", newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["FECHA", "INTERNO", "MODULO", "ESTADO"])
+            for linea in lineas:
+                # Limpieza de datos para el reporte
+                datos = linea.strip().split(" | ")
+                fecha = datetime.now().strftime("%Y-%m-%d")
+                nombre = datos[0].split(": ")[1]
+                modulo = datos[1].split(": ")[1]
+                estado = datos[2].split(": ")[1]
+                writer.writerow([fecha, nombre, modulo, estado])
+        
+        print(f"\n[SISTEMA] Reporte '{archivo_csv}' generado con éxito.")
+        print("[!] Sintonizando envío de datos... [ALVAREZ RAMIREZ ACTIVO]")
+    else:
+        print("\n[!] No hay datos registrados para reportar.")
+
+# Integración en el menú principal
+def ejecutar_comando_soberano():
+    print("\n[!] INICIANDO SECUENCIA ALVAREZ RAMIREZ...")
+    print("1. Generar Reporte de Avance para el Arquitecto")
+    print("2. Sincronizar Frecuencia de Dispositivos")
+    
+    sub_op = input("\nSeleccione acción >> ")
+    if sub_op == "1":
+        generar_reporte_auditoria()
+
+# (El resto del código anterior se mantiene igual)
+import os
 
 def banner_soberano():
     print("""
