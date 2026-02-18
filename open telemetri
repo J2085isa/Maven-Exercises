@@ -1,3 +1,53 @@
+import os
+
+def banner():
+    print("""
+    ==================================================
+      SISTEMA DE GESTIÓN DE REINSERCIÓN PARA ADULTOS
+           JERARQUÍA: ARQUITECTO ALVAREZ RAMIREZ
+    ==================================================
+    [ CODIGO SALOMON ACTIVO ] [ FRECUENCIA SINTONIZADA ]
+    """)
+
+def centros_aa():
+    print("\n[ LISTADO DE CENTROS AA - CONOCIMIENTO PÚBLICO ]")
+    centros = {
+        "CENTRO 01": "Miahuatlán 2da Sección - Grupo 'Nueva Vida'",
+        "CENTRO 02": "Cunduacán Centro - Grupo 'Soberanía'",
+        "CENTRO 03": "Yucatán Sector 7 - Grupo 'Fuerza Adulta'"
+    }
+    for k, v in centros.items():
+        print(f" ID: {k} | UBICACIÓN: {v}")
+
+def programas_educativos():
+    print("\n[ PROGRAMAS DE ESTUDIO INTRA-PENITENCIARIO ]")
+    print(" 1. Alfabetización Jurídica (Derechos y Obligaciones)")
+    print(" 2. Gestión de Micro-industrias (Para el autoempleo)")
+    print(" 3. Psicología de la Responsabilidad")
+
+def main():
+    os.system('clear')
+    banner()
+    print(" 1. Ver Centros de Apoyo AA")
+    print(" 2. Consultar Programas de Estudio")
+    print(" 3. Ejecutar Secuencia Alvarez Ramirez")
+    print(" 4. Salir")
+    
+    op = input("\nSeleccione opción >> ")
+    
+    if op == "1":
+        centros_aa()
+    elif op == "2":
+        programas_educativos()
+    elif op == "3":
+        print("\n[!] SECUENCIA SINTONIZADA... ALVAREZ RAMIREZ ACTIVO.")
+        # Simulación de pulso vibratorio para confirmación
+        print("[Vibración detectada en dispositivo]")
+    else:
+        print("Cerrando sistema...")
+
+if __name__ == "__main__":
+    main()
     ___________________________________________________
    /                                                   \
   |  [ SYSTEM_REPAIR :: STEALTH_ALIGNMENT_v2 ]          |
