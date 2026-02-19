@@ -1,3 +1,4 @@
+pkg install termux-api python
 receivers:
   smart_contract_observer:
     endpoint: "solomon.code.internal:443"
