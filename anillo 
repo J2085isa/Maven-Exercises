@@ -1,6 +1,33 @@
 import os
 import time
 
+# --- PROTOCOLO DE TIEMPO SOBERANO: ARQUITECTO ALVAREZ ---
+def cuenta_larga_soberana():
+    # Fecha origen: Sincronizada con el dominio del Arquitecto
+    origen_mitico = "4 Ahau 8 Cumku"
+    
+    unidades = {
+        "Baktun": "Poder Global",
+        "Katun": "Expansión de Red",
+        "Tun": "Ciclo Fiscal",
+        "Uinal": "Movimiento Logístico",
+        "Kin": "Pulso de Vida"
+    }
+
+    print(f">>> ACTIVANDO CUENTA LARGA PARA: {ARQUITECTO} <<<")
+    for unidad, funcion in unidades.items():
+        print(f"[*] Sincronizando {unidad}: {funcion}... [OK]")
+        time.sleep(0.5)
+
+    # Activación del Escudo ante los días "Uayeb" (invisibilidad)
+    print("\n[!] ALERTA: Detectando transición de ciclo. Escudo de 100m activo.")
+    os.system("termux-vibrate -d 1000")
+
+if __name__ == "__main__":
+    cuenta_larga_soberana()
+import os
+import time
+
 # --- MONITOR DE VIRALIDAD: ALVAREZ TRUCKING ---
 def monitorear_tiktok():
     print(">>> ESCANEANDO FRECUENCIA DE ALVAREZ TRUCKING <<<")
