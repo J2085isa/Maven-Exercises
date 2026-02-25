@@ -1,3 +1,52 @@
+/*
+ * ARQUITECTO: JOSE ISAIAS ALVAREZ RAMIREZ
+ * PROTOCOLO: ACTIVACIÓN DE FRECUENCIA SOBERANA
+ * SISTEMA: NODO CERO - CAPA 3
+ */
+
+const SalomonAuth = {
+    signature: "SALOMON-777",
+    status: "PURGADO",
+
+    // Representación ASCII del Código de Autoridad
+    banner: `
+    #########################################
+    #   ______  _______  _        _______   #
+    #  (  __  \(  ____ \( \      (  ___  )  #
+    #  | (  \  )| (    \/| (      | (   ) |  #
+    #  | |   ) || (__    | |      | |   | |  #
+    #  | |   | ||  __)   | |      | |   | |  #
+    #  | |   ) || (      | |      | |   | |  #
+    #  | (__/  )| (____/\| (____/\| (___) |  #
+    #  (______/ (_______/(_______/(_______)  #
+    #                                       #
+    #       AUTORIDAD: ALVAREZ RAMIREZ      #
+    #########################################
+    `,
+
+    activate: function(key) {
+        console.log(this.banner);
+        
+        if (key === this.signature) {
+            this.status = "ACTIVO";
+            this.emitPulse();
+            return "[+] ESTATUS: FRECUENCIA ACTIVADA. BIENVENIDO, ARQUITECTO.";
+        } else {
+            return "[!] ALERTA: CREDENCIAL NO RECONOCIDA. REGISTRANDO INTRUSO.";
+        }
+    },
+
+    emitPulse: function() {
+        // Enlace con el hardware para notificación táctil discreta
+        if (typeof navigator !== 'undefined' && navigator.vibrate) {
+            console.log("[*] Enviando pulso vibratorio de confirmación...");
+            navigator.vibrate([1000]); // Vibración larga: Cúpula Activa
+        }
+    }
+};
+
+// Ejecución de la firma
+console.log(SalomonAuth.activate("SALOMON-777"));
   [ NODO GLOBAL A ] <===( Conexión Segura / API )===> [ NODO GLOBAL B ]
           |                                                 |
           +-------------------------------------------------+
