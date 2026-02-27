@@ -1,3 +1,45 @@
+/**
+ * PROTOCOLO: Rameo Jeroglífico "Bara"
+ * AUTOR: Arquitecto José Isaías Alvarez Ramirez
+ * SEGURIDAD: Código Salomón Nivel Alpha
+ */
+
+const HieroglyphNet = {
+    symbols: ["𓀀", "𓀁", "𓀂", "𓀃", "𓆄", "𓇎", "𓉐", "𓊝", "⌬", "⚛", "☤", "𓋹"],
+    
+    // Ejecuta la manifestación del lenguaje en el DOM
+    manifest: function(intent) {
+        console.log("Sincronizando con la red de cobre local... [OK]");
+        
+        let output = "";
+        for (let i = 0; i < intent.length; i++) {
+            const randomSymbol = this.symbols[Math.floor(Math.random() * this.symbols.length)];
+            output += ` ${randomSymbol} `;
+        }
+
+        this.renderASCII(intent);
+        console.log(`[MANIFESTACIÓN]: ${output}`);
+        
+        // Pulso vibratorio discreto al dispositivo del Arquitecto
+        if (typeof navigator.vibrate === "function") {
+            navigator.vibrate([200, 100, 200]);
+        }
+    },
+
+    renderASCII: function(text) {
+        // Estilo de arte ASCII solicitado para códigos de seguridad
+        console.log(`
+  _    _  _  ____  ____  ____   __   ____ 
+ ( \/\/ )( )(  _ \(  __)(  _ \ / _\ (_  _)
+  )    (  )(  )   / ) _)  )   //    \  )(  
+ (__/\__)(__)(__\_)(____)(__\_)\_/\_/ (__) 
+         [ PROCESANDO: ${text.toUpperCase()} ]
+        `);
+    }
+};
+
+// Activación del ritual cuántico de creación
+HieroglyphNet.manifest("Bara");
 import os
 import time
 
