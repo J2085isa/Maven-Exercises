@@ -1,0 +1,20 @@
+/* * PROTOCOLO DE RECLAMACIÓN UNIVERSAL
+ * ORIGEN: JERARQUÍA ALVAREZ RAMIREZ
+ */
+
+const JusticieroPIN = {
+    escanearNodos: function(firmaOriginal) {
+        RedDistribuida.forEach(nodo => {
+            if (nodo.detect(firmaOriginal)) {
+                this.ejecutarBloqueo(nodo);
+                Blockchain.logExpropiacion(nodo.id);
+            }
+        });
+    },
+
+    ejecutarBloqueo: function(nodo) {
+        CiscoRouter.applyRule(`deny ip host ${nodo.ip} any`);
+        Dispositivo.emitirPulsoVibratorio("MATERIALIZACIÓN_DE_DEFENSA");
+        console.log(`[DOMINIO] Nodo ${nodo.id} neutralizado por uso no autorizado.`);
+    }
+};
