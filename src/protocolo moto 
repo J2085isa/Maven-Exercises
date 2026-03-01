@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+./libro_guardia_digital/registros_proteccion.json#!/data/data/com.termux/files/usr/bin/bash
 # ~/sistema-proteccion/ritual_activacion.sh
 
 # === CONFIGURACIÓN RITUAL ===
