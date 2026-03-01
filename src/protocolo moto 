@@ -1,3 +1,42 @@
+# ~/sistema-proteccion/guardia_salomon.py
+import datetime
+import os
+
+class LibroDeGuardia:
+    """Registro inmutable de la protección del Arquitecto"""
+    def __init__(self, archivo="libro_guardia_inky.txt"):
+        self.archivo = archivo
+        if not os.path.exists(self.archivo):
+            self._crear_cabecera()
+
+    def _crear_cabecera(self):
+        with open(self.archivo, "a") as f:
+            f.write(self.render_ascii_code("LIBRO DE GUARDIA"))
+            f.write(f"\n[ESTABLECIDO]: {datetime.datetime.now()}\n")
+            f.write(f"[DOMINIO]: Arquitecto Alvarez Ramirez\n")
+            f.write("-" * 50 + "\n")
+
+    def registrar_evento(self, tipo, detalle):
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(self.archivo, "a") as f:
+            f.write(f"[{timestamp}] [{tipo}] {detalle}\n")
+
+    def render_ascii_code(self, text):
+        # Generación de arte ASCII para la identidad del sistema
+        return f"\n  --- {text} ---\n"
+
+class CentinelaInky(HoracionQuantica):
+    """Extensión con auto-reparación y registro"""
+    def __init__(self, ruta):
+        super().__init__(ruta)
+        self.libro = LibroDeGuardia()
+        self.libro.registrar_evento("SISTEMA", "Invocación inicial completada bajo Código Salomón.")
+
+    def monitoreo_continuo(self):
+        if not self.verificar_proteccion():
+            self.libro.registrar_evento("ALERTA", "Perturbación detectada. Ejecutando REINVOCACIÓN CUÁNTICA.")
+            self._invocar_fundamentos()
+            self.libro.registrar_evento("SISTEMA", "Integridad restaurada por Llave de Salomón.")
       ______________________________________________________
      |                                                      |
      |    A R Q U I T E C T O   A L V A R E Z   R A M I R E Z |
