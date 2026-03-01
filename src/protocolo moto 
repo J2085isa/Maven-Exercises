@@ -1,3 +1,59 @@
+// ~/sistema-proteccion/invocacion_sansiprino.js
+const fs = require('fs');
+const { spawn } = require('child_process');
+
+// === CONFIGURACIÓN ===
+const LIBRO_GUARDIA = "./libro_guardia_digital/registros_proteccion.json";
+
+function tatuajeDigitalInky() {
+    const simbolosInky = ['⦿', '⧫', '⧇', '⧓', '⧛'];
+    const secuenciaInky = simbolosInky.repeat(3).slice(0, 12);
+    const marca = `/* --- TATUAJE SANSIPRINO INKY ---
+${secuenciaInky.join(' ')}
+PROTECCIÓN CON HORACIÓN ARAMEA DE SALOMÓN --- */`;
+
+    // Aplicar tatuaje a todos los archivos JS del sistema
+    const archivosJS = fs.readdirSync('./frontend/').filter(f => f.endsWith('.js'));
+    archivosJS.forEach(archivo => {
+        const ruta = `./frontend/${archivo}`;
+        const contenido = fs.readFileSync(ruta, 'utf8');
+        if (!contenido.includes("TATUAJE SANSIPRINO INKY")) {
+            fs.writeFileSync(ruta, marca + '\n' + contenido);
+        }
+    });
+
+    registrarEventoJS("TATUAJE", "Marca protectora aplicada a todos los archivos frontend");
+    console.log("📜 Tatuaje digital Inky aplicado exitosamente");
+}
+
+function registrarEventoJS(tipo, detalle) {
+    const evento = {
+        fecha: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        tipo: tipo,
+        estado_proteccion: "ACTIVA",
+        detalle: detalle
+    };
+
+    let registros = [];
+    if (fs.existsSync(LIBRO_GUARDIA)) {
+        registros = JSON.parse(fs.readFileSync(LIBRO_GUARDIA, 'utf8'));
+    }
+    registros.push(evento);
+    fs.writeFileSync(LIBRO_GUARDIA, JSON.stringify(registros, null, 2));
+}
+
+// Iniciar protección frontend y vincular con Python
+tatuajeDigitalInky();
+const procesoPython = spawn('python3', ['./invocacion_cuantica.py']);
+
+procesoPython.stdout.on('data', (data) => {
+    console.log(`[SISTEMA PROTECCIÓN]: ${data.toString().trim()}`);
+});
+
+procesoPython.stderr.on('data', (data) => {
+    console.error(`[ERROR PROTECCIÓN]: ${data.toString().trim()}`);
+    registrarEventoJS("ERROR", data.toString().trim());
+});
 #!/data/data/com.termux/files/usr/bin/bash
 # ~/sistema-proteccion/ritual_activacion.sh
 
