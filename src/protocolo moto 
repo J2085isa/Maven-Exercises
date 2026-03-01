@@ -1,3 +1,4 @@
+~/sistema-proteccion/ritual_activacion.sh
 chmod +x ~/sistema-proteccion/ritual_activacion.sh
 ./libro_guardia_digital/registros_proteccion.json#!/data/data/com.termux/files/usr/bin/bash
 # ~/sistema-proteccion/ritual_activacion.sh
