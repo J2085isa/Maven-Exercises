@@ -29,7 +29,37 @@
 </body>
 </html>
 . CONFIGURACIÓN DE PRUEBAS - NODO 01 CROLANDIA
-[profile.default]
+[profile.default]<!-- ~/infraestructura-global-alvarez/frontend/panel_seguridad.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel de Seguridad Global</title>
+    <script src="script_panel.js"></script>
+    <style>
+        body { font-family: monospace; background: #000; color: #0f0; margin: 20px; }
+        .alerta { color: #f00; }
+        .ok { color: #0f0; }
+        .reporte { margin: 20px 0; padding: 10px; border: 1px solid #0f0; }
+    </style>
+</head>
+<body>
+    <h1>📊 PANEL DE SEGURIDAD GLOBAL</h1>
+    <div id="estado-sistema" class="ok">Estado: ACTIVO</div>
+    
+    <div class="reporte">
+        <h2>📋 ÚLTIMO REPORTE</h2>
+        <p>Fecha: <span id="fecha-reporte"></span></p>
+        <p>Tokens activos: <span id="tokens-activos"></span></p>
+        <p>Tokens renovados en la semana: <span id="tokens-renovados"></span></p>
+        <p>Intentos de intrusión bloqueados: <span id="intentos-bloqueados"></span></p>
+        <button onclick="generarNuevoReporte()">Generar Reporte Actualizado</button>
+        <button onclick="enviarReporteCorreo()">Enviar Reporte por Correo</button>
+    </div>
+
+    <div id="logs-container"></div>
+</body>
+</html>
+
 slow-timeout = { period = "45s", terminate-after = 2 }
 
 [[profile.default.overrides]]
