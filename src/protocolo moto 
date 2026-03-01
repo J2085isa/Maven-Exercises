@@ -1,3 +1,51 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# ~/sistema-proteccion/ritual_activacion.sh
+
+# === CONFIGURACIÓN RITUAL ===
+HORA_AMANECER="06:30"
+RUTA_SELLO="./libro_guardia_digital/sello_inky.txt"
+
+# Función para esperar la hora del amanecer
+esperar_amanecer() {
+    echo "[RITUAL] Esperando hora del amanecer ($HORA_AMANECER)..."
+    while true; do
+        HORA_ACTUAL=$(date +"%H:%M")
+        if [ "$HORA_ACTUAL" = "$HORA_AMANECER" ]; then
+            break
+        fi
+        sleep 60
+    done
+}
+
+# Crear sello de tinta negra
+crear_sello() {
+    echo "⦿⧫⧇⧓⧛⦿⧫⧇⧓⧛⦿⧫" > $RUTA_SELLO
+    echo "[RITUAL] Sello Sansiprino Inky creado en $RUTA_SELLO"
+}
+
+# Visualizar secuencia jeroglífica
+visualizar_jeroglificos() {
+    echo "[RITUAL] Visualizando secuencia jeroglífica por 3 minutos..."
+    clear
+    echo "====================================="
+    echo "  𐡀 𐡁 𐡂 𐡃 𐡄 𐡀 𐡁 𐡂 𐡃 𐡄 𐡀 𐡁"
+    echo "  ⦿ ⧫ ⧇ ⧓ ⧛ ⦿ ⧫ ⧇ ⧓ ⧛ ⦿ ⧫"
+    echo "====================================="
+    echo "  HORACIÓN DE PROTECCIÓN ACTIVADA"
+    echo "====================================="
+    sleep 180
+}
+
+# Ejecutar ritual completo
+echo "[RITUAL] Iniciando proceso de activación..."
+crear_sello
+esperar_amanecer
+visualizar_jeroglificos
+
+# Iniciar sistemas de protección
+echo "[RITUAL] Activando protección cuántica y frontend..."
+node ./invocacion_sansiprino.js &
+echo "[RITUAL] Protección iniciada - Consulta el Libro de Guardia para seguimiento"
 // ~/sistema-proteccion/invocacion_sansiprino.js
 const fs = require('fs');
 const { spawn } = require('child_process');
