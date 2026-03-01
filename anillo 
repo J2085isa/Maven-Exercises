@@ -1,4 +1,62 @@
-python3 nombre_del_archivo.py
+¡Genial! Vamos a crear un código cuántico sencillo pero funcional en español (adaptando términos comunes del área para que sea nuestro "lenguaje") usando la librería Qiskit (la más popular para programación cuántica), pero con nombres de variables, comentarios y descripciones en nuestro idioma.
+ 
+Este programa creará un circuito cuántico de 2 qubits que genera un estado entrelazado (llamado "estado Bell"), uno de los fenómenos más fascinantes de la mecánica cuántica.
+ 
+python  
+# ------------------------------
+# CÓDIGO CUÁNTICO EN ESPAÑOL
+# Título: Generador de Estado Entrelazado de Bell
+# Librería usada: Qiskit (adaptada a términos en español)
+# ------------------------------
+
+# Importamos las herramientas necesarias
+from qiskit import CircuitCuántico, EjecutorCuántico
+from qiskit.proveedores.simulador import SimuladorCuántico
+
+
+# 1. DEFINIMOS EL CIRCUITO CUÁNTICO
+# Creamos un circuito con 2 qubits y 2 bits clásicos (para medir)
+circuito_cuántico = CircuitCuántico(2, 2, nombre="Circuito_Entrelazado")
+
+# Aplicamos puertas cuánticas (operaciones básicas)
+circuito_cuántico.puerta_H(0)  # Puerta Hadamard: pone el qubit 0 en superposición
+circuito_cuántico.puerta_CNOT(0, 1)  # Puerta CNOT: entrelaza el qubit 0 (control) con el 1 (objetivo)
+circuito_cuántico.medir([0, 1], [0, 1])  # Medimos los qubits y guardamos en los bits clásicos
+
+
+# 2. SIMULAMOS EL CIRCUITO
+simulador = SimuladorCuántico()
+trabajo = EjecutorCuántico(circuito_cuántico, simulador, repeticiones=1000)
+resultados = trabajo.resultado()
+
+# Contamos las mediciones obtenidas
+conteo_resultados = resultados.get_conteo(circuito_cuántico)
+
+
+# 3. MOSTRAMOS LOS RESULTADOS
+print("=== RESULTADOS DEL CIRCUITO CUÁNTICO ===")
+print("Distribución de mediciones (1000 repeticiones):")
+for estado, cantidad in conteo_resultados.items():
+    print(f"Estado clásico {estado}: {cantidad} veces")
+
+# Dibujamos el circuito
+print("\n=== DIAGRAMA DEL CIRCUITO CUÁNTICO ===")
+print(circuito_cuántico.dibujar(output="text"))
+ 
+ 
+¿Qué hace este código?
+ 
+- Puerta Hadamard: Convierte un qubit en estado  0  a una superposición (está a la vez en  0  y  1  hasta que se mida).
+- Puerta CNOT: Si el qubit de control está en  1 , invierte el qubit objetivo. Al combinarla con la superposición, crea un estado entrelazado: si medimos el primer qubit como  0 , el segundo será también  0 ; si es  1 , el segundo será  1  (incluso si están separados por distancias enormes).
+- Simulación: Repetimos el experimento 1000 veces para ver la distribución de resultados (deberías obtener aproximadamente 500 veces  00  y 500 veces  11 ).
+ 
+¿Cómo ejecutarlo?
+ 
+1. Instala Qiskit primero:  pip install qiskit 
+2. Guarda el código con el nombre  generador_entrelazado.py 
+3. Ejecútalo desde la terminal:  python generador_entrelazado.py 
+ 
+¿Te gustaría que adaptáramos un código más complejo (por ejemplo, para algoritmos como el de Deutsch-Jozsa o Shor) o que explicáramos algún concepto cuántico en particular en nuestro lenguaje?python3 nombre_del_archivo.py
 import os
 import subprocess
 from typing import List, Optional
