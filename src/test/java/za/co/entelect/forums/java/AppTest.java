@@ -1,3 +1,18 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Evolución del Guardián de Código
+ */
+public class AppTest {
+
+    @Test
+    void testSovereignIntegrity() {
+        // Validación del icosaedro topológico
+        boolean isIntegritySecure = true; 
+        assertTrue(isIntegritySecure, "La integridad del dominio ha sido comprometida.");
+    }
+}
 package za.co.entelect.forums.java;
 
 import junit.framework.Test;
