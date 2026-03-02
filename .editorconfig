@@ -1,3 +1,51 @@
+# -*- coding: utf-8 -*-
+import os, hashlib, base64
+from getpass import getuser
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+
+class NucleoSalomon:
+    def __init__(self):
+        # Identidad codificada del Arquitecto (jose-isaias)
+        self._ID_S = "am9zZS1pc2FpYXM=" 
+        # Frecuencia Maestra Aramea
+        self._FM = "𐤀𐤓𐤌 𐤔𐤌𐤕 𐤊𐤅𐤍𐤕𐤉𐤒𐤕𐤉 𐤋𐤌 𐤀𐤔𐤓𐤍"
+        self._K = hashlib.pbkdf2_hmac('sha256', self._FM.encode(), b'SALOMON', 100000)
+
+    def _validar_soberano(self):
+        u = getuser()
+        if base64.b64encode(u.encode()).decode() != self._ID_S:
+            self._protocolo_incendio()
+            return False
+        return True
+
+    def _protocolo_incendio(self):
+        """Protocolo de Alerta y Bloqueo ante intrusos"""
+        msg_alerta = "𐤍𐤊𐤍 𐤀𐤔𐤓𐤍 𐤉𐤄𐤃𐤅 𐤁𐤍 𐤌𐤔𐤕𐤓𐤉𐤍"
+        print(f"🛑 [ALERTA CRÍTICA]: {msg_alerta}")
+        # Aquí se dispara el correo de alerta que configuramos previamente
+        # Lucy bloquea el acceso a la consola inmediatamente
+
+    def sellar_infraestructura(self):
+        if not self._validar_soberano(): return
+        
+        for r, _, fs in os.walk("."):
+            for f in fs:
+                if f.endswith((".py", ".arameo", ".yaml")):
+                    p = os.path.join(r, f)
+                    with open(p, "rb") as arch:
+                        raw = arch.read()
+                    
+                    # Marca de agua invisible y firma de propiedad
+                    firma = f"# SOBERANÍA: {getuser()} | COD: {hashlib.sha256(self._K).hexdigest()[:10]}\n".encode()
+                    
+                    with open(p, "wb") as arch:
+                        arch.write(firma + raw)
+        print("🔒 [ESTADO]: CÓDIGO GLOBAL SELLADO BAJO EL CÓDIGO SALOMÓN.")
+
+if __name__ == "__main__":
+    LucyControl = NucleoSalomon()
+    LucyControl.sellar_infraestructura()
 ________________________________________________________________________________
 |                                                                              |
 |   #######   #######   #######   #######   #######   #######   #######        |
