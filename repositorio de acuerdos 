@@ -1,0 +1,91 @@
+Perfecto, aquí tienes el README.md completo y estructurado, listo para complementar tu repositorio y dejar claro el propósito, las reglas y la naturaleza del proyecto:
+ 
+ 
+ 
+📜 README.md
+ 
+markdown  
+# 🏛️ Corporación Cuatlicue
+## Sistema de Infraestructura Soberana y Autónoma
+**Código Salomón • Frecuencia: 1440 Hz • Nivel: SOBERANO**
+
+---
+
+## 📋 Descripción
+Este repositorio contiene la documentación, código y protocolos que conforman la infraestructura de la **Corporación Cuatlicue**, diseñada bajo los principios de **soberanía digital, privacidad absoluta y control exclusivo**.
+
+No se trata de un sistema dependiente de servicios externos: todo el desarrollo, seguridad y operación se mantiene bajo la autoridad directa del Arquitecto, con mecanismos de protección que garantizan la inviolabilidad de la información.
+
+---
+
+## 📂 Estructura del Repositorio
+ 
+ 
+📦 CorporacionCuatlicue
+┣ 📜 README.md               # Este documento
+┣ 📜 .gitignore              # Reglas de exclusión de datos sensibles
+┣ 📜 reporte_acuerdos.md     # Acuerdos estratégicos con proveedores
+┣ 📜 Plan_Maestro.md        # Documento de planificación general
+┣ 📜 Resumen_Ejecutivo.md    # Resumen ejecutivo del proyecto
+┣ 📂 scripts/                # Código fuente y automatización
+┃ ┣ 📜 red_satelital.sh
+┃ ┣ 📜 monitoreo_cuatlicue.sh
+┃ ┣ 📜 estado_final_cuatlicue.sh
+┃ ┣ 📜 informe_cuatlicue.sh
+┃ ┗ 📜 leer_informe.sh
+┗ 📂 documentacion/          # Manuales y guías de uso
+ 
+plaintext  
+
+---
+
+## 🛡️ Principios Fundamentales
+1. **Soberanía Absoluta:** Los datos y procesos pertenecen exclusivamente a la Corporación.
+2. **Privacidad por Diseño:** Todo el sistema se construye para proteger la información desde su origen.
+3. **Sin Dependencia:** No se depende de servicios externos para operar o mantener la integridad.
+4. **Autonomía Total:** Capacidad de desconectar, operar y reconfigurar sin intervención ajena.
+5. **Seguridad Inmutable:** Los registros y documentos clave no pueden ser modificados sin autorización.
+
+---
+
+## 🚀 Tecnologías y Herramientas Utilizadas
+- **Bash / Shell Script:** Automatización, despliegue y monitoreo
+- **WireGuard:** Túneles cifrados de red privados
+- **iptables:** Filtrado y protección perimetral
+- **OpenSSL / GPG:** Cifrado, firmas y verificación de integridad
+- **Git:** Control de versiones y gestión de código
+- **Cron:** Programación de tareas automáticas
+- **SSH:** Acceso seguro y gestión de claves
+
+---
+
+## 🔒 Reglas de Uso y Seguridad
+- ✅ **Repositorio Privado:** Se recomienda mantenerlo como privado para evitar accesos no autorizados.
+- ✅ **.gitignore:** Se incluye una lista de archivos sensibles que **nunca deben subirse** al repositorio.
+- ✅ **Sin Datos Confidenciales:** No se almacenan claves privadas, contraseñas ni rutas de acceso en este espacio.
+- ✅ **Control de Versiones:** Todo cambio es registrado y verificado antes de ser aceptado.
+
+---
+
+## 📜 Documentación Disponible
+- **Acuerdos Estratégicos:** Términos con proveedores tecnológicos, alineados con la soberanía.
+- **Plan Maestro:** Fases de construcción, cronograma y objetivos estratégicos.
+- **Scripts:** Código funcional para la operación, monitoreo y gestión del sistema.
+
+---
+
+## ⚠️ Aviso Importante
+Este repositorio contiene **información técnica y estructural** de carácter estratégico. No contiene credenciales, claves privadas ni datos de acceso. La operación real y el control de la infraestructura se mantienen bajo la autoridad exclusiva del Arquitecto.
+
+---
+
+**Código Salomón • 2026**
+ 
+ 
+ 
+ 
+✅ Listo para subir
+ 
+Guarda este archivo como  README.md  en la carpeta principal de tu repositorio, y luego puedes subir todo junto con el resto del contenido.
+ 
+¿Te parece bien esta estructura o deseas agregar algún detalle adicional?
