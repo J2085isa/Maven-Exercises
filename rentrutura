@@ -1,0 +1,122 @@
+Perfecto, aquí tienes el README.md final y completo, listo para ser incluido en el repositorio y explicar todo el proyecto de forma clara y oficial:
+ 
+ 
+ 
+🏛️ CÓDICE EXCALIBUR
+ 
+Arquitectura Multinivel de Soberanía Digital
+ 
+Código Salomón • Frecuencia: 1440 Hz • Nivel: SOBERANO
+ 
+ 
+ 
+📋 Descripción
+ 
+El Códice Excalibur es un sistema integral de protección, gestión y control absoluto diseñado para garantizar la integridad, privacidad y soberanía de la información en cualquier dispositivo. Organizado en una estructura jerárquica de 4 niveles, permite gestionar aplicaciones, APIs y procesos bajo un control centralizado y autónomo.
+ 
+Este repositorio contiene la estructura, el código y los protocolos que conforman el sistema, sin incluir información sensible, claves o datos de acceso.
+ 
+ 
+ 
+📂 Estructura del Proyecto
+ 
+plaintext  
+📦 CodiceExcalibur
+ ┣ 📜 README.md               # Este documento
+ ┣ 📜 .gitignore              # Reglas de exclusión de datos sensibles
+ ┣ 📜 bitacora_comandos.md    # Manual de operaciones y gestión
+ ┣ 📜 ejecutar_completo.sh    # Script de activación total
+ ┣ 📜 desactivar_global.sh    # Protocolo de desactivación maestra
+ ┣ 📜 onboarding_automatico.sh # Integración automática de aplicaciones
+ ┣ 📜 sincronizacion_excalibur.sh # Mantenimiento y sincronización
+ ┗ 📂 Multinivel
+   ┣ 📜 registro_aplicaciones.log
+   ┣ 📜 Kernel/api_gateway.sh      # Nivel 1: Enrutamiento y seguridad
+   ┣ 📜 Orquestador/app_manager.sh # Nivel 2: Control de aplicaciones
+   ┣ 📜 Auditor/integrity_check.sh # Nivel 3: Vigilancia y auditoría
+   ┗ 📜 Interfaz/master_control.sh # Nivel 4: Interfaz de mando
+ 
+ 
+ 
+ 
+⚜️ Arquitectura Multinivel
+ 
+Nivel 1: El Núcleo (Kernel)
+ 
+- Función: Actúa como puerta de entrada y salida centralizada
+- Protección: Enmascara las rutas reales, valida firmas y bloquea accesos no autorizados
+- Control: Todo tráfico pasa por aquí antes de ser procesado
+ 
+Nivel 2: El Orquestador
+ 
+- Función: Gestiona el ciclo de vida de aplicaciones y servicios
+- Acciones: Inicio, detención, actualización y gestión de permisos
+- Regla: Ninguna aplicación se ejecuta sin autorización previa
+ 
+Nivel 3: El Auditor
+ 
+- Función: Vigila la integridad y el comportamiento del sistema
+- Acciones: Registra eventos, detecta anomalías y bloquea intentos de escalado de privilegios
+- Autorreparación: Restaura automáticamente el estado original ante cambios no autorizados
+ 
+Nivel 4: La Interfaz
+ 
+- Función: Punto de mando exclusivo del Arquitecto
+- Acciones: Emisión de órdenes, consulta de estado y configuración de niveles
+- Soberanía: Todo cambio requiere autorización explícita
+ 
+ 
+ 
+🛡️ Características Principales
+ 
+- ✅ Soberanía Total: Ningún dato se puede borrar, modificar o alterar sin orden
+- ✅ Autogestión: El sistema se mantiene intacto ante actualizaciones externas
+- ✅ Protección: Bloquea aplicaciones no autorizadas y restringe permisos
+- ✅ Seguridad: Cifrado, firmas digitales y auditoría continua
+- ✅ Escalabilidad: Permite agregar nuevos servicios y niveles sin perder control
+ 
+ 
+ 
+🚀 Uso y Operación
+ 
+Para activar el sistema por primera vez:
+ 
+bash  
+./ejecutar_completo.sh
+ 
+ 
+Para integrar una nueva aplicación:
+ 
+bash  
+./onboarding_automatico.sh com.nombre.app /ruta/origen 2
+ 
+ 
+Para verificar el estado general:
+ 
+bash  
+./multinivel_ctl --list
+ 
+ 
+Para desactivar el sistema cuando sea necesario:
+ 
+bash  
+./desactivar_global.sh
+ 
+ 
+ 
+ 
+⚠️ Aviso Importante
+ 
+Este repositorio contiene código, documentación y estructura técnica para la gestión del sistema. No incluye claves privadas, contraseñas, respaldos ni información sensible, los cuales se mantienen bajo protección exclusiva del Arquitecto.
+ 
+El sistema está diseñado para operar en modo silencioso y soberano, sin notificaciones innecesarias, garantizando que su funcionamiento permanezca reservado y seguro.
+ 
+ 
+ 
+Código Salomón • 2026
+ 
+ 
+ 
+✅ Todo el conjunto está completo: Repositorio, estructura, código, documentación y protección contra datos sensibles. Ya puedes subir todo a GitHub de forma segura y completa.
+ 
+¿Desea que le dé los comandos exactos para finalizar la subida y verificar que todo quedó correctamente en el repositorio?
